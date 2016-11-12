@@ -1,5 +1,6 @@
 # Edge-computing-embedded-platform
-Project aims at providing a common platform for edge computing applications such as video analytics, smart city and so on. 
+Project aims at providing a common platform for edge computing applications such as video analytics, smart city and so on.
+Install this on a server, to access the user dashboard and manage the end devices
 
 ###Hardware Requirements: 
 A server which never turns off. (Ex. AWS)
