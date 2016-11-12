@@ -1,0 +1,21 @@
+{
+    "pid": 24290, 
+    "options": {
+        "cbdir": "/home/ubuntu/abhi/Edge-computing-embedded-platform/server/wamp/.crossbar", 
+        "cdc": false, 
+        "loglevel": "info", 
+        "logtofile": false, 
+        "logformat": "standard", 
+        "command": "start", 
+        "logdir": null, 
+        "config": "config.json", 
+        "colour": "auto", 
+        "reactor": null
+    }, 
+    "argv": [
+        "/usr/local/bin/crossbar", 
+        "start", 
+        "--cbdir", 
+        "/home/ubuntu/abhi/Edge-computing-embedded-platform/server/wamp/.crossbar"
+    ]
+}

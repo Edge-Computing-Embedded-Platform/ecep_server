@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
+      rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel='stylesheet' href='/stylesheets/style_ud.css' />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<style>
+</style>
+<body class="home" ng-app="myapp" ng-controller="myctrl">
+<div class="container-fluid display-table">
+    <div class="row display-table-row">
+        <div class="col-md-2 col-sm-1 hidden-xs display-table-cell v-align box" id="navigation">
+            <div class="logo">
+                <a hef="home.html"><img src="http://jskrishna.com/work/merkury/images/logo.png" alt="merkery_logo" class="hidden-xs hidden-sm">
+                    <img src="http://jskrishna.com/work/merkury/images/circle-logo.png" alt="merkery_logo" class="visible-xs visible-sm circle-logo">
+                </a>
+            </div>
+            <div class="navi">
+                <ul>
+                    <li class="active"><a href="#home" class="page scroll"><i class="fa fa-home" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Home</span></a></li>
+                    <li><a href="#" ng-click="workflow()" class="page scroll"><i class="fa fa-tasks" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Workflow</span></a></li>
+                    <li><a href="#"><i class="fa fa-bar-chart" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Statistics</span></a></li>
+                    <li><a href="#"><i class="fa fa-user" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Calender</span></a></li>
+                    <li><a href="#"><i class="fa fa-calendar" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Users</span></a></li>
+                    <li><a href="#"><i class="fa fa-cog" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Setting</span></a></li>
+                </ul>
+            </div>
+        </div>
+
+
+            <!--<button type="button" class="slide-toggle">Slide Toggle</button> -->
+            <section id="home" class="container content-section text-center">
+                <div class="row">
+                    <div class="col-md-12">
+                    <h1>hello</h1>
+                        </div>
+                </div>
+
+</section>
+
+
+    <section id="workflow" class="container content-section text-center" >
+        <div class="row">
+            <div class="col-md-12">
+                <h5>you r in workflow</h5>
+
+                </div>
+        </div>
+
+    </section>
+
+
+
+<!-- Modal -->
+<div id="add_project" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header login-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title">Add Project</h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" placeholder="Project Title" name="name">
+                <input type="text" placeholder="Post of Post" name="mail">
+                <input type="text" placeholder="Author" name="passsword">
+                <textarea placeholder="Desicrption"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="cancel" data-dismiss="modal">Close</button>
+                <button type="button" class="add-project" data-dismiss="modal">Save</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+</body>
+<script>
+    var app=angular.module("myapp",[]);
+    app.controller("myctrl",function($scope,$http){
+        console.log("hi");
+        $scope.workflow=function()
+        {
+        console.log("in ajax");
+        window.location.assign("/workflow");
+        }
+    });
+</script>
+</html>
