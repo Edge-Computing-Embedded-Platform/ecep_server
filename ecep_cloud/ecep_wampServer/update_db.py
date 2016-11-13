@@ -49,17 +49,18 @@ class updateDB(object):
         node.update_compute_node(**data)
         
     
-    def deviceReg(self, device):
+    def deviceReg(self, deviceInfo):
         print 'deviceReg'
-        print device
+        print deviceInfo
         global regDevice
         
-        if device in regDevice:
-            print 'heartbeat from ' + device + ' received'
+        if deviceInfo['deviceId'] in regDevice:
+            print ('heartbeat from ' + deviceInfo['deviceId'] + ' received')
         else:
-            print 'registering a new device: ' + device
+            print ('registering a new device: ' + deviceInfo['deviceId'])
+            print ('acrhitecture: ' + deviceInfo['arch'] + ', at location: ' + deviceInfo['location'])
 
-        regDevice[device] = True
+        regDevice[deviceInfo['deviceId']] = True
 
     @threaded
     def checkHeartbeat(self):
@@ -69,7 +70,6 @@ class updateDB(object):
         global regDevice
         while True:
             for device in regDevice:
-                print regDevice
                 if regDevice[device] == False:
                     print 'no heartbeat'
                 else:

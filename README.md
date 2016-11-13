@@ -1,10 +1,9 @@
 # Edge-computing-embedded-platform
 Project aims at providing a common platform for edge computing applications such as video analytics, smart city and so on.
-Install this on a server, to access the user dashboard and manage the end devices
+Deploy a webserver and launch user dashboard through this repo.
 
 ###Hardware Requirements: 
 A server which never turns off. (Ex. AWS)
-
 
 ###Software Requirements: 
 **Server:** 

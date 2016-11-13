@@ -13,6 +13,7 @@ from container_control import *
 from server.ecep_db.controller import Compute_Manager, Image_Manager, Device_Manager
 from wamp_server import *
 import urlparse
+import sys
 
 
 # Handle command request
@@ -38,10 +39,8 @@ class handleReq(tornado.web.RequestHandler):
         self.write('Edge Computing Project')
 
     def put(self, *kwargs):
-        # print 'updating db'
-        update = json.loads(self.request.body)
+        pdate = json.loads(self.request.body)
 
-    #       print update
     def post(self, **kwargs):
         print "received"
 
@@ -250,8 +249,8 @@ application = tornado.web.Application([(r"/handle_request", handleReq),
 if __name__ == "__main__":
     # params for wampserver
     ip = u'127.0.0.1'
-    port = '8096'
-    realm = u'realm1'
+    port = sys.argv[1]
+    realm = sys.argv[2]
 
     server = wampserver()
     check = server.connect(ip, port, realm)
