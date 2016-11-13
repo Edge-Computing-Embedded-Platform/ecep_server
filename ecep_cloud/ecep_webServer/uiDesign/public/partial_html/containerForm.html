@@ -1,0 +1,63 @@
+<div class="col-md-6 col-sm-25  col-md-25">
+    <div class="box-inner">
+        <div class="box-header well" data-original-title="">
+            <h2><i class="glyphicon glyphicon-edit"></i> Create Container</h2>
+        </div>
+        <div class="box-content">
+                <div class="form-group">
+                    <div class="btn-group pull-middle " id="location_div">
+                        <select class="btn btn-primary dropdown-toggle" name="location_dropdown" type="button" data-toggle="dropdown" id="location_dropdown" >
+                            <option id="location">  <i class="glyphicon glyphicon-tint"></i><span
+                                    class="hidden-sm hidden-xs"> Location</span>
+                                <span class="caret"></span>
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="btn-group pull-middle "id="device_div" >
+                        <select class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="device" style= "display:none" >
+                            <option>  <i class="glyphicon glyphicon-tint"></i><span
+                                    class="hidden-sm hidden-xs"> Device Name</span>
+                                <span class="caret"></span>
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="form-group">
+                    <div class="btn-group pull-middle " id="arch_div">
+                        <select id="architecture" style= "display:none" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            <option>  <i class="glyphicon glyphicon-tint"></i><span
+                                    class="hidden-sm hidden-xs"> Architecture</span>
+                                <span class="caret"></span>
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="btn-group pull-middle " id="img_div">
+                        <select id="containerImage" style= "display:none" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            <option>  <i class="glyphicon glyphicon-tint"></i><span
+                                    class="hidden-sm hidden-xs">Container Image </span>
+                                <span class="caret"></span>
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="container_name">Location</label>
+                    <span id="loc"></span>
+                </div>
+                <div class="form-group">
+                    <label for="container_name">Container Name</label>
+                    <input type="text" class="form-control" id="container_name" placeholder="Enter a Conatiner Name...">
+                </div>
+                <button type="button" onclick="sendContainer()" class="btn btn-default" >Submit</button>
+        </div>
+        <br>
+    </div>
+</div>
+</div>
+<script src="js/containerForm.js"></script>
+<!--/span-->
