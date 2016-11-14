@@ -152,50 +152,6 @@
 
     <div class=" row" id="load">
 
-        <div class="btn-group pull-middle ">
-            <select class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="location_dropdown" >
-                <option id="location">  <i class="glyphicon glyphicon-tint"></i><span
-                            class="hidden-sm hidden-xs"> Location</span>
-                    <span class="caret"></span></option>
-
-            </select>
-
-        </div>
-
-        <div class="btn-group pull-middle ">
-            <select class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="device" style= "display:none" >
-                <option>  <i class="glyphicon glyphicon-tint"></i><span
-                            class="hidden-sm hidden-xs"> Device Name</span>
-                    <span class="caret"></span></option>
-
-            </select>
-
-        </div>
-
-        <div class="btn-group pull-middle ">
-            <select id="architecture" style= "display:none" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                <option>  <i class="glyphicon glyphicon-tint"></i><span
-                            class="hidden-sm hidden-xs"> Architecture</span>
-                    <span class="caret"></span></option>
-
-            </select>
-
-        </div>
-
-        <div class="btn-group pull-middle ">
-            <select id="containerImage" style= "display:none" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                <option>  <i class="glyphicon glyphicon-tint"></i><span
-                            class="hidden-sm hidden-xs">Container Image </span>
-                    <span class="caret"></span></option>
-
-            </select>
-
-        </div>
-
-        <br>
-
-
-
 
         <!------------------------------------------------------->
         <div style="margin-top: 3rem">
@@ -204,12 +160,12 @@
 
 
                     <div>Containers</div>
-                    <div>3</div>
+                    <div id="containerCount"></div>
 
                 </a>
             </div>
 
-            <div class="col-md-3 col-sm-3 col-xs-6">
+           <!-- <div class="col-md-3 col-sm-3 col-xs-6">
                 <a data-toggle="tooltip" title="4 new pro members." class="well top-block" href="#">
 
 
@@ -217,14 +173,14 @@
                     <div>5</div>
 
                 </a>
-            </div>
+            </div>-->
 
             <div class="col-md-3 col-sm-3 col-xs-6">
                 <a data-toggle="tooltip" title="$34 new sales." class="well top-block" href="#">
 
 
                     <div>Device</div>
-                    <div>1</div>
+                    <div id="deviceCount"></div>
 
                 </a>
             </div>

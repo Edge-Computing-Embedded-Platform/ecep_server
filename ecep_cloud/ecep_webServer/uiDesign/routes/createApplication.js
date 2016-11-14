@@ -47,7 +47,7 @@ router.post('/', rfcal_upload.single('applicationFile'),function (req, res,next)
     console.log(fileName);
 
     var source= './upload/'+fileName;
-    var destination = './home/ubuntu/ecep/'+'admin'+'_'+req.body.container+'/'+fileName;
+    var destination = '/home/ubuntu/ecep/'+'admin'+'_'+req.body.container+'/'+fileName;
 
     fs.copy(source, destination, function (err) {
         if (err) return console.error(err);

@@ -7,7 +7,7 @@ $(document).ready(function(){
 
 
     $.ajax({
-        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/location",
+        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/device?command=all",
         type: "GET",
 
         crossDomain: true,
@@ -18,19 +18,16 @@ $(document).ready(function(){
 
         success: function (response) {
 
-            var location=JSON.parse(response).location;
+            var device=JSON.parse(response).device;
             // var loca = document.getElementById("location-dropdown");
 
-            console.log(location[1]);
             // alert("success");
 
-            for(var i=0; i<location.length;i++)
-            {
-                var loc=location[i];
-                // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
-                $("#location_dropdown").append($("<option value='"+loc+"'>"+loc+"</option>"));
 
-            }
+                // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
+                $("#deviceCount").append($("<div>"+device.length+"</div>"));
+
+
 
         },
         error: function (xhr, status) {
@@ -39,6 +36,34 @@ $(document).ready(function(){
     });
 
 
+    $.ajax({
+        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute?command=filter&username=admin",
+        type: "GET",
+
+        crossDomain: true,
+
+
+        // async : false,
+
+
+        success: function (response) {
+
+            var container=JSON.parse(response).compute;
+            // var loca = document.getElementById("location-dropdown");
+
+            // alert("success");
+
+
+            // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
+            $("#containerCount").append($("<div>"+container.length+"</div>"));
+
+
+
+        },
+        error: function (xhr, status) {
+            alert("error");
+        }
+    });
 
 
 
