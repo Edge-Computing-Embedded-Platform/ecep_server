@@ -10,7 +10,7 @@ import tornado.ioloop
 import tornado.web
 import json
 from container_control import *
-from ..ecep_db.controller import Compute_Manager, Image_Manager, Device_Manager
+from ..ecep_db.controller import Compute_Manager, Image_Manager, Device_Manager, Location_Manager
 from wamp_server import *
 import urlparse
 import sys
@@ -79,8 +79,8 @@ class Download(tornado.web.RequestHandler):
                 self.set_status(400, reason="param %s missing" % key)
                 raise tornado.web.HTTPError(400)
 
-        file_path = file_root_path + data['username'] + '/' + data['containerName'] + '/' + data['filename']
-
+        file_path = file_root_path + data['username'] + '_' + data['containerName'] +'/'+ data['filename']
+        print file_path
         try:
             file_object = open(file_path, 'rb')
 
@@ -213,7 +213,7 @@ class ComputeHandler(tornado.web.RequestHandler):
             return
 
         if "username" in data or "deviceId" in data:
-            ret = compute.get_device_list();
+            ret = compute.get_compute_node_list();
             self.write(json.dumps(ret))
             self.finish()
             return
@@ -229,8 +229,8 @@ class LocationHandler(tornado.web.RequestHandler):
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT')
 
     def get(self,**kwargs):
-        loc_list = ["San Jose", "Palo Alto"]
-        loc = {"location":loc_list}
+        loc_list = Location_Manager()
+        loc = loc_list.get_location()
         ret = json.dumps(loc)
         print ret
         self.write(ret)
@@ -258,7 +258,6 @@ if __name__ == "__main__":
     # start a thread to check heartbeat
     uDB_instance = updateDB()
     handle = uDB_instance.checkHeartbeat()
-
     # start a tornado server to handle user requests
     application.listen(9000)
     tornado.ioloop.IOLoop.instance().start()
