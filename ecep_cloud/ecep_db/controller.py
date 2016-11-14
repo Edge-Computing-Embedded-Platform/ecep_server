@@ -47,6 +47,10 @@ class Image(Base):
                'arch': self.arch}
         return ret
 
+class Location(Base):
+    __tablename__ = 'location'
+    locationId = Column(Integer, autoincrement=True)
+    location =  Column(String(30), primary_key=True)
 
 class Compute(Base):
     __tablename__ = 'compute'
@@ -185,12 +189,19 @@ class Device_Manager():
         self.validate_device_params(kwargs)
 
         node = Device(**kwargs)
+        loc = Location(location = kwargs['location'])
 
+        try:
+            db_session.add(loc)
+            db_session.commit()
+        except:
+            db_session.rollback()
+            pass
         try:
             db_session.add(node)
             db_session.commit()
         except Exception, e:
-            db_session.rollback();
+            db_session.rollback()
             ret = "{error:%s}" % str(e)
 
         return ret
@@ -267,6 +278,23 @@ class Device_Manager():
 
         return ret
 
+    def remove_device(self, **kwargs):
+        global db_session
+        ret = {'status': True}
+        try:
+            node = db_session.query(Device).filter_by(deviceId = kwargs['deviceId']).first()
+            count = db_session.query(Device).filter_by(location = node.location).count()
+
+            if count is 0:
+                db_session.query(Location).filter_by(location = node.location).delete()
+
+            db_session.query(Device).filter_by(deviceId = kwargs['deviceId']).delete()
+            db_session.commit()
+
+        except Exception, e:
+            ret = {'status':e}
+            return ret
+
     def validate_device_params(self, params):
         key = ['id','deviceId','arch','location']
         rm = []
@@ -279,6 +307,51 @@ class Device_Manager():
 
     def __init__(self):
         self.pk = ['deviceId', 'arch']
+
+class Location_Manager():
+
+    def add_new_location(self, **kwargs):
+        global db_session
+        ret = {'status': True}
+        print(kwargs)
+
+        try:
+            node = Location(location = kwargs["location"])
+            db_session.add(node)
+            db_session.commit()
+        except Exception, e:
+            db_session.rollback();
+            ret = {'status': e}
+            pass
+        return ret
+
+    def remove_location(self, **kwargs):
+        global db_session
+        ret = {'status': True}
+        print(kwargs)
+
+        try:
+            node = db_session.query(Compute).filter_by(location = kwargs["location"]).delete()
+        except Exception, e:
+            db_session.rollback();
+            ret = {'status': e}
+            pass
+
+    def get_location(self):
+
+        global db_session
+        try:
+            list_db = db_session.query(Device).all()
+            db_arr = []
+            for u in list_db:
+                new = u.location
+                db_arr.append(new)
+            ret = {'location':db_arr}
+        except Exception, e:
+            db_session.rollback();
+            ret = {'status': e}
+            pass
+        return ret
 
 
 class Compute_Manager():
@@ -354,6 +427,20 @@ class Compute_Manager():
 
         return ret
 
+    def remove_compute_node(self, **kwargs):
+        ret = {'status':True}
+
+        global db_session
+
+        print(kwargs)
+        try:
+            db_session.query(Compute).filter_by(remoteName = kwargs["containerName"]).delete()
+            db_session.commit()
+        except Exception, e:
+            ret = "{error:%s}" % str(e)
+            return ret
+        return ret
+
     def validate_compute_params(self,params):
         key = ['containerId', 'containerName', 'remoteName', 'imageName', 'deviceId', 'username', 'appPath', 'status']
         rm = []
@@ -366,6 +453,7 @@ class Compute_Manager():
 
     def __init__(self):
         self.pk = ['username', 'containerName']
+
 
 
 """testing"""
