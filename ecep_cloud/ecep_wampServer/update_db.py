@@ -9,7 +9,7 @@ response received from end node
 
 import threading
 import time
-from server.ecep_db.controller import Compute_Manager
+from server.ecep_db.controller import *
 
 # maintain all the registered devices
 regDevice = {}
@@ -50,6 +50,9 @@ class updateDB(object):
         
     
     def deviceReg(self, deviceInfo):
+        """
+        The device registers when there is no previous device
+        """
         print 'deviceReg'
         print deviceInfo
         global regDevice
@@ -57,6 +60,8 @@ class updateDB(object):
         if deviceInfo['deviceId'] in regDevice:
             print ('heartbeat from ' + deviceInfo['deviceId'] + ' received')
         else:
+            devManager = Device_Manager()
+            devManager.add_new_device_node(args)
             print ('registering a new device: ' + deviceInfo['deviceId'])
             print ('acrhitecture: ' + deviceInfo['arch'] + ', at location: ' + deviceInfo['location'])
 
@@ -69,9 +74,13 @@ class updateDB(object):
         """
         global regDevice
         while True:
+            print regDevice
             for device in regDevice:
                 if regDevice[device] == False:
                     print 'no heartbeat'
+                    # remove the entry
+                    regDevice.pop(device, None)
+                    
                 else:
                     print device + ' is alive'
                     regDevice[device] = False

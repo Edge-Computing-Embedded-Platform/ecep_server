@@ -10,7 +10,10 @@ def sendCommand(data):
         if data['command'] == 'create':
             keyList = ('imageName', 'containerName', 'command', 'username')
 
-        elif data['command'] == 'start' or data['command'] == 'stop' or data['command'] == 'remove':
+        elif data['command'] == 'start':
+            keyList = ('containerName', 'command', 'username', 'filename')
+            
+        elif data['command'] == 'stop' or data['command'] == 'remove':
             keyList = ('containerName', 'command', 'username')
 
         msg = dict((key, data[key]) for key in keyList)
@@ -33,11 +36,13 @@ def checkValidity(command, param):
     print command + ' received'
 
     if command == 'create':
-        valid = ('deviceId' in param) and ('imageName' in param) and ('containerName' in param) and (
-            'username' in param)
+        valid = ('deviceId' in param) and ('imageName' in param) and ('containerName' in param) and ('username' in param)
 
-    elif command == 'start' or command == 'stop' or command == 'remove':
+    elif command == 'stop' or command == 'remove':
         valid = ('deviceId' in param) and ('containerName' in param) and ('username' in param)
+        
+    elif command == 'start':
+        valid = ('deviceId' in param) and ('containerName' in param) and ('username' in param) and ('filename' in param)
 
     # elif command == 'list':
     print valid

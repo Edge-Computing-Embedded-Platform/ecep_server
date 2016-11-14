@@ -83,7 +83,7 @@ class ClientReader(ApplicationSession):
             
 
 class wampserver(ApplicationSession):
-    def __init__(self, topicRead=None):  # Sistemare
+    def __init__(self, topicRead=None):
 
         self._topicRead = None
         self._debug = False
@@ -97,7 +97,8 @@ class wampserver(ApplicationSession):
 
         self._extra = {'heartbeat': 'com.ecep.heartbeat', 
                        'deviceResponse': 'com.ecep.deviceResponse', 
-                       'containerStatus': 'com.ecep.containerStatus'}
+                       'containerStatus': 'com.ecep.containerStatus',
+                       'cpuInfo' : 'com.ecep.cpuInfo'}
                        
 
     def connect(self, ip, port, realm):
