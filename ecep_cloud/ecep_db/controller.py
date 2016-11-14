@@ -218,7 +218,7 @@ class Device_Manager():
 
         args = self.pk
         ret = "{error:OK}"
-
+        #print( "add_new_device_node")
         print(kwargs)
         for key in args:
             if key not in kwargs:
@@ -230,9 +230,15 @@ class Device_Manager():
 
         try:
             db_session.add(loc)
+            #db_session.flush()
             db_session.commit()
         except Exception, e:
-            db_session.rollback()
+            print e
+            try:
+                db_session.rollback()
+            except Exception, e:
+                set_db_session()
+                print e
             pass
         try:
             db_session.add(node)
