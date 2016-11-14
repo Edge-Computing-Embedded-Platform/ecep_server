@@ -43,79 +43,66 @@ router.post('/', rfcal_upload.single('applicationFile'),function (req, res,next)
 
     console.log("Entered Docker2");
 
-    // if(filestorage.accessSync('./temp'))
-    // {
-    //     console.log("Entered Docker2");
-    //     filestorage.mkdirSync('./temp');
-    // }
 
-
-    // if (!fs.existsSync('./p')){
-    //     mkdirp=true;
-    // }
-    // else
-    //     mkdirp=false;
     console.log(fileName);
 
-    fs.copy('./upload/build.txt', './tmp/build.txt', function (err) {
-        if (err) return console.error(err)
+    var source= './upload/'+fileName;
+    var destination = '/home/ubuntu/ecep/'+'admin'+'_'+req.body.container+'/'+fileName;
 
-        fs.remove('./upload/build.txt');
+    fs.copy(source, destination, function (err) {
+        if (err) return console.error(err);
+
+        fs.remove(source);
         console.log("success!")
-    })
 
 
 
 
-//     var data = JSON.stringify({
-//         "command": "create",
-//        // "username": "abhi",
-//        // "imageName":req.body.image,
-//        /// "internalCommand":req.body.internal,
-//         "containerName":"tej",
-//         "deviceId":req.body.device
-//     });
-//     console.log(mkdir);
-//   //  res.send({"data":"Success"});
-//
-//     mv('./upload/', './tem/', mkdirp=false , function(err) {
-//         // handle the error
-//        if(err){
-//            throw err;
-//        }
-//        else {
-//            console.log("Entered Docker3");
-//
-//            var post_options = {
-//                host: 'ec2-52-39-130-106.us-west-2.compute.amazonaws.com',
-//                port: '9000',
-//                path: '/handle_request',
-//                method: 'POST',
-//                headers: {
-//                    'Content-Type': 'application/json',
-//                    'Content-Length': Buffer.byteLength(data)
-//                }
-//            };
-//
-//            console.log("h1");
-//            var post_req = http.request(post_options, function (reses) {
-//                reses.setEncoding('utf8');
-//                console.log("h2");
-//                reses.on('data', function (chunk) {
-//                    console.log("h3");
-//                    console.log('Response: ' + chunk);
-//                    // res.send(chunk);
-//                    res.send({"data": "Success"});
-//                    // res.render('index', { title: 'Express' });
-//                });
-//            });
-//            console.log("h4");
-//
-// // post the data
-//     post_req.write(data);
-//     post_req.end();
-//      }
-//    });
+
+   var data = JSON.stringify({
+        "command": "start",
+         "username":"admin",
+        "containerName":"tej",
+
+        //"deviceId":req.body,
+            "filename":fileName
+    });
+
+  //  res.send({"data":"Success"});
+
+
+           console.log("Entered Docker3");
+
+           var post_options = {
+               host: 'ec2-52-39-130-106.us-west-2.compute.amazonaws.com',
+               port: '9000',
+               path: '/handle_request',
+               method: 'POST',
+               headers: {
+                   'Content-Type': 'application/json',
+                   'Content-Length': Buffer.byteLength(data)
+               }
+           };
+
+           console.log("h1");
+           var post_req = http.request(post_options, function (reses) {
+               reses.setEncoding('utf8');
+               console.log("h2");
+               reses.on('data', function (chunk) {
+                   console.log("h3");
+                   console.log('Response: ' + chunk);
+                   // res.send(chunk);
+                   res.send({"data": "Success"});
+                   // res.render('index', { title: 'Express' });
+               });
+           });
+           console.log("h4");
+
+// post the data
+    post_req.write(data);
+    post_req.end();
+
+   });
 });
 
 

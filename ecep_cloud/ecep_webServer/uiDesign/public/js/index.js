@@ -212,7 +212,11 @@ function sendContainer()
         url : "create",
         dataType: "json",
         data:{
-            "location":5,
+            "location":$('#location_dropdown').val(),
+            "device":$('#device').val(),
+            "arch":$('#architecture').val(),
+            "image":$('#containerImage').val(),
+            "containerName":$('#container_name').val(),
         },
         success : function(response) {
             console.log("S");
@@ -300,11 +304,10 @@ $('#dashboard').click(function() {
 
 
 });
-/*$('#applicationForm').click(function() {
+$('#applicationForm').click(function() {
     $.ajax({
 
-
-        //url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute?command=filter&deviceId=laptop&username=chin",
+        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute?command=filter&username=admin",
         type: "GET",
 
         crossDomain: true,
@@ -315,16 +318,17 @@ $('#dashboard').click(function() {
 
         success: function (response) {
 
-            var location = JSON.parse(response).compute;
+            var container = JSON.parse(response).compute;
             // var loca = document.getElementById("location-dropdown");
 
-            console.log($("#device").val());
+
             // alert("success");
 
-            for (var i = 0; i < location.length; i++) {
-                var loc = location[i];
+            for (var i = 0; i < container.length; i++) {
+                var loc = container[i].containerName;
+                console.log(container[i].containerName);
                 // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
-                $("containerName-app").append($("<option>" + loc + "</option>"));
+                $("#containerName_app").append($("<option>" + loc + "</option>"));
 
             }
 
@@ -334,6 +338,6 @@ $('#dashboard').click(function() {
         }
     });
 
-});*/
+});
 
 

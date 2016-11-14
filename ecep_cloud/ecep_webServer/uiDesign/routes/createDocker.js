@@ -20,12 +20,12 @@ router.post('/', function (req, res,next) {
     console.log("Entered Docker2");
     res.send({"data":"success"});
 
-    /*var data = JSON.stringify({
+    var data = JSON.stringify({
         "command": "create",
-        "username": "abhi",
+        "username": "admin",
         "imageName":req.body.image,
-        "internalCommand":req.body.internal,
-        "containerName":"tej",
+
+        "containerName":req.body.container,
         "deviceId":req.body.device
     });
     console.log(data);
@@ -45,13 +45,13 @@ router.post('/', function (req, res,next) {
         reses.on('data', function (chunk) {
             console.log('Response: ' + chunk);
             //res.send(chunk);
-            res.render('index', { title: 'Express' });
+            //res.render('index', { title: 'Express' });
         });
     });
 
 // post the data
     post_req.write(data);
-    post_req.end();*/
+    post_req.end();
 
 });
 
