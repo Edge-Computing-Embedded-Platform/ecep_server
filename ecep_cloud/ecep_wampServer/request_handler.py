@@ -250,7 +250,7 @@ if __name__ == "__main__":
     # params for wampserver
     ip = u'127.0.0.1'
     port = sys.argv[1]
-    realm = u'realm1'
+    realm = unicode(sys.argv[2])
 
     server = wampserver()
     check = server.connect(ip, port, realm)
@@ -260,6 +260,6 @@ if __name__ == "__main__":
     handle = uDB_instance.checkHeartbeat()
 
     # start a tornado server to handle user requests
-    application.listen(8090)
+    application.listen(9000)
     tornado.ioloop.IOLoop.instance().start()
     handle.join()
