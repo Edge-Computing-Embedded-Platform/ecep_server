@@ -1,6 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String, ForeignKey, ForeignKeyConstraint
+from sqlalchemy import Column, Integer, String, ForeignKey, ForeignKeyConstraint, Float
 import sqlalchemy
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy.orm import relationship
@@ -52,6 +52,44 @@ class Location(Base):
     locationId = Column(Integer, autoincrement=True)
     location =  Column(String(30), primary_key=True)
 
+class Info(Base):
+    __tablename__ = 'Info'
+    id = Column(Integer, autoincrement=True)
+    deviceId = Column(String(50), primary_key=True)
+    deviceName = Column(String(50))
+    totalContainers = Column(Integer)
+    totalImages = Column(Integer)
+    kernelVersion = Column(String(60))
+    os = Column(String(60))
+    CPUs = Column(Integer)
+    CPUUsage = Column(Float)
+    physicalMem = Column(Float)
+    physicalUsed = Column(Float)
+    physicalUnused = Column(Float)
+    diskMem = Column(Float)
+    diskUsed = Column(Float)
+    diskUnused = Column(Float)
+    diskPercent = Column(Float)
+
+    def get_dict(self):
+        ret = {'deviceId': self.imageName,
+               'deviceName': self.deviceName,
+                'totalContainers':self.totalContainers,
+               'totalImages':self.totalImages,
+               'kernelVersion':self.kernelVersion,
+               'os':self.os,
+               'CPUs':self.CPUs,
+               'CPUUsage': self.CPUUsage,
+               'physicalMem':self.physicalMem,
+               'physicalUsed': self.physicalUsed,
+               'physicalUnused':self.physicalUnused,
+               'diskMem':self.diskMem,
+               'diskUsed':self.diskUsed,
+               'diskUnused':self.diskUnused,
+               'diskPercent':self.diskPercent
+                }
+        return ret
+
 class Compute(Base):
     __tablename__ = 'compute'
     id = Column(Integer, autoincrement=True)
@@ -62,7 +100,7 @@ class Compute(Base):
     deviceId = Column(String(50))
     username = Column(String(50), primary_key=True)
     appPath = Column(String(100))
-    status = Column(String)
+    status = Column(String(50))
     __total__args__ = (PrimaryKeyConstraint(containerName, username), {})
 
     def __repr__(self):
@@ -187,14 +225,13 @@ class Device_Manager():
                 raise ValueError("Missing %s" % key)
 
         self.validate_device_params(kwargs)
-
         node = Device(**kwargs)
         loc = Location(location = kwargs['location'])
 
         try:
             db_session.add(loc)
             db_session.commit()
-        except:
+        except Exception, e:
             db_session.rollback()
             pass
         try:
@@ -284,8 +321,8 @@ class Device_Manager():
         try:
             node = db_session.query(Device).filter_by(deviceId = kwargs['deviceId']).first()
             count = db_session.query(Device).filter_by(location = node.location).count()
-
-            if count is 0:
+            print count
+            if count is 1:
                 db_session.query(Location).filter_by(location = node.location).delete()
 
             db_session.query(Device).filter_by(deviceId = kwargs['deviceId']).delete()
@@ -341,7 +378,7 @@ class Location_Manager():
 
         global db_session
         try:
-            list_db = db_session.query(Device).all()
+            list_db = db_session.query(Location).all()
             db_arr = []
             for u in list_db:
                 new = u.location
@@ -355,6 +392,7 @@ class Location_Manager():
 
 
 class Compute_Manager():
+
     def add_new_compute_node(self, **kwargs):
 
         global db_session
@@ -400,7 +438,7 @@ class Compute_Manager():
         self.validate_compute_params(kwargs)
         
         try:
-            db_session.query(Compute).filter_by(username=kwargs.get('username'), \
+            db_session.query(Compute).filter_by(username = kwargs.get('username'), \
                                                 containerName=kwargs.get('containerName')).update(kwargs)
             db_session.commit()
 
@@ -454,7 +492,25 @@ class Compute_Manager():
     def __init__(self):
         self.pk = ['username', 'containerName']
 
+class Info_Manager():
 
+    def update_device_info(self, **kwargs):
+        ret = {'status':True}
+
+        global db_session
+
+        try:
+            db_session.query(Info).filter_by(deviceID = kwargs['deviceID']).update(kwargs)
+            db_session.commit()
+        except:
+            try:
+                node = Info(**kwargs)
+                db_session.add(node)
+                db_session.commit()
+            except:
+                ret = {'status': False}
+
+        return ret
 
 """testing"""
 if __name__ == '__main__':
@@ -471,6 +527,7 @@ if __name__ == '__main__':
 
     node = Device_Manager()
     node.add_new_device_node(deviceId="beaglebone", arch="arm", location="san jose")
+    node.add_new_device_node(deviceId="laptop", arch="arm", location="san jose")
     node.add_new_device_node(deviceId="jetson", arch="MIPS", location="bangalore")
 
     node = Image_Manager()
