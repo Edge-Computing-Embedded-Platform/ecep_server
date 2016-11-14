@@ -25,7 +25,7 @@ router.post('/', function (req, res,next) {
         "username": "admin",
         "imageName":req.body.image,
 
-        "containerName":req.body.container,
+        "containerName":req.body.containerName,
         "deviceId":req.body.device
     });
     console.log(data);

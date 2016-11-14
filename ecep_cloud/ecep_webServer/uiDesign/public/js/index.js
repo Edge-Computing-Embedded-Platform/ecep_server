@@ -307,7 +307,8 @@ $('#dashboard').click(function() {
 $('#applicationForm').click(function() {
     $.ajax({
 
-        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute?command=filter&username=admin",
+       // url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute?command=filter&username=admin",
+        url:"http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/device?command=all",
         type: "GET",
 
         crossDomain: true,
@@ -318,17 +319,17 @@ $('#applicationForm').click(function() {
 
         success: function (response) {
 
-            var container = JSON.parse(response).compute;
+            var device = JSON.parse(response).device;
             // var loca = document.getElementById("location-dropdown");
 
 
             // alert("success");
 
-            for (var i = 0; i < container.length; i++) {
-                var loc = container[i].containerName;
-                console.log(container[i].containerName);
+            for (var i = 0; i < device.length; i++) {
+                var loc = device[i].deviceId;
+                console.log(device[i].containerName);
                 // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
-                $("#containerName_app").append($("<option>" + loc + "</option>"));
+                $("#device_app").append($("<option>" + loc + "</option>"));
 
             }
 

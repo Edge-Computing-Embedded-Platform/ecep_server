@@ -6,7 +6,7 @@
 $(document).ready(function() {
 
 
-});$("#location_dropdown").change(function () {
+$("#location_dropdown").change(function () {
     console.log("location changed");
 
     $("#device").show();
@@ -123,4 +123,4 @@ $("#architecture").change(function () {
 });
 
 
-
+});
