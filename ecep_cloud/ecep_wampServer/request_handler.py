@@ -10,7 +10,7 @@ import tornado.ioloop
 import tornado.web
 import json
 from container_control import *
-from server.ecep_db.controller import Compute_Manager, Image_Manager, Device_Manager
+from ..ecep_db.controller import Compute_Manager, Image_Manager, Device_Manager
 from wamp_server import *
 import urlparse
 import sys
@@ -250,7 +250,7 @@ if __name__ == "__main__":
     # params for wampserver
     ip = u'127.0.0.1'
     port = sys.argv[1]
-    realm = sys.argv[2]
+    realm = u'realm1'
 
     server = wampserver()
     check = server.connect(ip, port, realm)

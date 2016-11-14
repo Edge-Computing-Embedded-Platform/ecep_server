@@ -1,7 +1,7 @@
 {
-    "pid": 24290, 
+    "pid": 3358, 
     "options": {
-        "cbdir": "/home/ubuntu/abhi/Edge-computing-embedded-platform/server/wamp/.crossbar", 
+        "cbdir": "/home/ubuntu/final_Implementation_ECEP/ecep_server/ecep_cloud/ecep_wampServer/.crossbar", 
         "cdc": false, 
         "loglevel": "info", 
         "logtofile": false, 
@@ -14,8 +14,6 @@
     }, 
     "argv": [
         "/usr/local/bin/crossbar", 
-        "start", 
-        "--cbdir", 
-        "/home/ubuntu/abhi/Edge-computing-embedded-platform/server/wamp/.crossbar"
+        "start"
     ]
 }
