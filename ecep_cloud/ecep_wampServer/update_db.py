@@ -110,6 +110,7 @@ class updateDB(object):
                 else:
                     print device + ' is alive'
                     regDevice[device] = False
+
             time.sleep(600)
 
 
