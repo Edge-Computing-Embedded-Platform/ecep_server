@@ -67,10 +67,7 @@ class updateDB(object):
         else:
             devManager = Device_Manager()
             devManager.add_new_device_node(**deviceInfo)
-            
-            info = Info_Manager()
-            info.remove_device_info(deviceId = deviceInfo['deviceId'])
-            
+                        
             print ("*******************************************************************************************")
             print ('registering a new device: ' + deviceInfo['deviceId'])
             print ('acrhitecture: ' + deviceInfo['arch'] + ', at location: ' + deviceInfo['location'])
@@ -88,8 +85,13 @@ class updateDB(object):
             for device in regDevice:
                 if regDevice[device] == False:
                     print 'no heartbeat'
+
                     devManager = Device_Manager()
                     devManager.remove_device(deviceId = device)
+
+                    info = Info_Manager()
+                    info.remove_device_info(deviceId = device)
+
                     regDevice.pop(device, None)
                 else:
                     print device + ' is alive'
