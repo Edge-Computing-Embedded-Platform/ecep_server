@@ -269,12 +269,15 @@ if __name__ == "__main__":
     port = sys.argv[1]
     realm = unicode(sys.argv[2])
 
+    
+    
     server = wampserver()
     check = server.connect(ip, port, realm)
 
     # start a thread to check heartbeat
     uDB_instance = updateDB()
     handle = uDB_instance.checkHeartbeat()
+    
     # start a tornado server to handle user requests
     application.listen(9000)
     tornado.ioloop.IOLoop.instance().start()

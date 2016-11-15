@@ -16,6 +16,14 @@ from ..ecep_db.controller import *
 regDevice = {}
 
 
+def device_init():
+    global regDevice
+    
+    devManager = Device_Manager()
+    devices = devManager.get_device_list()['device']
+
+    regDevice = dict((dev : True) for dev in devices)
+
 # decorator for threads
 def threaded(func):
     def func_wrapper(*args, **kwargs):
@@ -81,6 +89,8 @@ class updateDB(object):
         check if the end node is alive
         """
         global regDevice
+        print regDevice
+        
         while True:
             for device in regDevice:
                 if regDevice[device] == False:
