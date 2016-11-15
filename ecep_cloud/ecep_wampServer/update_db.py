@@ -49,6 +49,12 @@ class updateDB(object):
         node = Compute_Manager()
         node.update_compute_node(**data)
         
+    def removeComputeNode(self, container):
+        """
+        Used to remove the container entry
+        """
+        node = Compute_Manager()
+        node.remove_compute_node(containerName = container)
     
     def deviceReg(self, deviceInfo):
         """
@@ -61,10 +67,15 @@ class updateDB(object):
         else:
             devManager = Device_Manager()
             devManager.add_new_device_node(**deviceInfo)
+            
+            info = Info_Manager()
+            info.remove_device_info(deviceId = deviceInfo['deviceId'])
+            
             print ("*******************************************************************************************")
             print ('registering a new device: ' + deviceInfo['deviceId'])
             print ('acrhitecture: ' + deviceInfo['arch'] + ', at location: ' + deviceInfo['location'])
             print ("*******************************************************************************************")
+            
         regDevice[deviceInfo['deviceId']] = True
 
     @threaded
@@ -74,13 +85,12 @@ class updateDB(object):
         """
         global regDevice
         while True:
-            print regDevice
             for device in regDevice:
                 if regDevice[device] == False:
                     print 'no heartbeat'
-                    
+                    devManager = Device_Manager()
+                    devManager.remove_device(deviceId = device)
                     regDevice.pop(device, None)
-                    
                 else:
                     print device + ' is alive'
                     regDevice[device] = False
@@ -102,7 +112,7 @@ class updateDB(object):
                 self.updateComputeNode(data)
         except Exception as e:
             print 'Could not update the node with periodic status, error: ', e
-	    pass
+            pass
             
     def updateDeviceResponse(self, response):
         """
@@ -115,16 +125,28 @@ class updateDB(object):
             data['username'] = response['containerName'].split('_')[0]
             data['containerName'] = response['containerName'].split('_')[1]
 
-            if data['command'] == 'create':
+            if data['status'] == 'created':
                 data['container_id'] = response['ID']
 
-            self.updateComputeNode(data)
-            
-            #TODO: complete for remove
+            if data['status'] == 'removed':
+                self.removeComputeNode(response['containerName'])
+            else:
+                self.updateComputeNode(data)
             
         except Exception as e:
             print 'Could not update device response, error: ' + e
-                
+            
+            
+    def updateCPUinfo(self, info):
+        """
+        update the cpu information from end node
+        """
+        infoDB = Info_Manager()
+        kwargs = info['info'].copy()
+        kwargs['deviceId'] = info['deviceId']
+        print ('cpuInfo', kwargs)
+        infoDB.update_device_info(**kwargs)
+        
         
 
 

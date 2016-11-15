@@ -80,7 +80,22 @@ class ClientReader(ApplicationSession):
             print ("Subscribed to topic: " + self.contStat)
         except Exception as e:
             print("could not subscribe to topic:" + self.contStat + ', error: '+ e)
+        
+        
+        # This is to handle cpu info
+        self.cpuInfo = self.config.extra['cpuInfo']
+        def cpuInfo(args):
+            log.msg('I receives', args)
+            uDB_instance = uDB()
             
+            # handle the cpu info updates
+            uDB_instance.updateCPUinfo(args)
+        try:
+            yield self.subscribe(cpuInfo, self.cpuInfo)
+            print ("Subscribed to topic: " + self.cpuInfo)
+        except Exception as e:
+            print("could not subscribe to topic:" + self.cpuInfo + ', error: '+ e)
+        
 
 class wampserver(ApplicationSession):
     def __init__(self, topicRead=None):
