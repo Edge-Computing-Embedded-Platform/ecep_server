@@ -2,38 +2,75 @@
 
 <!------------------------------------------------------->
 <div style="margin-top: 3rem">
-<div class="col-md-3 col-sm-3 col-xs-6" >
-    <a data-toggle="tooltip" title="" class="well top-block" href="#">
+    <div class="col-md-3 col-sm-3 col-xs-6" >
+        <a data-toggle="tooltip" title="" class="well top-block" href="#">
 
 
-        <div>Containers</div>
-        <div>3</div>
+            <div>User's Containers</div>
+            <div id="containerCount"></div>
 
-    </a>
-</div>
-
-<div class="col-md-3 col-sm-3 col-xs-6">
-    <a data-toggle="tooltip" title="4 new pro members." class="well top-block" href="#">
-
-
-        <div>Application</div>
-        <div>5</div>
-
-    </a>
-</div>
-
-<div class="col-md-3 col-sm-3 col-xs-6">
-    <a data-toggle="tooltip" title="$34 new sales." class="well top-block" href="#">
-
-
-        <div>Device</div>
-        <div>1</div>
-
-    </a>
-</div>
+        </a>
     </div>
 
+    <!-- <div class="col-md-3 col-sm-3 col-xs-6">
+         <a data-toggle="tooltip" title="4 new pro members." class="well top-block" href="#">
+
+
+             <div>Application</div>
+             <div>5</div>
+
+         </a>
+     </div>-->
+
+    <div class="col-md-3 col-sm-3 col-xs-6">
+        <a data-toggle="tooltip" title="$" class="well top-block" href="#">
+
+
+            <div>Total Available Device</div>
+            <div id="deviceCount"></div>
+
+        </a>
+    </div>
+</div>
+<!------------------------------------------------------->
+
+<div class="row">
+    <div class="box col-md-9 col-sm-3 col-xs-6">
+        <div class="box-inner">
+            <div class="box-header well" data-original-title="">
+                <h2><i class="glyphicon glyphicon-user"></i> Container Details</h2>
+
+                <div class="box-icon">
+                    <a href="#" class="btn btn-minimize btn-round btn-default"><i
+                            class="glyphicon glyphicon-chevron-up"></i></a>
+                    <a href="#" class="btn btn-close btn-round btn-default"><i
+                            class="glyphicon glyphicon-remove"></i></a>
+                </div>
+            </div>
+            <div class="box-content">
+                <table class="table table-striped table-bordered responsive">
+                    <thead>
+                    <tr>
+                        <th>Container Name</th>
+                        <th>Device Name</th>
+                        <th>Image Name</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="containerRow">
 
 
 
-<script src="js/dashboard .js"></script>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--/span-->
+
+
+
+
+
+    <script src="js/dashboard .js"></script>

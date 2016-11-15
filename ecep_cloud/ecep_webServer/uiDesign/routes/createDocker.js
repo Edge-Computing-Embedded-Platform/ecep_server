@@ -23,7 +23,7 @@ router.post('/', function (req, res,next) {
     var data = JSON.stringify({
         "command": "create",
         "username": "admin",
-        "imageName":req.body.image,
+        "imageName":"hello-world",
 
         "containerName":req.body.containerName,
         "deviceId":req.body.device
