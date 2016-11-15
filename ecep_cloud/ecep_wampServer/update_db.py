@@ -18,18 +18,19 @@ regDevice = {}
 
 def device_init():
     global regDevice
-    
+
     devManager = Device_Manager()
     devices = devManager.get_device_list()['device']
 
     for dev in devices:
-	regDevice[dev['deviceId']] = True
+        regDevice[dev['deviceId']] = True
 
 
 # decorator for threads
-def threaded(func, th_name):
+def threaded(func):
     def func_wrapper(*args, **kwargs):
-        thread = threading.Thread(target=func, args=args, kwargs=kwargs,name = th_name)
+        print args[0]
+        thread = threading.Thread(target=func, args=args, kwargs=kwargs)
         thread.setDaemon(True)
         thread.start()
         return thread
@@ -58,14 +59,13 @@ class updateDB(object):
         node = Compute_Manager()
         node.update_compute_node(**data)
 
-        
     def removeComputeNode(self, container):
         """
         Used to remove the container entry
         """
         node = Compute_Manager()
-        node.remove_compute_node(containerName = container)
-    
+        node.remove_compute_node(containerName=container)
+
     def deviceReg(self, deviceInfo):
         """
         The device registers when there is no previous device
@@ -77,14 +77,13 @@ class updateDB(object):
         else:
             devManager = Device_Manager()
             devManager.add_new_device_node(**deviceInfo)
-                        
+
             print ("*******************************************************************************************")
             print ('registering a new device: ' + deviceInfo['deviceId'])
             print ('acrhitecture: ' + deviceInfo['arch'] + ', at location: ' + deviceInfo['location'])
             print ("*******************************************************************************************")
-            
-        regDevice[deviceInfo['deviceId']] = True
 
+        regDevice[deviceInfo['deviceId']] = True
 
     @threaded
     def checkHeartbeat(self, name='checkHeartbeat'):
@@ -93,29 +92,28 @@ class updateDB(object):
         """
         global regDevice
         print regDevice
-        
+
         while True:
-	    rm = []
+            rm = []
             for device in regDevice:
                 if regDevice[device] == False:
                     print 'no heartbeat'
 
                     devManager = Device_Manager()
-                    devManager.remove_device(deviceId = device)
+                    devManager.remove_device(deviceId=device)
 
                     info = Info_Manager()
-                    info.remove_device_info(deviceId = device)
+                    info.remove_device_info(deviceId=device)
 
                     rm.append(device)
                 else:
                     print device + ' is alive'
                     regDevice[device] = False
-	    
-	    for item in rm:
-		regDevice.pop(item, None)
+
+            for item in rm:
+                regDevice.pop(item, None)
 
             time.sleep(600)
-
 
     def updateContainerStatus(self, statusList):
         """
@@ -152,11 +150,10 @@ class updateDB(object):
                 self.removeComputeNode(response['containerName'])
             else:
                 self.updateComputeNode(data)
-            
+
         except Exception as e:
             print 'Could not update device response, error: ' + e
-            
-            
+
     def updateCPUinfo(self, info):
         """
         update the cpu information from end node
@@ -166,6 +163,7 @@ class updateDB(object):
         kwargs['deviceId'] = info['deviceId']
         print ('cpuInfo', kwargs)
         infoDB.update_device_info(**kwargs)
+
 
 if __name__ == '__main__':
     trial = updateDB()

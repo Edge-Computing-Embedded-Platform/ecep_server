@@ -15,13 +15,13 @@ db_session = None
 
 def set_db_session():
     print "DB version: %s"% sqlalchemy.__version__
-    db = create_engine('sqlite:///demo.db', echo=False)
+    db = create_engine('sqlite:///demo.db', echo=False,connect_args={'check_same_thread':False})
     Base.metadata.create_all(db)
     global db_lock
     global db_session
     session = sessionmaker(bind=db)
     db_session = session()
-    db_lock = threading.Lock
+    db_lock = threading.Lock()
 
 class Device(Base):
     __tablename__ = 'device'
@@ -344,8 +344,7 @@ class Device_Manager():
         return ret
 
     def get_device_list(self):
-        print("get_device_list")
-
+        
         global db_session
         global db_lock
 
@@ -562,6 +561,7 @@ class Info_Manager():
 
         global db_session
         global db_lock
+
         if 'deviceId' not in kwargs:
             raise KeyError("missing key:%s"%'deviceId')
         db_lock.acquire()
@@ -586,6 +586,7 @@ class Info_Manager():
             db_session.query(Info).filter_by(deviceId=kwargs['deviceId']).delete()
             db_session.flush()
             db_session.commit()
+            ret = {'status': True}
         except Exception, e:
             db_session.rollback()
             ret = {'info': e}

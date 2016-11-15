@@ -268,8 +268,6 @@ if __name__ == "__main__":
     ip = u'127.0.0.1'
     port = sys.argv[1]
     realm = unicode(sys.argv[2])
-
-    
     
     server = wampserver()
     check = server.connect(ip, port, realm)
