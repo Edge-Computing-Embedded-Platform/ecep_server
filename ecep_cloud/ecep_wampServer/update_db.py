@@ -54,18 +54,17 @@ class updateDB(object):
         """
         The device registers when there is no previous device
         """
-        print 'deviceReg'
-        print deviceInfo
         global regDevice
         
         if deviceInfo['deviceId'] in regDevice:
             print ('heartbeat from ' + deviceInfo['deviceId'] + ' received')
         else:
             devManager = Device_Manager()
-            devManager.add_new_device_node(deviceInfo)
+            devManager.add_new_device_node(**deviceInfo)
+            print ("*******************************************************************************************")
             print ('registering a new device: ' + deviceInfo['deviceId'])
             print ('acrhitecture: ' + deviceInfo['arch'] + ', at location: ' + deviceInfo['location'])
-
+            print ("*******************************************************************************************")
         regDevice[deviceInfo['deviceId']] = True
 
     @threaded
@@ -79,7 +78,7 @@ class updateDB(object):
             for device in regDevice:
                 if regDevice[device] == False:
                     print 'no heartbeat'
-                    # remove the entry
+                    
                     regDevice.pop(device, None)
                     
                 else:
@@ -102,7 +101,8 @@ class updateDB(object):
                 print data
                 self.updateComputeNode(data)
         except Exception as e:
-            print 'Could not update the node with periodic status, error: ' + e
+            print 'Could not update the node with periodic status, error: ', e
+	    pass
             
     def updateDeviceResponse(self, response):
         """

@@ -19,7 +19,8 @@ def sendCommand(data):
         msg = dict((key, data[key]) for key in keyList)
 
         if msg['command'] == 'create':
-            db_msg = msg
+            db_msg = msg.copy()
+	    db_msg['deviceId'] = data['deviceId']
             db = updateDB()
             db.addComputeNode(db_msg)
 
