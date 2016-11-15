@@ -59,12 +59,14 @@ class updateDB(object):
         node = Compute_Manager()
         node.update_compute_node(**data)
 
+
     def removeComputeNode(self, container):
         """
         Used to remove the container entry
         """
         node = Compute_Manager()
         node.remove_compute_node(containerName=container)
+
 
     def deviceReg(self, deviceInfo):
         """
@@ -84,6 +86,7 @@ class updateDB(object):
             print ("*******************************************************************************************")
 
         regDevice[deviceInfo['deviceId']] = True
+
 
     @threaded
     def checkHeartbeat(self, name='checkHeartbeat'):
@@ -124,9 +127,10 @@ class updateDB(object):
             for entries in statusList:
                 data = dict((key, entries[key]) for key in keyList)
                 print ":P:P:P:P:P"
-                data['username'] = entries['containerName'].split('_')[0]
+                user = entries['containerName'][0].split('_')[0]
+                data['username'] = user.split('/')[1]
                 print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
-                data['containerName'] = entries['containerName'].split('_')[1]
+                data['containerName'] = entries['containerName'][0].split('_')[1]
                 print data
                 self.updateComputeNode(data)
         except Exception as e:
@@ -155,6 +159,7 @@ class updateDB(object):
         except Exception as e:
             print 'Could not update device response, error: ' + e
             pass
+
 
     def updateCPUinfo(self, info):
         """
