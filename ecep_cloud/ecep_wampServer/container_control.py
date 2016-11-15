@@ -39,10 +39,10 @@ def checkValidity(command, param):
     if command == 'create':
         valid = ('deviceId' in param) and ('imageName' in param) and ('containerName' in param) and ('username' in param)
 
-    elif command == 'stop' or command == 'remove':
+    elif command == 'stop' or command == 'remove' and command == 'start':
         valid = ('deviceId' in param) and ('containerName' in param) and ('username' in param)
         
-    elif command == 'start':
+    elif command == 'upStart':
         valid = ('deviceId' in param) and ('containerName' in param) and ('username' in param) and ('filename' in param)
 
     # elif command == 'list':
