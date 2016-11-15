@@ -95,6 +95,7 @@ class updateDB(object):
         print regDevice
         
         while True:
+	    rm = []
             for device in regDevice:
                 if regDevice[device] == False:
                     print 'no heartbeat'
@@ -105,11 +106,13 @@ class updateDB(object):
                     info = Info_Manager()
                     info.remove_device_info(deviceId = device)
 
-                    regDevice.pop(device, None)
-
+                    rm.append(device)
                 else:
                     print device + ' is alive'
                     regDevice[device] = False
+	    
+	    for item in rm:
+		regDevice.pop(item, None)
 
             time.sleep(600)
 
