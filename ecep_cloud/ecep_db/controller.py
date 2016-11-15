@@ -6,9 +6,10 @@ from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import PrimaryKeyConstraint
 import json
+import threading
 
 Base = declarative_base()
-
+db_lock = None
 db_session = None
 
 
@@ -16,10 +17,11 @@ def set_db_session():
     print "DB version: %s"% sqlalchemy.__version__
     db = create_engine('sqlite:///demo.db', echo=False)
     Base.metadata.create_all(db)
+    global db_lock
     global db_session
     session = sessionmaker(bind=db)
     db_session = session()
-
+    db_lock = threading.Lock
 
 class Device(Base):
     __tablename__ = 'device'
@@ -128,7 +130,7 @@ def create_db_connect(url):
 class Image_Manager():
     def add_new_image_entry(self, **kwargs):
         global db_session
-
+        global db_lock
         args = self.pk
         ret = "{error:OK}"
 
@@ -138,6 +140,7 @@ class Image_Manager():
                 raise ValueError("Missing %s" % key)
 
         self.validate_image_params(kwargs)
+        db_lock.acquire()
         node = Image(**kwargs)
 
         try:
@@ -147,6 +150,7 @@ class Image_Manager():
             db_session.rollback();
             ret = "{error:%s}" % str(e)
             pass
+        db_lock.release()
         return ret
 
     def update_new_image_node(self, **kwargs):
@@ -154,8 +158,10 @@ class Image_Manager():
         ret = "{error:OK}"
 
         global db_session
+        global db_lock
 
         print(kwargs.items())
+        db_lock.acquire()
         for key in args:
             if key not in kwargs:
                 raise ValueError("Missing %s" % key)
@@ -166,14 +172,15 @@ class Image_Manager():
         except Exception, e:
             db_session.rollback()
             ret = "{error:%s}" % str(e)
-
+        db_lock.release()
         return ret
 
     def get_image_list(self, **kwargs):
         global db_session
-
+        global db_lock
         print kwargs
 
+        db_lock.acquire()
         try:
             list_db = db_session.query(Image).filter_by(**kwargs).all()
             db_arr = []
@@ -185,7 +192,7 @@ class Image_Manager():
         except Exception, e:
             ret = "{error:%s}" % str(e)
             return ret
-
+        db_lock.release()
         return ret
 
     def validate_image_params(self, params):
@@ -207,9 +214,11 @@ class Location_Manager():
 
     def add_new_location(self, **kwargs):
         global db_session
+        global  db_lock
         ret = {'status': True}
         print(kwargs)
 
+        db_lock.acquire()
         try:
             node = Location(location = kwargs["location"])
             db_session.add(node)
@@ -218,35 +227,44 @@ class Location_Manager():
             db_session.rollback();
             ret = {'status': e}
             pass
+        db_lock.release()
         return ret
 
     def remove_location(self, **kwargs):
         global db_session
+        global db_lock
         ret = {'status': True}
         print(kwargs)
 
+        db_lock.acquire()
         try:
             node = db_session.query(Compute).filter_by(location = kwargs["location"]).delete()
         except Exception, e:
             db_session.rollback();
             ret = {'status': e}
             pass
+        return ret
 
+        db_lock.release()
     def get_location(self):
 
         global db_session
+        global db_lock
+
+        db_lock.acquire()
         try:
             list_db = db_session.query(Location).all()
             db_arr = []
             for u in list_db:
                 new = u.location
                 db_arr.append(new)
-            print db_arr
+            print "get_location:" + db_arr
             ret = {'location':db_arr}
         except Exception, e:
             db_session.rollback();
             ret = {'status': e}
             pass
+        db_lock.release()
         return ret
 
 
@@ -261,69 +279,77 @@ class Location_Manager():
 class Device_Manager():
     def add_new_device_node(self, **kwargs):
         global db_session
+        global db_lock
 
         args = self.pk
         ret = "{error:OK}"
-        #print( "add_new_device_node")
+        print threading.currentThread()
         print(kwargs)
         for key in args:
             if key not in kwargs:
                 raise ValueError("Missing %s" % key)
 
         self.validate_device_params(kwargs)
-        node = Device(**kwargs)
 
         loc = Location_Manager()
         loc.add_new_location(location = kwargs['location'])
 
+        db_lock.acquire()
+        node = Device(**kwargs)
         try:
             db_session.add(node)
             db_session.commit()
         except Exception, e:
             db_session.rollback()
             ret = "{error:%s}" % str(e)
-
+            pass
+        db_lock.release()
         return ret
 
     def is_device_present(selfself, **kwargs):
         global db_session
+        global db_lock
         args = ["deviceId"]
 
         for key in args:
             if key not in kwargs:
                 raise ValueError("Missing %s" % key)
+        db_lock.acquire()
         try:
             count = db_session.query(Device).filter_by(deviceId=kwargs.get('deviceId')).count()
             ret = {'count': count}
         except Exception, e:
             ret = "{error:%s}" % str(e)
-
+        db_lock.release()
         return ret
 
     def update_new_device_node(self, **kwargs):
         args = self.pk
         ret = "{error:OK}"
-
+        global db_lock
         global db_session
 
         print(kwargs.items())
         for key in args:
             if key not in kwargs:
                 raise ValueError("Missing %s" % key)
+        db_lock.acquire()
         try:
             db_session.query(Device).filter_by(deviceId=kwargs.get('deviceId')).update(kwargs)
             db_session.commit()
 
         except Exception, e:
             ret = "{error:%s}" % str(e)
-
+        db_lock.release()
         return ret
 
     def get_device_list(self):
         print("get_device_list")
 
         global db_session
+        global db_lock
 
+        db_lock.acquire()
         try:
             list_db = db_session.query(Device).all()
             db_arr = []
@@ -334,15 +360,16 @@ class Device_Manager():
             ret = {'device': db_arr}
 
         except Exception, e:
-            print("")
             ret = "{error:%s}" % str(e)
-            return ret
-
+            pass
+        db_lock.release()
         return ret
 
     def get_device_list_filter(self, **kwargs):
         global db_session
+        global db_lock
 
+        db_lock.acquire()
         try:
             list_db = db_session.query(Device).filter_by(**kwargs).all()
             db_arr = []
@@ -353,13 +380,15 @@ class Device_Manager():
             ret = {'device': db_arr}
         except Exception, e:
             ret = "{error:%s}" % str(e)
-            return ret
-
+            pass
+        db_lock.lock()
         return ret
 
     def remove_device(self, **kwargs):
         global db_session
+        global db_lock
         ret = {'status': True}
+        db_lock.acquire()
         try:
             node = db_session.query(Device).filter_by(deviceId = kwargs['deviceId']).first()
             count = db_session.query(Device).filter_by(location = node.location).count()
@@ -372,7 +401,9 @@ class Device_Manager():
 
         except Exception, e:
             ret = {'status':e}
-            return ret
+            pass
+        db_lock.release()
+        return ret
 
     def validate_device_params(self, params):
         key = ['id','deviceId','arch','location']
@@ -393,6 +424,7 @@ class Compute_Manager():
     def add_new_compute_node(self, **kwargs):
 
         global db_session
+        global db_lock
         args = self.pk
         ret = "{error:OK}"
         """
@@ -410,6 +442,8 @@ class Compute_Manager():
         self.validate_compute_params(kwargs)
         kwargs['remoteName'] = kwargs['username'] + '_' + kwargs['containerName']
         print(kwargs)
+
+        db_lock.acquire()
         node = Compute(**kwargs)
 
         try:
@@ -419,6 +453,7 @@ class Compute_Manager():
             db_session.rollback();
             ret = "{error:%s}" % str(e)
             pass
+        db_lock.release()
         return ret
 
     def update_compute_node(self, **kwargs):
@@ -426,28 +461,32 @@ class Compute_Manager():
         ret = "{error:OK}"
 
         global db_session
-
+        global db_lock
         print(kwargs.items())
         for key in args:
             if key not in kwargs:
                 raise ValueError("Missing %s" % key)
         
         self.validate_compute_params(kwargs)
-        
+        db_lock.acquire()
         try:
             db_session.query(Compute).filter_by(username = kwargs.get('username'), \
                                                 containerName=kwargs.get('containerName')).update(kwargs)
             db_session.commit()
 
         except Exception, e:
+            db_session.rollback()
             ret = "{error:%s}" % str(e)
-
+            pass
+        db_lock.release()
         return ret
 
     def get_compute_node_list(self, **kwargs):
 
         global db_session
+        global db_lock
 
+        db_lock.acquire()
         try:
             list_db = db_session.query(Compute).filter_by(**kwargs).all()
             db_arr = []
@@ -458,22 +497,25 @@ class Compute_Manager():
             ret = {'compute': db_arr}
         except Exception, e:
             ret = "{error:%s}" % str(e)
-            return ret
-
+            pass
+        db_lock.release()
         return ret
 
     def remove_compute_node(self, **kwargs):
         ret = {'status':True}
 
         global db_session
-
+        global db_lock
         print(kwargs)
+
+        db_lock.acquire()
         try:
             db_session.query(Compute).filter_by(remoteName = kwargs["containerName"]).delete()
             db_session.commit()
         except Exception, e:
             ret = "{error:%s}" % str(e)
-            return ret
+            pass
+        db_lock.release()
         return ret
 
     def validate_compute_params(self,params):
@@ -493,9 +535,10 @@ class Info_Manager():
 
     def update_device_info(self, **kwargs):
         ret = {'status':True}
-
+        global db_lock
         global db_session
 
+        db_lock.acquire()
         try:
             db_session.query(Info).filter_by(deviceID = kwargs['deviceID']).update(kwargs)
             db_session.commit()
@@ -511,16 +554,17 @@ class Info_Manager():
                     pass
             except:
                 ret = {'status': False}
-
+                pass
+        db_lock.release()
         return ret
 
     def get_device_info(self, **kwargs):
 
         global db_session
-
+        global db_lock
         if 'deviceId' not in kwargs:
             raise KeyError("missing key:%s"%'deviceId')
-
+        db_lock.acquire()
         try:
             node = db_session.query(Info).filter_by(deviceId = kwargs['deviceId']).first()
             info = node.get_dict()
@@ -529,13 +573,15 @@ class Info_Manager():
             db_session.rollback()
             ret = {'info': e}
             pass
+        db_lock.release()
         return ret
 
     def remove_device_info(self, **kwargs):
         global db_session
-
+        global db_lock
         if 'deviceId' not in kwargs:
             raise KeyError("missing key:%s" % 'deviceId')
+        db_lock.acquire()
         try:
             db_session.query(Info).filter_by(deviceId=kwargs['deviceId']).delete()
             db_session.flush()
@@ -544,6 +590,7 @@ class Info_Manager():
             db_session.rollback()
             ret = {'info': e}
             pass
+        db_lock.release()
         return ret
 
 
