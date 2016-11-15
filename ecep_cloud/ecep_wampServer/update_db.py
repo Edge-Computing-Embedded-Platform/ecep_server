@@ -22,7 +22,9 @@ def device_init():
     devManager = Device_Manager()
     devices = devManager.get_device_list()['device']
 
-    regDevice = dict((dev : True) for dev in devices)
+    for dev in devices:
+	regDevice[dev['deviceId']] = True
+
 
 # decorator for threads
 def threaded(func, th_name):
@@ -83,8 +85,9 @@ class updateDB(object):
             
         regDevice[deviceInfo['deviceId']] = True
 
-    @threaded("heartBeat")
-    def checkHeartbeat(self):
+
+    @threaded
+    def checkHeartbeat(self, name='checkHeartbeat'):
         """
         check if the end node is alive
         """
@@ -108,6 +111,7 @@ class updateDB(object):
                     print device + ' is alive'
                     regDevice[device] = False
             time.sleep(600)
+
 
     def updateContainerStatus(self, statusList):
         """
