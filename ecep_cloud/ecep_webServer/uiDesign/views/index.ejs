@@ -41,7 +41,8 @@
     <link href='css/jquery.iphone.toggle.css' rel='stylesheet'>
     <link href='css/uploadify.css' rel='stylesheet'>
     <link href='css/animate.min.css' rel='stylesheet'>
-
+    <script src="dist/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="dist/sweetalert.css">
     <!-- jQuery -->
     <script src="bower_components/jquery/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -159,7 +160,7 @@
                 <a data-toggle="tooltip" title="" class="well top-block" href="#">
 
 
-                    <div>Containers</div>
+                    <div>User's Containers</div>
                     <div id="containerCount"></div>
 
                 </a>
@@ -176,16 +177,55 @@
             </div>-->
 
             <div class="col-md-3 col-sm-3 col-xs-6">
-                <a data-toggle="tooltip" title="$34 new sales." class="well top-block" href="#">
+                <a data-toggle="tooltip" title="$" class="well top-block" href="#">
 
 
-                    <div>Device</div>
+                    <div>Total Available Device</div>
                     <div id="deviceCount"></div>
 
                 </a>
             </div>
         </div>
+        <!------------------------------------------------------->
 
+        <div class="row">
+            <div class="box col-md-9 col-sm-3 col-xs-6">
+                <div class="box-inner">
+                    <div class="box-header well" data-original-title="">
+                        <h2><i class="glyphicon glyphicon-user"></i> Container Details</h2>
+
+                        <div class="box-icon">
+                            <a href="#" class="btn btn-minimize btn-round btn-default"><i
+                                        class="glyphicon glyphicon-chevron-up"></i></a>
+                            <a href="#" class="btn btn-close btn-round btn-default"><i
+                                        class="glyphicon glyphicon-remove"></i></a>
+                        </div>
+                    </div>
+                    <div class="box-content">
+                        <table class="table table-striped table-bordered responsive">
+                            <thead>
+                            <tr>
+                                <th>Container Name</th>
+                                <th>Device Name</th>
+                                <th>Image Name</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody id="containerRow">
+
+
+
+                              </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--/span-->
+
+
+
+            <!------------------------------------------------------->
 
     </div>
 

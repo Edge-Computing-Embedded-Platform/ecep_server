@@ -1,0 +1,106 @@
+{
+  "name": "sweetalert2",
+  "version": "6.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/limonte/sweetalert2.git"
+  },
+  "homepage": "https://limonte.github.io/sweetalert2/",
+  "description": "A replacement for JavaScript's popup boxes, supported fork of sweetalert",
+  "main": "dist/sweetalert2.js",
+  "jsnext:main": "src/sweetalert2.js",
+  "dependencies": {
+    "es6-promise": "latest"
+  },
+  "devDependencies": {
+    "babel-preset-es2015-rollup": "latest",
+    "babel-plugin-transform-object-assign": "latest",
+    "gulp": "latest",
+    "gulp-autoprefixer": "latest",
+    "gulp-clean-css": "latest",
+    "gulp-qunit": "latest",
+    "gulp-rename": "latest",
+    "gulp-rollup": "latest",
+    "gulp-sass": "latest",
+    "gulp-sass-lint": "latest",
+    "gulp-standard": "latest",
+    "gulp-uglify": "latest",
+    "rollup": "latest",
+    "rollup-plugin-babel": "latest",
+    "standard": "latest",
+    "uglify-js": "latest"
+  },
+  "standard": {
+    "ignore": [
+      "dist/"
+    ],
+    "global": [
+      "MutationObserver"
+    ]
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "author": {
+    "name": "Tristan Edwards",
+    "email": "tristan.edwards@me.com",
+    "url": "http://tristanedwards.me"
+  },
+  "contributors": [
+    {
+      "name": "Limon Monte",
+      "email": "limon.monte@gmail.com",
+      "url": "https://limonte.github.io"
+    },
+    {
+      "name": "Sam Turrell",
+      "email": "sam@samturrell.co.uk",
+      "url": "http://samturrell.co.uk"
+    }
+  ],
+  "keywords": [
+    "sweetalert",
+    "sweetalert2",
+    "alert",
+    "prompt"
+  ],
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "gulp test",
+    "assume-dist-unchanged": "git ls-files dist | tr '\\n' ' ' | xargs git update-index --assume-unchanged",
+    "no-assume-dist-unchanged": "git ls-files dist | tr '\\n' ' ' | xargs git update-index --no-assume-unchanged"
+  },
+  "bugs": {
+    "url": "https://github.com/limonte/sweetalert2/issues"
+  },
+  "license": "MIT",
+  "gitHead": "35bad986164e86bec99210d1a7f51b94813eb98e",
+  "_id": "sweetalert2@6.1.0",
+  "_shasum": "2b25308b31b2726054b0b10661f6909fbf5678e5",
+  "_from": "sweetalert2@latest",
+  "_npmVersion": "3.10.8",
+  "_nodeVersion": "6.9.1",
+  "_npmUser": {
+    "name": "limonte",
+    "email": "limon.monte@gmail.com"
+  },
+  "dist": {
+    "shasum": "2b25308b31b2726054b0b10661f6909fbf5678e5",
+    "tarball": "https://registry.npmjs.org/sweetalert2/-/sweetalert2-6.1.0.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "limonte",
+      "email": "limon.monte@gmail.com"
+    }
+  ],
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/sweetalert2-6.1.0.tgz_1478923181153_0.9017814954277128"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/sweetalert2/-/sweetalert2-6.1.0.tgz"
+}
