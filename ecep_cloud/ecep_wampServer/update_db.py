@@ -73,7 +73,7 @@ class updateDB(object):
         global regDevice
 
         if deviceInfo['deviceId'] in regDevice:
-            print ('heartbeat from ' + deviceInfo['deviceId'] + ' received')
+            pass
         else:
             devManager = Device_Manager()
             devManager.add_new_device_node(**deviceInfo)
@@ -91,7 +91,6 @@ class updateDB(object):
         check if the end node is alive
         """
         global regDevice
-        print regDevice
 
         while True:
             rm = []
@@ -124,7 +123,9 @@ class updateDB(object):
         try:
             for entries in statusList:
                 data = dict((key, entries[key]) for key in keyList)
+                print ":P:P:P:P:P"
                 data['username'] = entries['containerName'].split('_')[0]
+                print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
                 data['containerName'] = entries['containerName'].split('_')[1]
                 print data
                 self.updateComputeNode(data)
@@ -153,18 +154,20 @@ class updateDB(object):
 
         except Exception as e:
             print 'Could not update device response, error: ' + e
+            pass
 
     def updateCPUinfo(self, info):
         """
         update the cpu information from end node
         """
         infoDB = Info_Manager()
-        print ("#####################################################################")
+        print ("######################################################################")
         print info
-        kwargs = info['info']
-        kwargs['deviceId'] = info['deviceId']
-        print ('cpuInfo', kwargs)
-        infoDB.update_device_info(**kwargs)
+        print ("######################################################################")
+        if 'info' in info:
+            data = info['info']
+            data['deviceId'] = info['deviceId']
+            infoDB.update_device_info(**data)
 
 
 if __name__ == '__main__':

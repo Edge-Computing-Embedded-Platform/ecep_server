@@ -18,7 +18,6 @@ class init_db_lock():
 
         if db_lock is None:
             db_lock = threading.Lock()
-        print db_lock
 
     def get_lock(self):
         global db_lock
@@ -83,6 +82,7 @@ class Info(Base):
     diskUsed = Column(Float)
     diskUnused = Column(Float)
     diskPercent = Column(Float)
+    physicalPercent = Column(Float)
 
     def get_dict(self):
         ret = {'deviceId': self.imageName,
@@ -96,6 +96,7 @@ class Info(Base):
                'physicalMem':self.physicalMem,
                'physicalUsed': self.physicalUsed,
                'physicalUnused':self.physicalUnused,
+               'physicalPercent':self.physicalPercent,
                'diskMem':self.diskMem,
                'diskUsed':self.diskUsed,
                'diskUnused':self.diskUnused,
@@ -386,7 +387,6 @@ class Device_Manager():
         global db_session
         global db_lock
 
-        print kwargs
         db_lock.acquire()
         try:
             list_db = db_session.query(Device).filter_by(**kwargs).all()
@@ -396,7 +396,6 @@ class Device_Manager():
                 db_arr.append(new)
 
             ret = {'device': db_arr}
-            print ret
         except Exception, e:
             ret = "{error:%s}" % str(e)
             pass
@@ -460,7 +459,6 @@ class Compute_Manager():
 
         self.validate_compute_params(kwargs)
         kwargs['remoteName'] = kwargs['username'] + '_' + kwargs['containerName']
-        print(kwargs)
 
         db_lock.acquire()
         node = Compute(**kwargs)
@@ -481,7 +479,7 @@ class Compute_Manager():
 
         global db_session
         global db_lock
-        print(kwargs.items())
+
         for key in args:
             if key not in kwargs:
                 raise ValueError("Missing %s" % key)
@@ -525,7 +523,6 @@ class Compute_Manager():
 
         global db_session
         global db_lock
-        print(kwargs)
 
         db_lock.acquire()
         try:
@@ -560,6 +557,7 @@ class Info_Manager():
         db_lock.acquire()
 
         info  = db_session.query(Info).filter_by(deviceId=kwargs['deviceId']).first()
+        print info
         if info is None:
             try:
                 node = Info(**kwargs)
@@ -590,10 +588,11 @@ class Info_Manager():
             node = db_session.query(Info).filter_by(deviceId = kwargs['deviceId']).first()
             info = node.get_dict()
             ret = {'info':info}
-            print ret
+
         except Exception, e:
             db_session.rollback()
             ret = {'info': e}
+            print ret
             pass
         db_lock.release()
         return ret
@@ -611,7 +610,7 @@ class Info_Manager():
             ret = {'status': True}
         except Exception, e:
             db_session.rollback()
-            ret = {'info': e}
+            print e
             pass
         db_lock.release()
         return ret

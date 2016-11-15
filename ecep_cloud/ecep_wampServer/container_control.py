@@ -33,7 +33,7 @@ def sendCommand(data):
     return packet  # To check if the user request is valid
 
 def checkValidity(command, param):
-    print param
+
     print command + ' received'
 
     if command == 'create':
@@ -51,7 +51,7 @@ def checkValidity(command, param):
 
 
 if __name__ == '__main__':
-    print 'testing controller command'
+
     contcmd = {'command': 'create', 'deviceId': 'beaglebone', 'imageName': 'ubuntu', 'containerName': 'abhi',
                'username': 'beagle'}
 

@@ -32,6 +32,12 @@ def handleCmd(entries):
 
 # Handle request from user
 class handleReq(tornado.web.RequestHandler):
+
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers", 'x-requested-with,Origin')
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT')
+
     def get(self):
         temp = contcmd = {'username': 'newlogin', 'command': 'create', 'deviceId': 'beaglebone', 'imageName': 'ubuntu',
                           'containerName': 'abhi'}
@@ -42,7 +48,7 @@ class handleReq(tornado.web.RequestHandler):
         pdate = json.loads(self.request.body)
 
     def post(self, **kwargs):
-        print "received"
+
 
         try:
             data = json.loads(self.request.body)

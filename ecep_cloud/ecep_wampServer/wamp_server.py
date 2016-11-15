@@ -40,7 +40,7 @@ class ClientReader(ApplicationSession):
         # This is to handle heartbeat
         self.heartbeat = self.config.extra['heartbeat']
         def onHeartbeat(args):
-            log.msg('I receives', args)
+            #log.msg('I receives', args)
             uDB_instance = uDB()
 
             # handle the heartbeat
@@ -85,7 +85,7 @@ class ClientReader(ApplicationSession):
         # This is to handle cpu info
         self.cpuInfo = self.config.extra['cpuInfo']
         def cpuInfo(args):
-            log.msg('I receives', args)
+            #log.msg('I receives', args)
             uDB_instance = uDB()
             
             # handle the cpu info updates
@@ -111,7 +111,7 @@ class wampserver(ApplicationSession):
         self._url = None
 
         self._extra = {'heartbeat': 'com.ecep.heartbeat', 
-                       'deviceResponse': 'com.ecep.deviceResponse', 
+                       'deviceResponse': 'com.ecep.deviceResponse',
                        'containerStatus': 'com.ecep.containerStatus',
                        'cpuInfo' : 'com.ecep.cpuInfo'}
                        
@@ -161,7 +161,11 @@ class wampserver(ApplicationSession):
 def sendTo(topic, data):
     print topic, data
     global requestReceived
-    requestReceived.publish(topic, data)
+    try:
+        requestReceived.publish(topic, data)
+    except Exception as e:
+        print e
+        pass
 
 
 if __name__ == '__main__':
