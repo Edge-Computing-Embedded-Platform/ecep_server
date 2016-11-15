@@ -12,16 +12,27 @@ Base = declarative_base()
 db_lock = None
 db_session = None
 
+class init_db_lock():
+    def __init__(self):
+        global db_lock
+
+        if db_lock is None:
+            db_lock = threading.Lock()
+        print db_lock
+
+    def get_lock(self):
+        global db_lock
+        return db_lock
 
 def set_db_session():
-    print "DB version: %s"% sqlalchemy.__version__
-    db = create_engine('sqlite:///demo.db', echo=False,connect_args={'check_same_thread':False})
-    Base.metadata.create_all(db)
-    global db_lock
-    global db_session
-    session = sessionmaker(bind=db)
-    db_session = session()
-    db_lock = threading.Lock()
+    if db_session is None:
+        print "DB version: %s"% sqlalchemy.__version__
+        db = create_engine('sqlite:///demo.db', echo=False,connect_args={'check_same_thread':False})
+        Base.metadata.create_all(db)
+        global db_session
+        session = sessionmaker(bind=db)
+        db_session = session()
+
 
 class Device(Base):
     __tablename__ = 'device'
@@ -226,6 +237,7 @@ class Location_Manager():
         except Exception, e:
             db_session.rollback();
             ret = {'status': e}
+            print ret
             pass
         db_lock.release()
         return ret
@@ -246,23 +258,29 @@ class Location_Manager():
         return ret
 
         db_lock.release()
+
     def get_location(self):
 
         global db_session
         global db_lock
 
-        db_lock.acquire()
+        try:
+            db_lock.acquire()
+        except Exception,e:
+            print e
+        print " lock acquired"
         try:
             list_db = db_session.query(Location).all()
             db_arr = []
             for u in list_db:
                 new = u.location
                 db_arr.append(new)
-            print "get_location:" + db_arr
+
             ret = {'location':db_arr}
         except Exception, e:
             db_session.rollback();
             ret = {'status': e}
+            print ret
             pass
         db_lock.release()
         return ret
@@ -306,7 +324,7 @@ class Device_Manager():
         db_lock.release()
         return ret
 
-    def is_device_present(selfself, **kwargs):
+    def is_device_present(self, **kwargs):
         global db_session
         global db_lock
         args = ["deviceId"]
@@ -344,7 +362,7 @@ class Device_Manager():
         return ret
 
     def get_device_list(self):
-        
+
         global db_session
         global db_lock
 
@@ -357,7 +375,7 @@ class Device_Manager():
                 db_arr.append(new)
 
             ret = {'device': db_arr}
-
+            print ret
         except Exception, e:
             ret = "{error:%s}" % str(e)
             pass
@@ -368,6 +386,7 @@ class Device_Manager():
         global db_session
         global db_lock
 
+        print kwargs
         db_lock.acquire()
         try:
             list_db = db_session.query(Device).filter_by(**kwargs).all()
@@ -377,10 +396,11 @@ class Device_Manager():
                 db_arr.append(new)
 
             ret = {'device': db_arr}
+            print ret
         except Exception, e:
             ret = "{error:%s}" % str(e)
             pass
-        db_lock.lock()
+        db_lock.release()
         return ret
 
     def remove_device(self, **kwargs):
@@ -538,22 +558,23 @@ class Info_Manager():
         global db_session
 
         db_lock.acquire()
-        try:
-            db_session.query(Info).filter_by(deviceID = kwargs['deviceID']).update(kwargs)
-            db_session.commit()
-        except:
+
+        info  = db_session.query(Info).filter_by(deviceId=kwargs['deviceId']).first()
+        if info is None:
             try:
-                try:
-                    db_session.rollback()
-                    node = Info(**kwargs)
-                    db_session.add(node)
-                    db_session.commit()
-                except:
-                    set_db_session()
-                    pass
-            except:
-                ret = {'status': False}
-                pass
+                node = Info(**kwargs)
+                db_session.add(node)
+                db_session.commit()
+            except Exception, e:
+                db_session.rollback()
+                print e
+        else:
+            try:
+                db_session.query(Info).filter_by(deviceId = kwargs['deviceId']).update(kwargs)
+                db_session.commit()
+            except Exception, e:
+                db_session.rollback()
+                print e
         db_lock.release()
         return ret
 
@@ -569,6 +590,7 @@ class Info_Manager():
             node = db_session.query(Info).filter_by(deviceId = kwargs['deviceId']).first()
             info = node.get_dict()
             ret = {'info':info}
+            print ret
         except Exception, e:
             db_session.rollback()
             ret = {'info': e}

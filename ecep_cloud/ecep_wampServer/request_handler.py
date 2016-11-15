@@ -10,7 +10,7 @@ import tornado.ioloop
 import tornado.web
 import json
 from container_control import *
-from ..ecep_db.controller import Compute_Manager, Image_Manager, Device_Manager, Location_Manager, Info_Manager
+from ..ecep_db.controller import Compute_Manager, Image_Manager, Device_Manager, Location_Manager, Info_Manager, init_db_lock
 from wamp_server import *
 import urlparse
 import sys
@@ -125,7 +125,9 @@ class DeviceHandler(tornado.web.RequestHandler):
             data = json.loads(self.request.query)
         except:
             data = dict(urlparse.parse_qsl(self.request.query))
+
         print data
+
         if data['command'] == 'filter':
             data.__delitem__('command')
 
@@ -227,7 +229,6 @@ class LocationHandler(tornado.web.RequestHandler):
         loc_list = Location_Manager()
         loc = loc_list.get_location()
         ret = json.dumps(loc)
-        print ret
         self.write(ret)
         self.finish();
 
@@ -268,7 +269,6 @@ if __name__ == "__main__":
     ip = u'127.0.0.1'
     port = sys.argv[1]
     realm = unicode(sys.argv[2])
-    
     server = wampserver()
     check = server.connect(ip, port, realm)
 

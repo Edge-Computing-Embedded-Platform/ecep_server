@@ -159,7 +159,9 @@ class updateDB(object):
         update the cpu information from end node
         """
         infoDB = Info_Manager()
-        kwargs = info['info'].copy()
+        print ("#####################################################################")
+        print info
+        kwargs = info['info']
         kwargs['deviceId'] = info['deviceId']
         print ('cpuInfo', kwargs)
         infoDB.update_device_info(**kwargs)
