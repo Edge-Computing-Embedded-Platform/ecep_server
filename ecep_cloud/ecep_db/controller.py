@@ -74,7 +74,7 @@ class Info(Base):
     def get_dict(self):
         ret = {'deviceId': self.imageName,
                'deviceName': self.deviceName,
-                'totalContainers':self.totalContainers,
+               'totalContainers':self.totalContainers,
                'totalImages':self.totalImages,
                'kernelVersion':self.kernelVersion,
                'os':self.os,
@@ -202,6 +202,54 @@ class Image_Manager():
         self.pk = ['imageName', 'arch']
 
 
+
+class Location_Manager():
+
+    def add_new_location(self, **kwargs):
+        global db_session
+        ret = {'status': True}
+        print(kwargs)
+
+        try:
+            node = Location(location = kwargs["location"])
+            db_session.add(node)
+            db_session.commit()
+        except Exception, e:
+            db_session.rollback();
+            ret = {'status': e}
+            pass
+        return ret
+
+    def remove_location(self, **kwargs):
+        global db_session
+        ret = {'status': True}
+        print(kwargs)
+
+        try:
+            node = db_session.query(Compute).filter_by(location = kwargs["location"]).delete()
+        except Exception, e:
+            db_session.rollback();
+            ret = {'status': e}
+            pass
+
+    def get_location(self):
+
+        global db_session
+        try:
+            list_db = db_session.query(Location).all()
+            db_arr = []
+            for u in list_db:
+                new = u.location
+                db_arr.append(new)
+            print db_arr
+            ret = {'location':db_arr}
+        except Exception, e:
+            db_session.rollback();
+            ret = {'status': e}
+            pass
+        return ret
+
+
 """
     Manager Class for the device table
     :methods:
@@ -210,8 +258,6 @@ class Image_Manager():
     get_device_list: gives back the entire list
     get_device_list_filter: takes filter location and arch
 """
-
-
 class Device_Manager():
     def add_new_device_node(self, **kwargs):
         global db_session
@@ -226,20 +272,10 @@ class Device_Manager():
 
         self.validate_device_params(kwargs)
         node = Device(**kwargs)
-        loc = Location(location = kwargs['location'])
 
-        try:
-            db_session.add(loc)
-            #db_session.flush()
-            db_session.commit()
-        except Exception, e:
-            print e
-            try:
-                db_session.rollback()
-            except Exception, e:
-                set_db_session()
-                print e
-            pass
+        loc = Location_Manager()
+        loc.add_new_location(location = kwargs['location'])
+
         try:
             db_session.add(node)
             db_session.commit()
@@ -350,51 +386,6 @@ class Device_Manager():
 
     def __init__(self):
         self.pk = ['deviceId', 'arch']
-
-class Location_Manager():
-
-    def add_new_location(self, **kwargs):
-        global db_session
-        ret = {'status': True}
-        print(kwargs)
-
-        try:
-            node = Location(location = kwargs["location"])
-            db_session.add(node)
-            db_session.commit()
-        except Exception, e:
-            db_session.rollback();
-            ret = {'status': e}
-            pass
-        return ret
-
-    def remove_location(self, **kwargs):
-        global db_session
-        ret = {'status': True}
-        print(kwargs)
-
-        try:
-            node = db_session.query(Compute).filter_by(location = kwargs["location"]).delete()
-        except Exception, e:
-            db_session.rollback();
-            ret = {'status': e}
-            pass
-
-    def get_location(self):
-
-        global db_session
-        try:
-            list_db = db_session.query(Location).all()
-            db_arr = []
-            for u in list_db:
-                new = u.location
-                db_arr.append(new)
-            ret = {'location':db_arr}
-        except Exception, e:
-            db_session.rollback();
-            ret = {'status': e}
-            pass
-        return ret
 
 
 class Compute_Manager():
@@ -510,13 +501,51 @@ class Info_Manager():
             db_session.commit()
         except:
             try:
-                node = Info(**kwargs)
-                db_session.add(node)
-                db_session.commit()
+                try:
+                    db_session.rollback()
+                    node = Info(**kwargs)
+                    db_session.add(node)
+                    db_session.commit()
+                except:
+                    set_db_session()
+                    pass
             except:
                 ret = {'status': False}
 
         return ret
+
+    def get_device_info(self, **kwargs):
+
+        global db_session
+
+        if 'deviceId' not in kwargs:
+            raise KeyError("missing key:%s"%'deviceId')
+
+        try:
+            node = db_session.query(Info).filter_by(deviceId = kwargs['deviceId']).first()
+            info = node.get_dict()
+            ret = {'info':info}
+        except Exception, e:
+            db_session.rollback()
+            ret = {'info': e}
+            pass
+        return ret
+
+    def remove_device_info(self, **kwargs):
+        global db_session
+
+        if 'deviceId' not in kwargs:
+            raise KeyError("missing key:%s" % 'deviceId')
+        try:
+            db_session.query(Info).filter_by(deviceId=kwargs['deviceId']).delete()
+            db_session.flush()
+            db_session.commit()
+        except Exception, e:
+            db_session.rollback()
+            ret = {'info': e}
+            pass
+        return ret
+
 
 """testing"""
 if __name__ == '__main__':

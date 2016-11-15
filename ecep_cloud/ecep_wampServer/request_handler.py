@@ -10,7 +10,7 @@ import tornado.ioloop
 import tornado.web
 import json
 from container_control import *
-from ..ecep_db.controller import Compute_Manager, Image_Manager, Device_Manager, Location_Manager
+from ..ecep_db.controller import Compute_Manager, Image_Manager, Device_Manager, Location_Manager, Info_Manager
 from wamp_server import *
 import urlparse
 import sys
@@ -79,7 +79,7 @@ class Download(tornado.web.RequestHandler):
                 self.set_status(400, reason="param %s missing" % key)
                 raise tornado.web.HTTPError(400)
 
-        file_path = file_root_path + data['username'] + '_' + data['containerName'] +'/'+ data['filename']
+        file_path = file_root_path + data['username'] + '_' + data['containerName'] + '/' + data['filename']
         print file_path
         try:
             file_object = open(file_path, 'rb')
@@ -97,7 +97,6 @@ class Download(tornado.web.RequestHandler):
 
 class DeviceHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
-        print "setting headers!!!"
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", 'x-requested-with,Origin')
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT')
@@ -146,7 +145,6 @@ class DeviceHandler(tornado.web.RequestHandler):
 
 class ImageHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
-        print "setting headers!!!"
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", 'x-requested-with,Origin')
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT')
@@ -188,9 +186,7 @@ class ImageHandler(tornado.web.RequestHandler):
 
 
 class ComputeHandler(tornado.web.RequestHandler):
-
     def set_default_headers(self):
-        print "setting headers!!!"
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", 'x-requested-with,Origin')
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT')
@@ -213,22 +209,21 @@ class ComputeHandler(tornado.web.RequestHandler):
             return
 
         if "username" in data or "deviceId" in data:
-            ret = compute.get_compute_node_list();
+            ret = compute.get_compute_node_list()
             self.write(json.dumps(ret))
             self.finish()
             return
         else:
             raise tornado.web.HTTPError(400)
 
-class LocationHandler(tornado.web.RequestHandler):
 
+class LocationHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
-        print "setting headers!!!"
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", 'x-requested-with,Origin')
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT')
 
-    def get(self,**kwargs):
+    def get(self, **kwargs):
         loc_list = Location_Manager()
         loc = loc_list.get_location()
         ret = json.dumps(loc)
@@ -237,13 +232,35 @@ class LocationHandler(tornado.web.RequestHandler):
         self.finish();
 
 
+class CPUInfoHandler(tornado.web.RequestHandler):
+    def set_default_header(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers", 'x-requested-with,Origin')
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT')
+
+    def get(self, **kwargs):
+        try:
+            data = json.loads(self.request.query)
+        except:
+            data = dict(urlparse.parse_qsl(self.request.query))
+
+        if 'deviceId' not in kwargs:
+            self.set_status(400, reason="param %s missing" % 'deviceId')
+            raise tornado.web.HTTPError(400)
+
+        info = Info_Manager()
+        ret = info.get_device_info(**kwargs)
+        self.write = json.dumps(ret)
+        self.finish()
+
 
 application = tornado.web.Application([(r"/handle_request", handleReq),
                                        (r"/download", Download),
                                        (r"/device", DeviceHandler),
                                        (r"/image", ImageHandler),
                                        (r"/compute", ComputeHandler),
-                                       (r"/location", LocationHandler)
+                                       (r"/location", LocationHandler),
+                                       (r"/cpuinfo", CPUInfoHandler)
                                        ])
 
 if __name__ == "__main__":
