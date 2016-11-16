@@ -24,16 +24,27 @@
                 {
                     var devId=container[i].deviceId;
                     var cName=container[i].containerName;
-                    $("#containerRow").append($("<tr ><td class='center'>"+cName+
-                        "</td><td class='center'>"+devId+
-                        "</td><td class='center'>"+container[i].imageName+"" +
-                        "</td><td class='center'><span class='label-warning label label-default'>"+container[i].status+"</span>" +
-                        "</td><" +
-                        "td class='center'><a class='btn btn-info' href='#' onclick='removeContainer(\"+container[i].deviceId+\",\"+cName+\");'>" +
-                        "<i class='glyphicon glyphicon-remove icon-white'></i>Remove Container</a>" +
-                        "<a class='btn btn-danger' href='#' onclick='stopContainer(\"+container[i].deviceId+\",\"+cName+\");'>" +
-                        "<i class='glyphicon glyphicon-stop icon-white'></i>Stop Container</a>" +
-                        "</td></tr>"));
+
+                    var htmlstring="";
+                    htmlstring=htmlstring+"<tr >";
+                    htmlstring=htmlstring+"<td class='center'>"+cName+"</td>";
+                    htmlstring=htmlstring+"<td class='center'>"+devId+"</td>";
+                    htmlstring=htmlstring+"<td class='center'>"+container[i].imageName+"</td>";
+                    htmlstring=htmlstring+"<td class='center'><span class='label-warning label label-default'>"+container[i].status+"</span>" +"</td>" ;
+                    htmlstring=htmlstring+'<td class="center"><a class="btn btn-success" href="#" onclick="startContainer('+i+')"';
+                    htmlstring=htmlstring+'<i class="glyphicon glyphicon-start icon-white" ></i>' ;
+                    htmlstring=htmlstring+ 'Start Container</a>';
+                    htmlstring=htmlstring+'<a class="btn btn-info" href="#" onclick="removeContainer('+i+')"';
+                    htmlstring=htmlstring+'<i class="glyphicon glyphicon-remove icon-white" ></i>' ;
+                    htmlstring=htmlstring+ 'Remove Container</a>';
+
+                    htmlstring=htmlstring+'<a class="btn btn-danger" href="#" onclick="stopContainer('+i+')"';
+                    htmlstring=htmlstring+'<i class="glyphicon glyphicon-stop icon-white" ></i>';
+                    htmlstring=htmlstring+   'Stop Container</a>';
+                    htmlstring=htmlstring+"</td>";
+                    htmlstring=htmlstring+"</tr>";
+                    $("#containerRow").append(htmlstring);
+
 
                 }
                 debugger;
@@ -180,8 +191,15 @@
 
     }
 
-    function removeContainer(deviceId,containerName)
+    function removeContainer(i)
     {
+
+        event.preventDefault();
+        debugger;
+        var deviceId=container[i].deviceId;
+        var containerName=container[i].containerName;
+        console.log(deviceId,containerName);
+
         debugger;
         $.ajax({
             url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/handle_request",
@@ -189,16 +207,55 @@
             dataType: "json",
             data:{
                 "username": "admin",
-                "containerName": deviceId,
+                "containerName": containerName,
                 "command": "remove",
-                "deviceId": containerName
+                "deviceId": deviceId
             },
 
             crossDomain: true,
 
             success: function (response) {
+              //  event.preventDefault();
 
+            },
+            error: function (xhr, status) {
+                swal({
+                    title:"ERROR",
+                    text: xhr.responseText,
+                    type: "error",
+                    showCancelButton: false,
+                    confirmButtonClass: 'btn-info',
+                    confirmButtonText: 'Close!'
+                });
+            }
+        });
 
+        return false;
+    }
+    function startContainer(i)
+    {
+        event.preventDefault();
+        debugger
+        var deviceId=container[i].deviceId;
+        var containerName=container[i].containerName;
+        console.log(deviceId,containerName);
+        debugger;
+        $.ajax({
+            url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/handle_request",
+            type : "POST",
+            dataType: "json",
+            data:{
+                "username": "admin",
+                "containerName": containerName,
+                "command": "start",
+                "deviceId": deviceId
+            },
+
+            crossDomain: true,
+
+            success: function (response) {
+                //event.preventDefault();
+                console.log("S");
 
 
             },
@@ -217,8 +274,10 @@
         return false;
     }
 
-    function stopContainer(deviceId,containerName)
+    function stopContainer(i)
+
     {
+        event.preventDefault();
         debugger;
         $.ajax({
             url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/handle_request",
@@ -226,17 +285,16 @@
             dataType: "json",
             data:{
                 "username": "admin",
-                "containerName": deviceId,
+                "containerName": containerName,
                 "command": "stop",
-                "deviceId": containerName
+                "deviceId": deviceId
             },
 
             crossDomain: true,
 
             success: function (response) {
 
-
-
+                console.log("S");
 
             },
             error: function (xhr, status) {
@@ -268,6 +326,12 @@
                 "containerName":$('#container_name').val(),
             },
             success : function(response) {
+debugger;
+                document.getElementById('#location_dropdown').val(0);
+                document.getElementById('#device').val(0);
+                document.getElementById('#architecture').val(0);
+                document.getElementById('#containerImage').val(0);
+
                 console.log("S");
             },
             //If there was no resonse from the server

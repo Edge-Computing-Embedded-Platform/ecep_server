@@ -18,12 +18,12 @@ router.post('/', function (req, res,next) {
     //console.log("body data:"+JSON.stringify(req.params));
 
     console.log("Entered Docker2");
-    res.send({"data":"success"});
+
 
     var data = JSON.stringify({
         "command": "create",
         "username": "admin",
-        "imageName":"hello-world",
+        "imageName":req.body.image,
 
         "containerName":req.body.containerName,
         "deviceId":req.body.device
@@ -44,7 +44,7 @@ router.post('/', function (req, res,next) {
         reses.setEncoding('utf8');
         reses.on('data', function (chunk) {
             console.log('Response: ' + chunk);
-            //res.send(chunk);
+            res.send({"data":"success"});
             //res.render('index', { title: 'Express' });
         });
     });

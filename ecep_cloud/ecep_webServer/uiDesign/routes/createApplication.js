@@ -60,7 +60,7 @@ router.post('/', rfcal_upload.single('applicationFile'),function (req, res,next)
 
 
    var data = JSON.stringify({
-        "command": "start",
+        "command": "upStart",
          "username":"admin",
         "containerName":req.body.containerName_app,
 
