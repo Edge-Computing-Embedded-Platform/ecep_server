@@ -42,7 +42,7 @@ def sendCommand(data):
 
 def checkValidity(command, param):
     print command + ' received'
-
+    valid = True
     if command == 'create':
         valid = ('deviceId' in param) and ('imageName' in param) and ('containerName' in param) and (
         'username' in param)
