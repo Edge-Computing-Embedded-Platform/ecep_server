@@ -1,0 +1,70 @@
+#JSFiddle {
+position: relative;
+width: 400px;
+}
+
+.overlay-label-middle{
+    display:block;
+width:400px;
+height:400px;
+-webkit-animation: mymove 3s; /* Chrome, Safari, Opera */
+animation: mymove 3s;
+text-align:left;
+vertical-align: middle;
+position: absolute;
+top: 49px;  /* chartArea top  */
+left: 146px; /* chartArea left */
+margin-top: 140px;
+font-size: 15px;
+}
+.overlay-label-middle-for-slice{
+    display:bloack;
+width:400px;
+height:400px;
+-webkit-animation: mymove 3s; /* Chrome, Safari, Opera */
+animation: mymove 3s;
+text-align:left;
+vertical-align: middle;
+position: absolute;
+top: 49px;  /* chartArea top  */
+left: 140px; /* chartArea left */
+margin-top: 140px;
+font-size: 15px;
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes mymove {
+    20% {font-size: 25px;}
+}
+
+/* Standard syntax */
+@keyframes mymove {
+    20% {font-size: 25px;}
+}
+
+.overlay-label-top{
+  display:bloack;
+width:400px;
+height:400px;
+text-align:middle;
+vertical-align: middle;
+position: absolute;
+top: 65px;  /* chartArea top  */
+left: 70px; /* chartArea left */
+margin-top: 0px;
+font-size: 14px;
+}
+
+
+.overlay-value-top {
+display:block;
+width:400px;
+height:400px;
+text-align:middle;
+vertical-align: middle;
+position: absolute;
+top: 85px;  /* chartArea top  */
+left: 110px; /* chartArea left */
+margin-top: 0px;
+font-size: 14px;
+}

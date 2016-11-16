@@ -28,6 +28,7 @@
     <link id="bs-css" href="css/bootstrap-cerulean.min.css" rel="stylesheet">
 
     <link href="css/charisma-app.css" rel="stylesheet">
+    <link href="css/chartOverlay.css" rel="stylesheet">
     <link href='bower_components/fullcalendar/dist/fullcalendar.css' rel='stylesheet'>
     <link href='bower_components/fullcalendar/dist/fullcalendar.print.css' rel='stylesheet' media='print'>
     <link href='bower_components/chosen/chosen.min.css' rel='stylesheet'>
@@ -46,7 +47,7 @@
     <!-- jQuery -->
     <script src="bower_components/jquery/jquery.min.js"></script>
 	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -55,82 +56,6 @@
 
     <!-- The fav icon -->
     <link rel="shortcut icon" href="img/favicon.ico">
-
-    <!-- For Pie chart -->
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-
-          // Load the Visualization API and the corechart package.
-          google.charts.load('current', {'packages':['corechart']});
-
-          // Set a callback to run when the Google Visualization API is loaded.
-          google.charts.setOnLoadCallback(drawChart);
-
-          // Callback that creates and populates a data table,
-          // instantiates the pie chart, passes in the data and
-          // draws it.
-          function drawChart() {
-
-          // Create the data table for disk Memory.
-          var diskMem = new google.visualization.DataTable();
-          diskMem.addColumn('string', 'Disk Memory');
-          diskMem.addColumn('number', 'Gb');
-          diskMem.addRows([
-            ['Total Disk Memory', 3],
-            ['Used Disk Memory', 1],
-            ['Free Disk Memory', 1],
-          ]);
-
-          // Set chart options for disk memory
-          var diskMem_options = {'title':'Disk Memory (Gb)', 'width':400, 'height':300,
-                         'animation': {'startup': true, 'duration': 1000, 'easing': 'inAndOut'},
-                         'pieHole': 0.6, 'pieSliceText': 'percentage',
-                         'slices': [{color: '#5DD367'}, {offset: 0.2}, {color: '#FF5733'}]};
-
-          // create the data table for physical memory
-          var physicalMem = new google.visualization.DataTable();
-          physicalMem.addColumn('string', 'Disk Memory');
-          physicalMem.addColumn('number', 'Gb');
-          physicalMem.addRows([
-            ['Total Physical Memory', 70],
-            ['Used Physical Memory', 25],
-            ['Free Physical Memory', 30],
-          ]);
-
-          // Set chart options for physical memory
-          var physicalMem_options = {'title':'Physical Memory (Mb)', 'width':400, 'height':300,
-                         'animation': {'startup': true, 'duration': 1000, 'easing': 'inAndOut'},
-                         'pieHole': 0.6, 'pieSliceText': 'percentage',
-                         'hAxis': {title : '%', textPosition: 'in', showTextEvery: 5, slantedText: false, textStyle: { color: '#FFFFFF', fontSize: 10 } },
-                         'slices': [{color: '#5DD367'}, {offset: 0.2}, {color: '#FF5733'}]};
-
-         var cpuInfo = new google.visualization.DataTable();
-         cpuInfo.addColumn('string', 'Disk Memory');
-         cpuInfo.addColumn('number', 'Gb');
-         cpuInfo.addRows([
-           ['CPU Usage', 75.2],
-           ['CPU Usage', 75.2]
-         ]);
-
-         // Set chart options for physical memory
-         var cpuInfo_options = {'title':'CPU Usage %', 'width':400, 'height':300,
-                        'animation': {'startup': true, 'duration': 1000, 'easing': 'inAndOut'},
-                        'pieHole': 0.6, 'pieSliceText': 'percentage',
-                        'hAxis': {textPosition: 'in', showTextEvery: 5, slantedText: false, textStyle: { color: '#FFFFFF', fontSize: 10 } },
-                        'slices': [{color: '#5DD367'}, {offset: 0.2}, {color: '#FF5733'}]};
-
-
-          // Instantiate and draw our chart, passing in some options.
-          var diskMem_chart = new google.visualization.PieChart(document.getElementById('diskMem_div'));
-          diskMem_chart.draw(diskMem, diskMem_options);
-
-          var physicalMem_chart = new google.visualization.PieChart(document.getElementById('physicalMem_div'));
-          physicalMem_chart.draw(physicalMem, physicalMem_options);
-
-          var cpuUsage_chart = new google.visualization.PieChart(document.getElementById('cpuUsage_div'));
-          cpuUsage_chart.draw(cpuInfo, cpuInfo_options);
-        }
-        </script>
 </head>
 
 <body>
@@ -302,13 +227,26 @@
       <div class="row">
           <!--Div that will hold the pie chart-->
           <div class="col-xs-4">
-            <div id="diskMem_div"></div>
+            <div id="JSFiddle">
+              <div id="diskMem_div"></div>
+              <div class="overlay-label-middle-for-slice">Gb</div>
+              <div class="overlay-label-top">  Total Disk Memory</div>
+              <div id="cnt" class="overlay-value-top">125.35</div>
+            </div>
           </div>
           <div class="col-xs-4">
-            <div id="physicalMem_div"></div>
+            <div id="JSFiddle">
+              <div id="physicalMem_div"></div>
+              <div class="overlay-label-middle-for-slice">Mb</div>
+              <div class="overlay-label-top">Total Physical Memory</div>
+              <div id="cnt" class="overlay-value-top">7348.52</div>
+            </div>
           </div>
           <div class="col-xs-4">
-            <div id="cpuUsage_div"></div>
+            <div id="JSFiddle">
+              <div id="cpuUsage_div"></div>
+              <div class="overlay-label-middle">%</div>
+            </div>
           </div>
       </div>
     </div>
