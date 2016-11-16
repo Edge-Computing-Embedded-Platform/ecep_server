@@ -3,6 +3,9 @@
  */
 
 $(document).ready(function(){
+
+
+    loadApplication();
  debugger;
     $("#device_app").change(function () {
 
@@ -45,3 +48,48 @@ $(document).ready(function(){
 
 
 });
+
+function loadApplication() {
+    $.ajax({
+
+        // url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute?command=filter&username=admin",
+        url:"http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/device?command=all",
+        type: "GET",
+
+        crossDomain: true,
+
+
+        // async : false,
+
+
+        success: function (response) {
+
+            var device = JSON.parse(response).device;
+            // var loca = document.getElementById("location-dropdown");
+
+
+            // alert("success");
+
+            for (var i = 0; i < device.length; i++) {
+                var loc = device[i].deviceId;
+                console.log(device[i].containerName);
+                // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
+                $("#device_app").append($("<option>" + loc + "</option>"));
+
+            }
+
+        },
+        error: function (xhr, status) {
+            swal({
+                title:"ERROR",
+                text: xhr.responseText,
+                type: "error",
+                showCancelButton: false,
+                confirmButtonClass: 'btn-info',
+                confirmButtonText: 'Close!'
+            });
+        }
+    });
+
+
+}

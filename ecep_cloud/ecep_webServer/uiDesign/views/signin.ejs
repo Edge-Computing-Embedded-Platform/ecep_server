@@ -33,13 +33,13 @@
             <div id="Signin" class="tab-pane fade in active">
                 <form id="logininform">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="email" placeholder="username" style="margin-left:-5px;width:385px" ng-model="username">
+                        <input type="text" class="form-control" id="email" placeholder="username" style="margin-left:-5px;width:385px">
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" id="pwd" placeholder="Password" style="margin-left:-5px;width:385px" ng-model="password">
+                        <input type="password" class="form-control" id="pwd" placeholder="Password" style="margin-left:-5px;width:385px">
                     </div>
                     <div class="form-group">
-                        <input type="submit" class="btn btn-primary " value="Sign in" style="margin-left:-5px;width:385px" ng-click="validatecheckin()">
+                        <input type="submit" class="btn btn-primary " value="Sign in" style="margin-left:-5px;width:385px" >
                     </div>
                     <div class="text-center">
                         <a href="" tabindex="5" class="forgot-password">Forgot Password?</a>
@@ -53,23 +53,24 @@
                     <div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="user" placeholder="username" style="margin-left:-5px;width:385px" ng-model="newuser">
+                        <input type="text" class="form-control" id="user" placeholder="username" style="margin-left:-5px;width:385px" >
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" id="pwd" placeholder="Password" style="margin-left:-5px;width:385px" ng-model="newpass">
+                        <input type="password" class="form-control" id="pwd" placeholder="Password" style="margin-left:-5px;width:385px">
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" id="pwdcheck" placeholder="Re-Enter the Password" style="margin-left:-5px;width:385px" ng-model="newpass1">
+                        <input type="password" class="form-control" id="pwdcheck" placeholder="Re-Enter the Password" style="margin-left:-5px;width:385px" >
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="firstname" placeholder="First Name" style="margin-left:-5px;width:185px;float:left" ng-model="fname"/>  <input type="text" class="form-control" id="lastname" placeholder="Last Name" style="margin-right:-5px;width:185px;float:right" ng-model="sname"/>
+                        <input type="text" class="form-control" id="firstname" placeholder="First Name" style="margin-left:-5px;width:185px;float:left" />
+                        <input type="text" class="form-control" id="lastname" placeholder="Last Name" style="margin-right:-5px;width:185px;float:right" />
                     </div>
                     </br>
                     </br>
                     <div class="form-group">
 
 
-                        <input type="submit" class="btn btn-primary " value="Sign up" style="margin-left:-5px;width:385px" ng-click="registeruser()">
+                        <input type="submit" class="btn btn-primary " value="Sign up" style="margin-left:-5px;width:385px" >
                     </div>
                 </form>
             </div>
@@ -81,49 +82,6 @@
 </div>
 
 </body>
-<script>
-
-var app=angular.module("myapp",[]);
-app.controller("myctrl",function($scope,$http){
-
-    $scope.validatecheckin=function () {
-
-
-        var user = $scope.username;
-        var pass = $scope.password;
-        console.log(user);
-        $http({
-            method: 'POST',
-            url: '/checklogin',
-            data :{
-                'user':$scope.username,
-                'password':$scope.password
-            }
-        }).success(function mysucess(response){
-            console.log(response);
-        });
-    }
-
-    $scope.registeruser=function(){
-
-       console.log("inside register html function");
-
-        $http({
-            method:'POST',
-            url:'/registeruser',
-            data:{
-                'newuser':$scope.newuser,
-                'password':$scope.newpass,
-                'firstname':$scope.fname,
-                'lastname':$scope.sname
-            }
-        }).success(function mysuccess(response){
-            console.log(response);
-        });
-
-    }
-});
-
-</script>
+<script src="js/signin.js"></script>
 </html>
 

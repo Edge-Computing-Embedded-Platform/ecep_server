@@ -5,6 +5,7 @@
 
 $(document).ready(function() {
 
+    loadLocation();
 
 $("#location_dropdown").change(function () {
     console.log("location changed");
@@ -124,3 +125,47 @@ $("#architecture").change(function () {
 
 
 });
+
+function loadLocation() {
+
+    $.ajax({
+        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/location",
+        type: "GET",
+
+        crossDomain: true,
+
+
+        // async : false,
+
+
+        success: function (response) {
+
+            var location=JSON.parse(response).location;
+            // var loca = document.getElementById("location-dropdown");
+
+            console.log(location.length);
+            // alert("success");
+
+            for(var i=0; i<location.length;i++)
+            {
+                var loc=location[i];
+                // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
+                $("#location_dropdown").append($("<option>"+loc+"</option>"));
+
+            }
+
+        },
+        error: function (xhr, status) {
+            swal({
+                title:"ERROR",
+                text: xhr.responseText,
+                type: "error",
+                showCancelButton: false,
+                confirmButtonClass: 'btn-info',
+                confirmButtonText: 'Close!'
+            });
+        }
+    });
+
+
+}

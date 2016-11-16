@@ -3,159 +3,11 @@
      */
     $(document).ready(function(){
 
-        $.ajax({
-            url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute?command=filter&username=admin",
-            type: "GET",
+       loadTable();
 
-            crossDomain: true,
+        loadDeviceCount();
 
-            // async : false,
-
-
-            success: function (response) {
-                debugger;
-                var container=JSON.parse(response).compute;
-                // var loca = document.getElementById("location-dropdown");
-
-                // alert("success");
-
-                for(var i=0; i<container.length;i++)
-
-                {
-                    var devId=container[i].deviceId;
-                    var cName=container[i].containerName;
-
-                    if (status.search("created"))
-                    {
-
-                        bgColor="label-default label label-danger";
-                    }
-                    if (status.search("Exited"))
-                    {
-                        bgColor="label-warning label label-default";
-                    }
-                    
-                    var htmlstring="";
-                    htmlstring=htmlstring+"<tr >";
-                    htmlstring=htmlstring+"<td class='center'>"+cName+"</td>";
-                    htmlstring=htmlstring+"<td class='center'>"+devId+"</td>";
-                    htmlstring=htmlstring+"<td class='center'>"+container[i].imageName+"</td>";
-                    htmlstring=htmlstring+"<td class='center'><span class='label-warning label label-default'>"+container[i].status+"</span>" +"</td>" ;
-                    htmlstring=htmlstring+'<td class="center"><a class="btn btn-success" href="#" onclick="startContainer('+i+')"';
-                    htmlstring=htmlstring+'<i class="glyphicon glyphicon-start icon-white" ></i>' ;
-                    htmlstring=htmlstring+ 'Start Container</a>';
-                    htmlstring=htmlstring+'<a class="btn btn-info" href="#" onclick="removeContainer('+i+')"';
-                    htmlstring=htmlstring+'<i class="glyphicon glyphicon-remove icon-white" ></i>' ;
-                    htmlstring=htmlstring+ 'Remove Container</a>';
-
-                    htmlstring=htmlstring+'<a class="btn btn-danger" href="#" onclick="stopContainer('+i+')"';
-                    htmlstring=htmlstring+'<i class="glyphicon glyphicon-stop icon-white" ></i>';
-                    htmlstring=htmlstring+   'Stop Container</a>';
-                    htmlstring=htmlstring+"</td>";
-                    htmlstring=htmlstring+"</tr>";
-                    $("#containerRow").append(htmlstring);
-
-
-                }
-                debugger;
-            },
-            error: function (xhr, status) {
-
-
-                //alert("error");
-                swal({
-                    title:"ERROR",
-                    text: xhr.responseText,
-                    type: "error",
-                    showCancelButton: false,
-                    confirmButtonClass: 'btn-info',
-                    confirmButtonText: 'Close!'
-                });
-            }
-        });
-
-
-
-        $.ajax({
-            url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/device?command=all",
-            type: "GET",
-
-            crossDomain: true,
-
-
-            // async : false,
-
-
-            success: function (response) {
-
-                var device=JSON.parse(response).device;
-                // var loca = document.getElementById("location-dropdown");
-
-                // alert("success");
-
-
-                // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
-                $("#deviceCount").append($("<div>"+device.length+"</div>"));
-
-
-
-            },
-            error: function (xhr, status) {
-                //alert("error");
-               swal({
-                    title:"ERROR",
-                    text: xhr.responseText,
-                    type: "error",
-                    showCancelButton: false,
-                    confirmButtonClass: 'btn-info',
-                    confirmButtonText: 'Close!'
-                });
-            }
-        });
-
-
-        $.ajax({
-            url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute?command=filter&username=admin",
-            type: "GET",
-
-            crossDomain: true,
-
-
-            // async : false,
-
-
-            success: function (response) {
-
-                var container=JSON.parse(response).compute;
-                // var loca = document.getElementById("location-dropdown");
-
-                // alert("success");
-
-
-                // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
-                $("#containerCount").append($("<div>"+container.length+"</div>"));
-
-
-
-            },
-            error: function (xhr, status) {
-               // alert("error");
-                swal({
-                    title:"ERROR",
-                    text: xhr.responseText,
-                    type: "error",
-                    showCancelButton: false,
-                    confirmButtonClass: 'btn-info',
-                    confirmButtonText: 'Close!'
-                });
-            }
-        });
-
-
-
-
-
-
+        loadContainerCount();
         $("#containerForm").click(function(){
 
             $("#load").load("../partial_html/containerForm.html");
@@ -354,37 +206,68 @@ debugger;
 
     }
 
+    function loadTable() {
 
-
-    $('#containerForm').click(function() {
         $.ajax({
-            url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/location",
+            url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute?command=filter&username=admin",
             type: "GET",
 
             crossDomain: true,
-
 
             // async : false,
 
 
             success: function (response) {
-
-                var location=JSON.parse(response).location;
+                debugger;
+                var container=JSON.parse(response).compute;
                 // var loca = document.getElementById("location-dropdown");
 
-                console.log(location.length);
                 // alert("success");
 
-                for(var i=0; i<location.length;i++)
+                for(var i=0; i<container.length;i++)
+
                 {
-                    var loc=location[i];
-                    // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
-                    $("#location_dropdown").append($("<option>"+loc+"</option>"));
+                    var devId=container[i].deviceId;
+                    var cName=container[i].containerName;
+
+                    if (status.search("created"))
+                    {
+
+                        bgColor="label-default label label-danger";
+                    }
+                    if (status.search("Exited"))
+                    {
+                        bgColor="label-warning label label-default";
+                    }
+
+                    var htmlstring="";
+                    htmlstring=htmlstring+"<tr >";
+                    htmlstring=htmlstring+"<td class='center'>"+cName+"</td>";
+                    htmlstring=htmlstring+"<td class='center'>"+devId+"</td>";
+                    htmlstring=htmlstring+"<td class='center'>"+container[i].imageName+"</td>";
+                    htmlstring=htmlstring+"<td class='center'><span class='label-warning label label-default'>"+container[i].status+"</span>" +"</td>" ;
+                    htmlstring=htmlstring+'<td class="center"><a class="btn btn-success" href="#" onclick="startContainer('+i+')"';
+                    htmlstring=htmlstring+'<i class="glyphicon glyphicon-start icon-white" ></i>' ;
+                    htmlstring=htmlstring+ 'Start Container</a>';
+                    htmlstring=htmlstring+'<a class="btn btn-info" href="#" onclick="removeContainer('+i+')"';
+                    htmlstring=htmlstring+'<i class="glyphicon glyphicon-remove icon-white" ></i>' ;
+                    htmlstring=htmlstring+ 'Remove Container</a>';
+
+                    htmlstring=htmlstring+'<a class="btn btn-danger" href="#" onclick="stopContainer('+i+')"';
+                    htmlstring=htmlstring+'<i class="glyphicon glyphicon-stop icon-white" ></i>';
+                    htmlstring=htmlstring+   'Stop Container</a>';
+                    htmlstring=htmlstring+"</td>";
+                    htmlstring=htmlstring+"</tr>";
+                    $("#containerRow").append(htmlstring);
+
 
                 }
-
+                debugger;
             },
             error: function (xhr, status) {
+
+
+                //alert("error");
                 swal({
                     title:"ERROR",
                     text: xhr.responseText,
@@ -396,93 +279,89 @@ debugger;
             }
         });
 
+    }
 
+function loadDeviceCount() {
+    $.ajax({
+        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/device?command=all",
+        type: "GET",
+
+        crossDomain: true,
+
+
+        // async : false,
+
+
+        success: function (response) {
+
+            var device=JSON.parse(response).device;
+            // var loca = document.getElementById("location-dropdown");
+
+            // alert("success");
+
+
+            // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
+            $("#deviceCount").append($("<div>"+device.length+"</div>"));
+
+
+
+        },
+        error: function (xhr, status) {
+            //alert("error");
+            swal({
+                title:"ERROR",
+                text: xhr.responseText,
+                type: "error",
+                showCancelButton: false,
+                confirmButtonClass: 'btn-info',
+                confirmButtonText: 'Close!'
+            });
+        }
     });
 
-    $('#dashboard').click(function() {
-        $.ajax({
-            url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/location",
-            type: "GET",
 
-            crossDomain: true,
+}
 
+function loadContainerCount() {
 
-            // async : false,
+    $.ajax({
+        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute?command=filter&username=admin",
+        type: "GET",
 
-
-            success: function (response) {
-
-                var location=JSON.parse(response).location;
-                // var loca = document.getElementById("location-dropdown");
-
-                console.log(location[1]);
-                // alert("success");
-
-                for(var i=0; i<location.length;i++)
-                {
-                    var loc=location[i];
-                    // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
-                    $("#location_dropdown").append($("<option>"+loc+"</option>"));
-
-                }
-
-            },
-            error: function (xhr, status) {
-                swal({
-                    title:"ERROR",
-                    text: xhr.responseText,
-                    type: "error",
-                    showCancelButton: false,
-                    confirmButtonClass: 'btn-info',
-                    confirmButtonText: 'Close!'
-                });
-            }
-        });
+        crossDomain: true,
 
 
+        // async : false,
+
+
+        success: function (response) {
+
+            var container=JSON.parse(response).compute;
+            // var loca = document.getElementById("location-dropdown");
+
+            // alert("success");
+
+
+            // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
+            $("#containerCount").append($("<div>"+container.length+"</div>"));
+
+
+
+        },
+        error: function (xhr, status) {
+            // alert("error");
+            swal({
+                title:"ERROR",
+                text: xhr.responseText,
+                type: "error",
+                showCancelButton: false,
+                confirmButtonClass: 'btn-info',
+                confirmButtonText: 'Close!'
+            });
+        }
     });
-    $('#applicationForm').click(function() {
-        $.ajax({
 
-            // url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute?command=filter&username=admin",
-            url:"http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/device?command=all",
-            type: "GET",
+}
 
-            crossDomain: true,
-
-
-            // async : false,
-
-
-            success: function (response) {
-
-                var device = JSON.parse(response).device;
-                // var loca = document.getElementById("location-dropdown");
-
-
-                // alert("success");
-
-                for (var i = 0; i < device.length; i++) {
-                    var loc = device[i].deviceId;
-                    console.log(device[i].containerName);
-                    // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
-                    $("#device_app").append($("<option>" + loc + "</option>"));
-
-                }
-
-            },
-            error: function (xhr, status) {
-                swal({
-                    title:"ERROR",
-                    text: xhr.responseText,
-                    type: "error",
-                    showCancelButton: false,
-                    confirmButtonClass: 'btn-info',
-                    confirmButtonText: 'Close!'
-                });
-            }
-        });
-
-    });
 
 
