@@ -25,6 +25,16 @@
                     var devId=container[i].deviceId;
                     var cName=container[i].containerName;
 
+                    if (status.search("created"))
+                    {
+
+                        bgColor="label-default label label-danger";
+                    }
+                    if (status.search("Exited"))
+                    {
+                        bgColor="label-warning label label-default";
+                    }
+                    
                     var htmlstring="";
                     htmlstring=htmlstring+"<tr >";
                     htmlstring=htmlstring+"<td class='center'>"+cName+"</td>";

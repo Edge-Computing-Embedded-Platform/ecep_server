@@ -2,7 +2,7 @@
  * Created by praveen on 11/11/2016.
  */
 $(document).ready(function(){
-
+debugger;
     $.ajax({
         url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/device?command=all",
         type: "GET",
@@ -22,7 +22,7 @@ $(document).ready(function(){
 
 
             // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
-            $("#deviceCount").append($("<div>"+device.length+"</div>"));
+            $("#deviceCount1").append($("<div>"+device.length+"</div>"));
 
 
 
@@ -59,7 +59,7 @@ $(document).ready(function(){
 
 
             // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
-            $("#containerCount").append($("<div>"+container.length+"</div>"));
+            $("#containerCount1").append($("<div>"+container.length+"</div>"));
 
 
 
@@ -97,20 +97,44 @@ $(document).ready(function(){
             for(var i=0; i<container.length;i++)
 
             {
+                var bgColor="label-warning label label-default";
+                var status=container[i].status;
                 var devId=container[i].deviceId;
                 var cName=container[i].containerName;
-                $("#containerRow").append($("<tr ><td class='center'>"+cName+
-                    "</td><td class='center'>"+devId+
-                    "</td><td class='center'>"+container[i].imageName+"" +
-                    "</td><td class='center'><span class='label-warning label label-default'>"+container[i].status+"</span>" +
-                    "</td><" +
-                    "td class='center'><a class='btn btn-info' href='#' onclick='removeContainer('+devId+','+cName+');'>" +
-                    "<i class='glyphicon glyphicon-remove icon-white'></i>Remove Container</a>" +
-                    "<a class='btn btn-danger' href='#' onclick='stopContainer('+devId+','+cName+');'>" +
-                    "<i class='glyphicon glyphicon-stop icon-white'></i>Stop Container</a>" +
-                    "</td></tr>"));
+
+                if (status.search("created"))
+                {
+
+                    bgColor="label-default label label-danger";
+                }
+                if (status.search("Exited"))
+                {
+                    bgColor="label-warning label label-default";
+                }
+
+                var htmlstring="";
+                htmlstring=htmlstring+"<tr >";
+                htmlstring=htmlstring+"<td class='center'>"+cName+"</td>";
+                htmlstring=htmlstring+"<td class='center'>"+devId+"</td>";
+                htmlstring=htmlstring+"<td class='center'>"+container[i].imageName+"</td>";
+                htmlstring=htmlstring+"<td class='center'><span class='"+bgColor+"'>"+container[i].status+"</span>" +"</td>" ;
+                htmlstring=htmlstring+'<td class="center"><a class="btn btn-success" href="#" onclick="startContainer1('+i+')"';
+                htmlstring=htmlstring+'<i class="glyphicon glyphicon-start icon-white" ></i>' ;
+                htmlstring=htmlstring+ 'Start Container</a>';
+                htmlstring=htmlstring+'<a class="btn btn-info" href="#" onclick="removeContainer1('+i+')"';
+                htmlstring=htmlstring+'<i class="glyphicon glyphicon-remove icon-white" ></i>' ;
+                htmlstring=htmlstring+ 'Remove Container</a>';
+
+                htmlstring=htmlstring+'<a class="btn btn-danger" href="#" onclick="stopContainer1('+i+')"';
+                htmlstring=htmlstring+'<i class="glyphicon glyphicon-stop icon-white" ></i>';
+                htmlstring=htmlstring+   'Stop Container</a>';
+                htmlstring=htmlstring+"</td>";
+                htmlstring=htmlstring+"</tr>";
+                $("#containerRow").append(htmlstring);
+
 
             }
+            debugger;
         },
         error: function (xhr, status) {
 
@@ -128,3 +152,124 @@ $(document).ready(function(){
     });
 
 });
+
+function removeContainer1(i)
+{
+
+    event.preventDefault();
+    debugger;
+    var deviceId=container[i].deviceId;
+    var containerName=container[i].containerName;
+    console.log(deviceId,containerName);
+
+    debugger;
+    $.ajax({
+        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/handle_request",
+        type : "POST",
+        dataType: "json",
+        data:{
+            "username": "admin",
+            "containerName": containerName,
+            "command": "remove",
+            "deviceId": deviceId
+        },
+
+        crossDomain: true,
+
+        success: function (response) {
+            //  event.preventDefault();
+
+        },
+        error: function (xhr, status) {
+            swal({
+                title:"ERROR",
+                text: xhr.responseText,
+                type: "error",
+                showCancelButton: false,
+                confirmButtonClass: 'btn-info',
+                confirmButtonText: 'Close!'
+            });
+        }
+    });
+
+    return false;
+}
+function startContainer1(i)
+{
+    event.preventDefault();
+    debugger
+    var deviceId=container[i].deviceId;
+    var containerName=container[i].containerName;
+    console.log(deviceId,containerName);
+    debugger;
+    $.ajax({
+        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/handle_request",
+        type : "POST",
+        dataType: "json",
+        data:{
+            "username": "admin",
+            "containerName": containerName,
+            "command": "start",
+            "deviceId": deviceId
+        },
+
+        crossDomain: true,
+
+        success: function (response) {
+            //event.preventDefault();
+            console.log("S");
+
+
+        },
+        error: function (xhr, status) {
+            swal({
+                title:"ERROR",
+                text: xhr.responseText,
+                type: "error",
+                showCancelButton: false,
+                confirmButtonClass: 'btn-info',
+                confirmButtonText: 'Close!'
+            });
+        }
+    });
+
+    return false;
+}
+
+function stopContainer1(i)
+
+{
+    event.preventDefault();
+    debugger;
+    $.ajax({
+        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/handle_request",
+        type : "POST",
+        dataType: "json",
+        data:{
+            "username": "admin",
+            "containerName": containerName,
+            "command": "stop",
+            "deviceId": deviceId
+        },
+
+        crossDomain: true,
+
+        success: function (response) {
+
+            console.log("S");
+
+        },
+        error: function (xhr, status) {
+            swal({
+                title:"ERROR",
+                text: xhr.responseText,
+                type: "error",
+                showCancelButton: false,
+                confirmButtonClass: 'btn-info',
+                confirmButtonText: 'Close!'
+            });
+        }
+    });
+    return false;
+
+}
