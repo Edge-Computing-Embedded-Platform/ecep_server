@@ -32,7 +32,9 @@ def handleCmd(entries):
 
 # Handle request from user
 class handleReq(tornado.web.RequestHandler):
-
+    """
+    Handle user command request
+    """
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", 'x-requested-with,Origin')
@@ -48,7 +50,6 @@ class handleReq(tornado.web.RequestHandler):
         pdate = json.loads(self.request.body)
 
     def post(self, **kwargs):
-
 
         try:
             data = json.loads(self.request.body)

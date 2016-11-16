@@ -40,11 +40,11 @@ class ClientReader(ApplicationSession):
         # This is to handle heartbeat
         self.heartbeat = self.config.extra['heartbeat']
         def onHeartbeat(args):
-            #log.msg('I receives', args)
+            
             uDB_instance = uDB()
-
-            # handle the heartbeat
+            # handle heartbeat
             uDB_instance.deviceReg(args)
+        
         try:
             yield self.subscribe(onHeartbeat, self.heartbeat)
             print ("Subscribed to topic: " + self.heartbeat)
@@ -55,11 +55,12 @@ class ClientReader(ApplicationSession):
         # This is to handle response from end node
         self.devResp = self.config.extra['deviceResponse']
         def deviceResponse(args):
-            log.msg('I receives', args)
+            
+            log.msg('Respone received: ', args)
             uDB_instance = uDB()
-
             # handle the device response
             uDB_instance.updateDeviceResponse(args)
+        
         try:
             yield self.subscribe(deviceResponse, self.devResp)
             print ("Subscribed to topic: " + self.devResp)
@@ -70,11 +71,12 @@ class ClientReader(ApplicationSession):
         # This is to handle container status sync
         self.contStat = self.config.extra['containerStatus']
         def containerStatus(args):
-            log.msg('I receives', args)
-            uDB_instance = uDB()
             
+            log.msg('Container status: ', args)
+            uDB_instance = uDB()
             # handle the status updates
             uDB_instance.updateContainerStatus(args)
+        
         try:
             yield self.subscribe(containerStatus, self.contStat)
             print ("Subscribed to topic: " + self.contStat)
@@ -85,11 +87,12 @@ class ClientReader(ApplicationSession):
         # This is to handle cpu info
         self.cpuInfo = self.config.extra['cpuInfo']
         def cpuInfo(args):
-            #log.msg('I receives', args)
-            uDB_instance = uDB()
             
+            log.msg('CPU Info: ', args)
+            uDB_instance = uDB()
             # handle the cpu info updates
             uDB_instance.updateCPUinfo(args)
+        
         try:
             yield self.subscribe(cpuInfo, self.cpuInfo)
             print ("Subscribed to topic: " + self.cpuInfo)
@@ -157,8 +160,10 @@ class wampserver(ApplicationSession):
         return self
 
 
-# Function used to publish the data 
 def sendTo(topic, data):
+    """
+    Sends the message to all the subscribed topics
+    """
     print topic, data
     global requestReceived
     try:

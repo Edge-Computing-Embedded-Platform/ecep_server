@@ -41,8 +41,12 @@ def sendCommand(data):
 
 
 def checkValidity(command, param):
+    """
+    Check the validity of user commands
+    """
     print command + ' received'
-    valid = True
+    valid = False
+    
     if command == 'create':
         valid = ('deviceId' in param) and ('imageName' in param) and ('containerName' in param) and (
         'username' in param)
@@ -53,13 +57,14 @@ def checkValidity(command, param):
     elif command == 'upStart':
         valid = ('deviceId' in param) and ('containerName' in param) and ('username' in param) and ('filename' in param)
 
-    # elif command == 'list':
-    print valid
     return valid
 
 
 if __name__ == '__main__':
-
+    """
+    For testing
+    """
+    
     contcmd = {'command': 'create', 'deviceId': 'beaglebone', 'imageName': 'ubuntu', 'containerName': 'abhi',
                'username': 'beagle'}
 

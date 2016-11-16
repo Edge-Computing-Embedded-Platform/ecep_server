@@ -112,6 +112,7 @@ class updateDB(object):
                     print device + ' is alive'
                     regDevice[device] = False
 
+            # Remove all the dead devices from the local data
             for item in rm:
                 regDevice.pop(item, None)
 
