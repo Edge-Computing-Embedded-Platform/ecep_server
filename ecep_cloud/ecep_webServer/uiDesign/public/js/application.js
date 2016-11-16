@@ -9,7 +9,7 @@ $(document).ready(function(){
         $("#containerName_app").show();
         $.ajax({
 
-            url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute?command=filter&username=admin&deviceId"+$("#device_app").val(),
+            url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute?command=filter&username=admin&deviceId="+$("#device_app").val(),
            // url:"http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/device?command=all",
             type: "GET",
 
