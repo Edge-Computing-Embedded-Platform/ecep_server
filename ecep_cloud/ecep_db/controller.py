@@ -487,6 +487,7 @@ class Compute_Manager():
         self.validate_compute_params(kwargs)
         db_lock.acquire()
         try:
+            print kwargs
             db_session.query(Compute).filter_by(username = kwargs.get('username'), \
                                                 containerName=kwargs.get('containerName')).update(kwargs)
             db_session.commit()

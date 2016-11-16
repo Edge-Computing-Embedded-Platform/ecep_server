@@ -1,6 +1,7 @@
 from wamp_server import *
 from update_db import updateDB
 
+
 # Form the data packet to be transfered to end node
 def sendCommand(data):
     if checkValidity(data['command'], data):
@@ -11,16 +12,22 @@ def sendCommand(data):
             keyList = ('imageName', 'containerName', 'command', 'username')
 
         elif data['command'] == 'start':
+            keyList = ('containerName', 'command', 'username')
+
+        elif data['command'] == 'upstart':
             keyList = ('containerName', 'command', 'username', 'filename')
-            
+
         elif data['command'] == 'stop' or data['command'] == 'remove':
             keyList = ('containerName', 'command', 'username')
 
-        msg = dict((key, data[key]) for key in keyList)
+        try:
+            msg = dict((key, data[key]) for key in keyList)
+        except Exception,e:
+            print e
 
         if msg['command'] == 'create':
             db_msg = msg.copy()
-	    db_msg['deviceId'] = data['deviceId']
+            db_msg['deviceId'] = data['deviceId']
             db = updateDB()
             db.addComputeNode(db_msg)
 
@@ -32,16 +39,17 @@ def sendCommand(data):
 
     return packet  # To check if the user request is valid
 
-def checkValidity(command, param):
 
+def checkValidity(command, param):
     print command + ' received'
 
     if command == 'create':
-        valid = ('deviceId' in param) and ('imageName' in param) and ('containerName' in param) and ('username' in param)
+        valid = ('deviceId' in param) and ('imageName' in param) and ('containerName' in param) and (
+        'username' in param)
 
     elif command == 'stop' or command == 'remove' and command == 'start':
         valid = ('deviceId' in param) and ('containerName' in param) and ('username' in param)
-        
+
     elif command == 'upStart':
         valid = ('deviceId' in param) and ('containerName' in param) and ('username' in param) and ('filename' in param)
 
@@ -65,5 +73,5 @@ if __name__ == '__main__':
     print value
     while True:
         time.sleep(5)
-        #heartbeat()
+        # heartbeat()
         sendCommand(contcmd)
