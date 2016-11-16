@@ -11,13 +11,10 @@ def sendCommand(data):
         if data['command'] == 'create':
             keyList = ('imageName', 'containerName', 'command', 'username')
 
-        elif data['command'] == 'start':
-            keyList = ('containerName', 'command', 'username')
-
-        elif data['command'] == 'upstart':
+        elif data['command'] == 'upStart':
             keyList = ('containerName', 'command', 'username', 'filename')
 
-        elif data['command'] == 'stop' or data['command'] == 'remove':
+        elif data['command'] == 'stop' or data['command'] == 'remove' or data['command'] == 'start':
             keyList = ('containerName', 'command', 'username')
 
         try:
