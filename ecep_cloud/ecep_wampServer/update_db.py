@@ -99,17 +99,22 @@ class updateDB(object):
             rm = []
             for device in regDevice:
                 if regDevice[device] == False:
-                    print 'no heartbeat'
+                    print '~~~!!!!!!!!!!!!!!! no heartbeat !!!!!!!!!!!!!!~~~'
 
-                    devManager = Device_Manager()
-                    devManager.remove_device(deviceId=device)
-
-                    info = Info_Manager()
-                    info.remove_device_info(deviceId=device)
-
-                    rm.append(device)
+                    try:
+                        devManager = Device_Manager()
+                        devManager.remove_device(deviceId=device)
+    
+                        info = Info_Manager()
+                        info.remove_device_info(deviceId=device)
+                        
+                        node = Compute_Manager()
+                        node.remove_compute_node_by_device(deviceId=device)
+    
+                        rm.append(device)
+                    except Exception as e:
+                        print 'error while removing: ', e
                 else:
-                    print device + ' is alive'
                     regDevice[device] = False
 
             # Remove all the dead devices from the local data
