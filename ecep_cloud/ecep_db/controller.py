@@ -65,7 +65,7 @@ class Location(Base):
     location =  Column(String(30), primary_key=True)
 
 class Info(Base):
-    __tablename__ = 'Info'
+    __tablename__ = 'cpuinfo'
     id = Column(Integer, autoincrement=True)
     deviceId = Column(String(50), primary_key=True)
     deviceName = Column(String(50))
@@ -85,7 +85,7 @@ class Info(Base):
     physicalPercent = Column(Float)
 
     def get_dict(self):
-        ret = {'deviceId': self.imageName,
+        ret = {'deviceId': self.deviceId,
                'deviceName': self.deviceName,
                'totalContainers':self.totalContainers,
                'totalImages':self.totalImages,
@@ -579,8 +579,8 @@ class Info_Manager():
 
         info  = db_session.query(Info).filter_by(deviceId=kwargs['deviceId']).all()
 
-        if info is None:
-            print "info is none"
+        if len(info) == 0:
+            print "*****************info is none***********************"
             try:
                 node = Info(**kwargs)
                 db_session.add(node)
