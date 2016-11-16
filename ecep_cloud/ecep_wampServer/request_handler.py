@@ -252,12 +252,12 @@ class CPUInfoHandler(tornado.web.RequestHandler):
         except:
             data = dict(urlparse.parse_qsl(self.request.query))
 
-        if 'deviceId' not in kwargs:
+        if 'deviceId' not in data:
             self.set_status(400, reason="param %s missing" % 'deviceId')
             raise tornado.web.HTTPError(400)
 
         info = Info_Manager()
-        ret = info.get_device_info(**kwargs)
+        ret = info.get_device_info(**data)
         self.write = json.dumps(ret)
         self.finish()
 
