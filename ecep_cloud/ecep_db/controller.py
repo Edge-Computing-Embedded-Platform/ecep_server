@@ -24,11 +24,11 @@ class init_db_lock():
         return db_lock
 
 def set_db_session():
+    global db_session
     if db_session is None:
         print "DB version: %s"% sqlalchemy.__version__
         db = create_engine('sqlite:///demo.db', echo=False,connect_args={'check_same_thread':False})
         Base.metadata.create_all(db)
-        global db_session
         session = sessionmaker(bind=db)
         db_session = session()
 
@@ -577,9 +577,10 @@ class Info_Manager():
 
         db_lock.acquire()
 
-        info  = db_session.query(Info).filter_by(deviceId=kwargs['deviceId']).first()
-        print info
+        info  = db_session.query(Info).filter_by(deviceId=kwargs['deviceId']).all()
+
         if info is None:
+            print "info is none"
             try:
                 node = Info(**kwargs)
                 db_session.add(node)
@@ -605,17 +606,22 @@ class Info_Manager():
         if 'deviceId' not in kwargs:
             raise KeyError("missing key:%s"%'deviceId')
         db_lock.acquire()
-        try:
-            node = db_session.query(Info).filter_by(deviceId = kwargs['deviceId']).first()
-            info = node.get_dict()
-            ret = {'info':info}
 
+        try:
+            list_db = db_session.query(Info).filter_by(deviceId = kwargs['deviceId']).all()
+            db_arr = []
+            for u in list_db:
+                new = u.get_dict()
+                db_arr.append(new)
+
+            ret = {'info':db_arr}
+            pass
         except Exception, e:
             db_session.rollback()
             ret = {'info': e}
-            print ret
             pass
         db_lock.release()
+
         return ret
 
     def remove_device_info(self, **kwargs):
@@ -625,7 +631,7 @@ class Info_Manager():
             raise KeyError("missing key:%s" % 'deviceId')
         db_lock.acquire()
         try:
-            db_session.query(Info).filter_by(deviceId=kwargs['deviceId']).delete()
+            db_session.query(Info).filter_by(deviceId = kwargs['deviceId']).delete()
             db_session.flush()
             db_session.commit()
             ret = {'status': True}

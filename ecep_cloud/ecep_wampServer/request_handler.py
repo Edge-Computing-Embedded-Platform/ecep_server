@@ -202,7 +202,7 @@ class ComputeHandler(tornado.web.RequestHandler):
 
     def get(self, **kwargs):
         try:
-            data = json.loads(self.request.query)
+            data = json.loads(self.request.body)
         except:
             data = dict(urlparse.parse_qsl(self.request.query))
         """get container list by username,
@@ -248,7 +248,7 @@ class CPUInfoHandler(tornado.web.RequestHandler):
 
     def get(self, **kwargs):
         try:
-            data = json.loads(self.request.query)
+            data = json.loads(self.request.body)
         except:
             data = dict(urlparse.parse_qsl(self.request.query))
 
@@ -258,8 +258,9 @@ class CPUInfoHandler(tornado.web.RequestHandler):
 
         info = Info_Manager()
         ret = info.get_device_info(**data)
-        self.write = json.dumps(ret)
+        self.write (json.dumps(ret))
         self.finish()
+
 
 
 application = tornado.web.Application([(r"/handle_request", handleReq),
