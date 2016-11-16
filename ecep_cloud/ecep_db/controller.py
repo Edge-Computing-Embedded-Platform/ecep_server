@@ -535,6 +535,26 @@ class Compute_Manager():
         db_lock.release()
         return ret
 
+    def remove_compute_node_by_device(self,**kwargs):
+
+        ret = {'status': True}
+
+        global db_session
+        global db_lock
+
+        if 'deviceId' not in kwargs:
+            raise  KeyError("missing %s"%'deviceId')
+
+        db_lock.acquire()
+        try:
+            db_session.query(Compute).filter_by(deviceId = kwargs["deviceId"]).delete()
+            db_session.commit()
+        except Exception, e:
+            ret = "{error:%s}" % str(e)
+            pass
+        db_lock.release()
+        return ret
+
     def validate_compute_params(self,params):
         key = ['containerId', 'containerName', 'remoteName', 'imageName', 'deviceId', 'username', 'appPath', 'status']
         rm = []
