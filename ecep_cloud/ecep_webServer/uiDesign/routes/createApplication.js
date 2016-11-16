@@ -48,7 +48,7 @@ router.post('/', rfcal_upload.single('applicationFile'),function (req, res,next)
     console.log(req.body.containerName_app);
 
     var source= './upload/'+fileName;
-    var destination = './home/ubuntu/ecep/'+'admin'+'_'+req.body.containerName_app+'/'+fileName;
+    var destination = '/home/ubuntu/ecep/'+'admin'+'_'+req.body.containerName_app+'/'+fileName;
 
     fs.copy(source, destination, function (err) {
         if (err) return console.error(err);
@@ -61,7 +61,7 @@ router.post('/', rfcal_upload.single('applicationFile'),function (req, res,next)
 
 
    var data = JSON.stringify({
-        "command": "upstart",
+        "command": "upStart",
          "username":"admin",
         "containerName":req.body.containerName_app,
 
