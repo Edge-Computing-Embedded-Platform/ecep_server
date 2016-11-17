@@ -161,6 +161,8 @@
     {
         event.preventDefault();
         debugger;
+        var deviceId=container[i].deviceId;
+        var containerName=container[i].containerName;
         $.ajax({
             url: ip+"/handle_request",
             type : "POST",
