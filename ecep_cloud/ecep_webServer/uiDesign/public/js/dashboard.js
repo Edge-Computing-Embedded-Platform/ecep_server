@@ -3,83 +3,33 @@
  */
 $(document).ready(function(){
 debugger;
-    $.ajax({
-        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/device?command=all",
-        type: "GET",
 
-        crossDomain: true,
+    ip="http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000";
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', {'packages':['corechart']});
 
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawChart);
 
-        // async : false,
+    // Callback that creates and populates a data table,
+    // instantiates the pie chart, passes in the data and
+    // draws it.
 
+    loadDeviceList();
+    loadDeviceCount1();
+    loadContainerCount1();
+    fillContianerTable();
 
-        success: function (response) {
-
-            var device=JSON.parse(response).device;
-            // var loca = document.getElementById("location-dropdown");
-
-            // alert("success");
-
-
-            // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
-            $("#deviceCount1").append($("<div>"+device.length+"</div>"));
+    $("#device_CPUinfo").change(function () {
 
 
-
-        },
-        error: function (xhr, status) {
-            swal({
-                title:"ERROR",
-                text: xhr.responseText,
-                type: "error",
-                showCancelButton: false,
-                confirmButtonClass: 'btn-info',
-                confirmButtonText: 'Close!'
-            });
-        }
+        $("#graphDisply").show();
     });
 
-
+});
+function fillContianerTable() {
     $.ajax({
-        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute?command=filter&username=admin",
-        type: "GET",
-
-        crossDomain: true,
-
-
-        // async : false,
-
-
-        success: function (response) {
-
-            var container=JSON.parse(response).compute;
-            // var loca = document.getElementById("location-dropdown");
-
-            // alert("success");
-
-
-            // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
-            $("#containerCount1").append($("<div>"+container.length+"</div>"));
-
-
-
-        },
-        error: function (xhr, status) {
-            swal({
-                title:"ERROR",
-                text: xhr.responseText,
-                type: "error",
-                showCancelButton: false,
-                confirmButtonClass: 'btn-info',
-                confirmButtonText: 'Close!'
-            });
-        }
-    });
-
-
-
-    $.ajax({
-        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute?command=filter&username=admin",
+        url: ip+"/compute?command=filter&username=admin",
         type: "GET",
 
         crossDomain: true,
@@ -89,7 +39,7 @@ debugger;
 
         success: function (response) {
             debugger;
-            var container=JSON.parse(response).compute;
+             container=JSON.parse(response).compute;
             // var loca = document.getElementById("location-dropdown");
 
             // alert("success");
@@ -151,8 +101,7 @@ debugger;
         }
     });
 
-});
-
+}
 function removeContainer1(i)
 {
 
@@ -164,7 +113,7 @@ function removeContainer1(i)
 
     debugger;
     $.ajax({
-        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/handle_request",
+        url: ip+"/handle_request",
         type : "POST",
         dataType: "json",
         data:{
@@ -203,7 +152,7 @@ function startContainer1(i)
     console.log(deviceId,containerName);
     debugger;
     $.ajax({
-        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/handle_request",
+        url: ip+"/handle_request",
         type : "POST",
         dataType: "json",
         data:{
@@ -237,12 +186,11 @@ function startContainer1(i)
 }
 
 function stopContainer1(i)
-
 {
     event.preventDefault();
     debugger;
     $.ajax({
-        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/handle_request",
+        url: ip+"/handle_request",
         type : "POST",
         dataType: "json",
         data:{
@@ -272,4 +220,124 @@ function stopContainer1(i)
     });
     return false;
 
+}
+
+function loadDeviceList() {
+    $.ajax({
+        url: ip+"/device?command=all",
+        type: "GET",
+
+        crossDomain: true,
+
+
+        // async : false,
+
+
+        success: function (response) {
+
+            // var loca = document.getElementById("location-dropdown");
+
+            // console.log(location[1]);
+            // alert("success");
+            var devices=JSON.parse(response).device
+            for(var i=0; i<devices.length;i++)
+            {
+                var dev=devices[i];
+
+                // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
+                $("#device_CPUinfo").append($("<option>"+dev.deviceId+"</option>"));
+
+            }
+
+        },
+        error: function (xhr, status) {
+            //alert("error");
+            swal({
+                title:"ERROR",
+                text: xhr.responseText,
+                type: "error",
+                showCancelButton: false,
+                confirmButtonClass: 'btn-info',
+                confirmButtonText: 'Close!'
+            });
+        }
+    });
+
+
+}
+function loadDeviceCount1() {
+    $.ajax({
+        url: ip+"/device?command=all",
+        type: "GET",
+
+        crossDomain: true,
+
+
+        // async : false,
+
+
+        success: function (response) {
+
+            var device=JSON.parse(response).device;
+            // var loca = document.getElementById("location-dropdown");
+
+            // alert("success");
+
+
+            // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
+            $("#deviceCount1").append($("<div>"+device.length+"</div>"));
+
+
+
+        },
+        error: function (xhr, status) {
+            swal({
+                title:"ERROR",
+                text: xhr.responseText,
+                type: "error",
+                showCancelButton: false,
+                confirmButtonClass: 'btn-info',
+                confirmButtonText: 'Close!'
+            });
+        }
+    });
+
+}
+
+function loadContainerCount1() {
+    $.ajax({
+        url: ip+"/compute?command=filter&username=admin",
+        type: "GET",
+
+        crossDomain: true,
+
+
+        // async : false,
+
+
+        success: function (response) {
+
+            var container=JSON.parse(response).compute;
+            // var loca = document.getElementById("location-dropdown");
+
+            // alert("success");
+
+
+            // $("<select />").append($("<option>", {loc:loc})).insertAfter($(this));
+            $("#containerCount1").append($("<div>"+container.length+"</div>"));
+
+
+
+        },
+        error: function (xhr, status) {
+            swal({
+                title:"ERROR",
+                text: xhr.responseText,
+                type: "error",
+                showCancelButton: false,
+                confirmButtonClass: 'btn-info',
+                confirmButtonText: 'Close!'
+            });
+        }
+    });
 }

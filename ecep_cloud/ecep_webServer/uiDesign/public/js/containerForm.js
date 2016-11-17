@@ -4,6 +4,18 @@
 
 
 $(document).ready(function() {
+ip="http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000";
+
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', {'packages':['corechart']});
+
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawChart);
+
+    // Callback that creates and populates a data table,
+    // instantiates the pie chart, passes in the data and
+    // draws it.
+
 
     loadLocation();
 
@@ -17,7 +29,7 @@ $("#location_dropdown").change(function () {
     console.log(loc);
     $.ajax({
 
-        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/device?command=filter&location="+ loc,
+        url: ip+"/device?command=filter&location="+ loc,
         type: "GET",
 
         crossDomain: true,
@@ -53,7 +65,7 @@ $("#device").change(function () {
     debugger;
     var selectedDevice=$("#device").val();
 
-    var url="http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/device?command=filter&location="+ $("#location_dropdown").val()+"&deviceId="+selectedDevice;
+    var url=ip+"/device?command=filter&location="+ $("#location_dropdown").val()+"&deviceId="+selectedDevice;
     console.log(url);
     $.ajax({
 
@@ -89,7 +101,7 @@ $("#architecture").change(function () {
     debugger;
     var selectedDevice=$("#device").val();
     //console.log(loc);
-    var url="http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/image?command=filter&arch="+ $("#architecture").val()
+    var url=ip+"/image?command=filter&arch="+ $("#architecture").val()
         ;
     $.ajax({
 
@@ -129,7 +141,7 @@ $("#architecture").change(function () {
 function loadLocation() {
 
     $.ajax({
-        url: "http://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/location",
+        url: ip+"/location",
         type: "GET",
 
         crossDomain: true,

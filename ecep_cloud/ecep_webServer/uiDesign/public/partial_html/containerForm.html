@@ -4,58 +4,97 @@
             <h2><i class="glyphicon glyphicon-edit"></i> Create Container</h2>
         </div>
         <div class="box-content">
-                <div class="form-group">
-                    <div class="btn-group pull-middle " id="location_div">
-                        <select class="btn btn-primary dropdown-toggle" name="location_dropdown" type="button" data-toggle="dropdown" id="location_dropdown" >
-                            <option id="location" name="location">  <i class="glyphicon glyphicon-tint"></i><span
-                                    class="hidden-sm hidden-xs"> Location</span>
-                                <span class="caret"></span>
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="btn-group pull-middle "id="device_div" >
-                        <select class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="device" name="device" style= "display:none" >
-                            <option>  <i class="glyphicon glyphicon-tint"></i><span
-                                    class="hidden-sm hidden-xs"> Device Name</span>
-                                <span class="caret"></span>
-                            </option>
-
-                        </select>
-                    </div>
+            <div class="form-group">
+                <div class="btn-group pull-middle " id="location_div">
+                    <select class="btn btn-primary dropdown-toggle" name="location_dropdown" type="button" data-toggle="dropdown" id="location_dropdown" >
+                        <option id="location" name="location">  <i class="glyphicon glyphicon-tint"></i><span
+                                class="hidden-sm hidden-xs"> Location</span>
+                            <span class="caret"></span>
+                        </option>
+                    </select>
                 </div>
-                <br>
-                <br>
-                <div class="form-group">
-                    <div class="btn-group pull-middle " id="arch_div">
-                        <select id="architecture" name="architecture" style= "display:none" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                            <option>  <i class="glyphicon glyphicon-tint"></i><span
-                                    class="hidden-sm hidden-xs"> Architecture</span>
-                                <span class="caret"></span>
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="btn-group pull-middle " id="img_div">
-                        <select id="containerImage" name="containerImage" style= "display:none" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                            <option>  <i class="glyphicon glyphicon-tint"></i><span
-                                    class="hidden-sm hidden-xs">Container Image </span>
-                                <span class="caret"></span>
-                            </option>
-                        </select>
-                    </div>
+                <div class="btn-group pull-middle "id="device_div" >
+                    <select class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="device" name="device" style= "display:none" >
+                        <option>  <i class="glyphicon glyphicon-tint"></i><span
+                                class="hidden-sm hidden-xs"> Device Name</span>
+                            <span class="caret"></span>
+                        </option>
+                    </select>
                 </div>
-                <br>
-
-                <div class="form-group">
-                    <label for="container_name">Container Name</label>
-                    <input type="text" class="form-control" id="container_name" placeholder="Enter a Conatiner Name..." required='required'>
+            </div>
+            <br>
+            <br>
+            <div class="form-group">
+                <div class="btn-group pull-middle " id="arch_div">
+                    <select id="architecture" name="architecture" style= "display:none" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        <option>  <i class="glyphicon glyphicon-tint"></i><span
+                                class="hidden-sm hidden-xs"> Architecture</span>
+                            <span class="caret"></span>
+                        </option>
+                    </select>
                 </div>
-                <button type="button" onclick="sendContainer()" class="btn btn-default" >Submit</button>
+                <div class="btn-group pull-middle " id="img_div">
+                    <select id="containerImage" name="containerImage" style= "display:none" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        <option>  <i class="glyphicon glyphicon-tint"></i><span
+                                class="hidden-sm hidden-xs">Container Image </span>
+                            <span class="caret"></span>
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="container_name">Container Name</label>
+                <input type="text" class="form-control" id="container_name" placeholder="Enter a Conatiner Name..." required='required'>
+            </div>
+            <button type="button" onclick="sendContainer()" class="btn btn-default" >Submit</button>
         </div>
         <br>
     </div>
 </div>
+
+<div class="box col-md-11 col-sm-4 col-xs-6" style="margin-left: 4%">
+    <div class="box-inner">
+        <div class="box-header well" data-original-title="">
+            <h2><i class="glyphicon glyphicon-info-sign"></i> CPU INFO</h2>
+            <div class="box-icon">
+                <a href="#" class="btn btn-minimize btn-round btn-default"><i
+                        class="glyphicon glyphicon-chevron-up"></i></a>
+                <a href="#" class="btn btn-close btn-round btn-default"><i
+                        class="glyphicon glyphicon-remove"></i></a>
+            </div>
+        </div>
+        <div class="box-content">
+
+            <div class="Graphs">
+                <!--Div that will hold the pie chart-->
+                <div class="row">
+
+                    <div class="col-md-4" id="JSFiddle">
+                        <div id="diskMem_div"></div>
+                        <div class="overlay-label-middle-for-slice">Gb</div>
+                        <div class="overlay-label-top">  Total Disk Memory</div>
+                        <div id="cnt" class="overlay-value-top">125.35</div>
+                    </div>
+
+
+                    <div class="col-md-4" id="JSFiddle">
+                        <div id="physicalMem_div"></div>
+                        <div class="overlay-label-middle-for-slice">Mb</div>
+                        <div class="overlay-label-top">Total Physical Memory</div>
+                        <div id="cnt" class="overlay-value-top">7348.52</div>
+                    </div>
+
+
+                    <div class="col-md-4" id="JSFiddle">
+                        <div id="cpuUsage_div"></div>
+                        <div class="overlay-label-middle">%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="js/containerForm.js"></script>
+<script src="js/webSocket.js"></script>
 <!--/span-->

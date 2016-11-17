@@ -13,12 +13,12 @@ text-align:left;
 vertical-align: middle;
 position: absolute;
 top: 49px;  /* chartArea top  */
-left: 146px; /* chartArea left */
+left: 163px; /* chartArea left */
 margin-top: 140px;
 font-size: 15px;
 }
 .overlay-label-middle-for-slice{
-    display:bloack;
+    display:block;
 width:400px;
 height:400px;
 -webkit-animation: mymove 3s; /* Chrome, Safari, Opera */
@@ -27,7 +27,7 @@ text-align:left;
 vertical-align: middle;
 position: absolute;
 top: 49px;  /* chartArea top  */
-left: 140px; /* chartArea left */
+left: 155px; /* chartArea left */
 margin-top: 140px;
 font-size: 15px;
 }
@@ -43,14 +43,14 @@ font-size: 15px;
 }
 
 .overlay-label-top{
-  display:bloack;
+  display:block;
 width:400px;
 height:400px;
-text-align:middle;
+text-align:left;
 vertical-align: middle;
 position: absolute;
 top: 65px;  /* chartArea top  */
-left: 70px; /* chartArea left */
+left: 80px; /* chartArea left */
 margin-top: 0px;
 font-size: 14px;
 }
@@ -60,11 +60,11 @@ font-size: 14px;
 display:block;
 width:400px;
 height:400px;
-text-align:middle;
+text-align:left;
 vertical-align: middle;
 position: absolute;
 top: 85px;  /* chartArea top  */
-left: 110px; /* chartArea left */
+left: 115px; /* chartArea left */
 margin-top: 0px;
 font-size: 14px;
 }

@@ -218,38 +218,67 @@
             </div>
             <!--/span-->
 
-
+        </div>
 
             <!------------------------------------------------------->
 
+
+            <div class="box col-md-12 col-sm-4 col-xs-6" style="margin-left: 0%">
+                <div class="box-inner">
+                    <div class="box-header well" data-original-title="">
+                        <h2><i class="glyphicon glyphicon-info-sign"></i> CPU INFO</h2>
+                        <div class="box-icon">
+                            <a href="#" class="btn btn-minimize btn-round btn-default"><i
+                                        class="glyphicon glyphicon-chevron-up"></i></a>
+                            <a href="#" class="btn btn-close btn-round btn-default"><i
+                                        class="glyphicon glyphicon-remove"></i></a>
+                        </div>
+                    </div>
+                    <div class="box-content">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="btn-group pull-middle "id="device_div">
+                                    <select class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" id="device_CPUinfo" name="device_CPUinfo" >
+                                        <option>  <i class="glyphicon glyphicon-tint"></i><span
+                                                    class="hidden-sm hidden-xs"> Device Name</span>
+                                            <span class="caret"></span>
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="Graphs">
+                        <!--Div that will hold the pie chart-->
+                            <div class="row" id="graphDisply" style="display: none">
+
+                                    <div class="col-md-4" style="#JSFiddle:position" >
+                                        <div id="diskMem_div"></div>
+                                        <div class="overlay-label-middle-for-slice">Gb</div>
+                                        <div class="overlay-label-top">  Total Disk Memory</div>
+                                        <div id="#cnt1" class="overlay-value-top"></div>
+                                    </div>
+
+
+                                    <div class="col-md-4" style="#JSFiddle:position">
+                                        <div id="physicalMem_div"></div>
+                                        <div class="overlay-label-middle-for-slice">Mb</div>
+                                        <div class="overlay-label-top">Total Physical Memory</div>
+                                        <div id="#cnt2" class="overlay-value-top"></div>
+                                    </div>
+
+
+                                    <div class="col-md-4" style="#JSFiddle:position">
+                                        <div id="cpuUsage_div"></div>
+                                        <div class="overlay-label-middle">%</div>
+                                    </div>
+                            </div>
+                         </div>
+                    </div>
+                 </div>
+        </div>
     </div>
-    <div class="Graphs">
-      <div class="row">
-          <!--Div that will hold the pie chart-->
-          <div class="col-xs-4">
-            <div id="JSFiddle">
-              <div id="diskMem_div"></div>
-              <div class="overlay-label-middle-for-slice">Gb</div>
-              <div class="overlay-label-top">  Total Disk Memory</div>
-              <div id="cnt" class="overlay-value-top">125.35</div>
-            </div>
-          </div>
-          <div class="col-xs-4">
-            <div id="JSFiddle">
-              <div id="physicalMem_div"></div>
-              <div class="overlay-label-middle-for-slice">Mb</div>
-              <div class="overlay-label-top">Total Physical Memory</div>
-              <div id="cnt" class="overlay-value-top">7348.52</div>
-            </div>
-          </div>
-          <div class="col-xs-4">
-            <div id="JSFiddle">
-              <div id="cpuUsage_div"></div>
-              <div class="overlay-label-middle">%</div>
-            </div>
-          </div>
-      </div>
-    </div>
+        </div>
 
     </div><!--/fluid-row-->
 </div>
@@ -298,6 +327,6 @@
  <!--application script for Charisma demo-->
 <script src="js/charisma.js"></script>
     <script src="js/index.js"></script>
-    <!--  <script src="js/webSocket.js"></script>-->
+     <script src="js/webSocket.js"></script>
   </body>
   </html>
