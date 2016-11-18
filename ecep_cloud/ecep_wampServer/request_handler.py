@@ -8,13 +8,14 @@ Handles user request. This integrates with DB and wamp server
 import tornado.escape
 import tornado.ioloop
 import tornado.web
+import tornado.websocket
+import time
 import json
 from container_control import *
 from ..ecep_db.controller import Compute_Manager, Image_Manager, Device_Manager, Location_Manager, Info_Manager, init_db_lock
 from wamp_server import *
 import urlparse
 import sys
-
 
 # Handle command request
 def handleCmd(entries):
@@ -262,6 +263,64 @@ class CPUInfoHandler(tornado.web.RequestHandler):
         self.finish()
 
 
+class CPUInfoHandlerWS(tornado.websocket.WebSocketHandler):
+
+    def check_origin(self, origin):
+        return True
+
+    def open(self):
+        print("cpuinfo websocket opened")
+        pass
+
+    @tornado.web.asynchronous
+    def on_message(self, message):
+
+        data = json.loads(message)
+        print data
+        if 'deviceId' not in data:
+            self.write_message("error")
+            return
+
+        info = Info_Manager()
+        ret = info.get_device_info(**data)
+        self.write_message(json.dumps(ret))
+
+    def on_close(self):
+        print("websocket connecction closed")
+        pass
+
+
+class ComputeHandlerWS(tornado.websocket.WebSocketHandler):
+
+    def check_origin(self, origin):
+        return True
+
+    def open(self):
+        print("compute websocket opened")
+        pass
+
+    @tornado.web.asynchronous
+    def on_message(self, message):
+        try:
+            data = json.loads(message)
+        except:
+            self.close()
+        """get container list by username,
+            get container list by deviceId"""
+
+        compute = Compute_Manager()
+
+        if data['command'] == 'filter':
+            data.__delitem__('command')
+            ret = compute.get_compute_node_list(**data)
+            return self.write_message(json.dumps(ret))
+
+        self.close()
+
+    def on_close(self):
+        print("websocket connecction closed")
+        pass
+
 
 application = tornado.web.Application([(r"/handle_request", handleReq),
                                        (r"/download", Download),
@@ -269,8 +328,9 @@ application = tornado.web.Application([(r"/handle_request", handleReq),
                                        (r"/image", ImageHandler),
                                        (r"/compute", ComputeHandler),
                                        (r"/location", LocationHandler),
-                                       (r"/cpuinfo", CPUInfoHandler)
-                                       ])
+                                       (r"/cpuinfot", CPUInfoHandler),
+                                       (r"/cpuinfo", CPUInfoHandlerWS),
+                                       (r"/compute_ws", CPUInfoHandlerWS)])
 
 if __name__ == "__main__":
     # params for wampserver
