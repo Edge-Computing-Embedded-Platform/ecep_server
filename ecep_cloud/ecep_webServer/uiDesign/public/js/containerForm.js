@@ -137,6 +137,69 @@ $("#architecture").change(function () {
 
 
 });
+function sendContainer()
+{
+    debugger;
+
+
+    output2 = document.getElementById("required");
+
+    //console.log(('#location_dropdown').val());
+    if($('#location_dropdown').val()=="Location" || $('#location_dropdown').val()=="")
+    {
+        debugger;
+        output2.innerHTML = "Please Select Location";
+        return false
+    }
+    if($('#device').val()=="Device Name" || $('#device').val()=="")
+    {
+        debugger;
+        output2.innerHTML = "Device Name";
+        return false
+    }
+    if($('#architecture').val()=="Architecture" || $('#architecture').val()=="")
+    {
+        debugger;
+        output2.innerHTML = "Please Select Architecture";
+        return false
+    }
+    if($('#containerImage').val()=="Location" || $('#containerImage').val()=="")
+    {
+        debugger;
+        output2.innerHTML = "Please Select Location";
+        return false
+    }
+
+    output2.innerHTML = "";
+    debugger
+    $.ajax({
+        type : "post",
+        url : "create",
+        dataType: "json",
+        data:{
+            "location":$('#location_dropdown').val(),
+            "device":$('#device').val(),
+            "arch":$('#architecture').val(),
+            "image":$('#containerImage').val(),
+            "containerName":$('#container_name').val(),
+
+
+        },
+        success : function(response) {
+            debugger;
+            $("#load").load("../partial_html/containerForm.html");
+
+            console.log("S");
+        },
+        //If there was no resonse from the server
+        error : function(res) {
+            console.log(res);
+        }
+    });
+    return false;
+
+
+}
 
 function loadLocation() {
 

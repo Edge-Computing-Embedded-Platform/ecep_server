@@ -75,6 +75,7 @@ router.post('/', rfcal_upload.single('applicationFile'),function (req, res,next)
            console.log("Entered Docker3");
 
            var post_options = {
+               //host: 'ec2-52-39-130-106.us-west-2.compute.amazonaws.com',
                host: 'ec2-52-39-130-106.us-west-2.compute.amazonaws.com',
                port: '9000',
                path: '/handle_request',

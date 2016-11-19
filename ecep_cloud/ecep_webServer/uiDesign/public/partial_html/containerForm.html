@@ -6,9 +6,9 @@
         <div class="box-content">
             <div class="form-group">
                 <div class="btn-group pull-middle " id="location_div">
-                    <select class="btn btn-primary dropdown-toggle" name="location_dropdown" type="button" data-toggle="dropdown" id="location_dropdown" >
-                        <option id="location" name="location">  <i class="glyphicon glyphicon-tint"></i><span
-                                class="hidden-sm hidden-xs"> Location</span>
+                    <select  class="btn btn-primary dropdown-toggle" name="location_dropdown" type="button" data-toggle="dropdown" id="location_dropdown" required >
+                        <option id="location" name="location" value="">  <i class="glyphicon glyphicon-tint"></i><span
+                                class="hidden-sm hidden-xs" > Location</span>
                             <span class="caret"></span>
                         </option>
                     </select>
@@ -21,6 +21,7 @@
                         </option>
                     </select>
                 </div>
+                <div id="required"></div>
             </div>
             <br>
             <br>
@@ -53,7 +54,7 @@
     </div>
 </div>
 
-<div class="box col-md-11 col-sm-4 col-xs-6" style="margin-left: 4%">
+<div class="box col-md-12 col-sm-4 col-xs-6" style="margin-left: 0%">
     <div class="box-inner">
         <div class="box-header well" data-original-title="">
             <h2><i class="glyphicon glyphicon-info-sign"></i> CPU INFO</h2>
@@ -66,27 +67,28 @@
         </div>
         <div class="box-content">
 
+
             <div class="Graphs">
                 <!--Div that will hold the pie chart-->
-                <div class="row">
+                <div class="row" id="graphDisply" >
 
-                    <div class="col-md-4" id="JSFiddle">
+                    <div class="col-md-4" style="#JSFiddle:position" >
                         <div id="diskMem_div"></div>
                         <div class="overlay-label-middle-for-slice">Gb</div>
                         <div class="overlay-label-top">  Total Disk Memory</div>
-                        <div id="cnt" class="overlay-value-top">125.35</div>
+                        <div id="#cnt1" class="overlay-value-top"></div>
                     </div>
 
 
-                    <div class="col-md-4" id="JSFiddle">
+                    <div class="col-md-4" style="#JSFiddle:position">
                         <div id="physicalMem_div"></div>
                         <div class="overlay-label-middle-for-slice">Mb</div>
                         <div class="overlay-label-top">Total Physical Memory</div>
-                        <div id="cnt" class="overlay-value-top">7348.52</div>
+                        <div id="#cnt2" class="overlay-value-top"></div>
                     </div>
 
 
-                    <div class="col-md-4" id="JSFiddle">
+                    <div class="col-md-4" style="#JSFiddle:position">
                         <div id="cpuUsage_div"></div>
                         <div class="overlay-label-middle">%</div>
                     </div>
@@ -95,6 +97,9 @@
         </div>
     </div>
 </div>
+
+<!--application script for Charisma demo-->
+<script src="js/charisma.js"></script>
 <script src="js/containerForm.js"></script>
 <script src="js/webSocket.js"></script>
 <!--/span-->
