@@ -154,7 +154,7 @@ function sendContainer()
     if($('#device').val()=="Device Name" || $('#device').val()=="")
     {
         debugger;
-        output2.innerHTML = "Device Name";
+        output2.innerHTML = "Please Select Device Name";
         return false
     }
     if($('#architecture').val()=="Architecture" || $('#architecture').val()=="")
@@ -163,10 +163,10 @@ function sendContainer()
         output2.innerHTML = "Please Select Architecture";
         return false
     }
-    if($('#containerImage').val()=="Location" || $('#containerImage').val()=="")
+    if($('#containerImage').val()=="Container Image" || $('#containerImage').val()=="")
     {
         debugger;
-        output2.innerHTML = "Please Select Location";
+        output2.innerHTML = "Please Select Container Image";
         return false
     }
 

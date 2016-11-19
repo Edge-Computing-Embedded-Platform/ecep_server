@@ -18,13 +18,14 @@ var fileName;
 
 var filestorage = multer.diskStorage({
     destination: function (req, file, cb) {
-
+        console.log("Entered multer");
         var dest = './upload/';
        mkdirp.sync(dest);
         cb(null, dest);
-
+        console.log("Exited multer");
     },
     filename: function (req, file, cb) {
+        console.log("FileName:" +file.originalname);
           fileName=file.originalname;
         cb(null, file.originalname);
     }

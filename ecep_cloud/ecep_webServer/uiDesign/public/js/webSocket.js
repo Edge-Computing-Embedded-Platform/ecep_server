@@ -4,14 +4,14 @@
 
 $(document).ready(function() {
     data = JSON.stringify({
-
+        "command":"filter",
         "username":"admin"
 
     });
 });
 
-
-var wsUri = "ws://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute_ws";
+var wsUri = "ws://192.168.0.121:9000/compute_ws ";
+//var wsUri = "ws://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute_ws ";
 //var wsUri = "ws://echo.websocket.org/";
 var output;
 
@@ -44,7 +44,7 @@ function onOpen(evt)
 
 
     writeToScreen("CONNECTED");
-    doSend("filter","admin");
+    doSend(data);
 
 
 
@@ -110,7 +110,7 @@ function onMessage(evt)
         setTimeout(function() {
             // send data to client every 1ms
             doSend(data);
-        }, 10000);
+        }, 30000);
 
 
 
