@@ -122,7 +122,7 @@ class updateDB(object):
             for item in rm:
                 regDevice.pop(item, None)
 
-            time.sleep(600)
+            time.sleep(100)
 
     def updateContainerStatus(self, statusList):
         """
@@ -130,6 +130,7 @@ class updateDB(object):
         """
         print '**************** in container status ***********************'
         
+        print statusList
         compute = Compute_Manager()
         contList = compute.get_compute_node_list(deviceId=statusList['deviceId'])
         
@@ -138,26 +139,25 @@ class updateDB(object):
         infoList = statusList['info']
 
         try:
-            for entries in infoList:
-                self._updateCont = False
-                data = dict((key, entries[key]) for key in keyList)
-                
-                user = entries['containerName'][0].split('_')[0]
-                data['username'] = user.split('/')[1]
-                data['containerName'] = entries['containerName'][0].split('_')[1]
-                data['imageName'] = entries['containerName'][0].split('_')[2]
+            for cont in contList:
 
-                #print data
-
-                for cont in contList:
-                    if (data['username'] in cont['username']) and (data['containerName'] in cont['containerName']):
+                for entries in infoList:
+                    self._updateCont = False
+                    data = dict((key, entries[key]) for key in keyList)
+                    
+                    user = entries['containerName'][0].split('_')[0]
+                    data['username'] = user.split('/')[1]
+                    data['containerName'] = entries['containerName'][0].split('_')[1]
+                    data['active'] = True
+    
+                    if (data['username'] == cont['username']) and (data['containerName'] == cont['containerName']):
                         self.updateComputeNode(data)
                         self._updateCont = True
                         print 'updated DB'
-                        
+                            
                 if self._updateCont == False:
-                    self.addComputeNode(data)
-                    print 'added a cont in DB'
+                    self.removeComputeNode(cont['containerName'])
+                    print 'removed a cont in DB'
                 
             print '********************************************************'
                 
