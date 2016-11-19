@@ -1,6 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String, ForeignKey, ForeignKeyConstraint, Float
+from sqlalchemy import Column, Integer, String, ForeignKey, ForeignKeyConstraint, Float, Boolean
 import sqlalchemy
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy.orm import relationship
@@ -115,6 +115,7 @@ class Compute(Base):
     username = Column(String(50), primary_key=True)
     appPath = Column(String(100))
     status = Column(String(50))
+    active = Column(Boolean)
     __total__args__ = (PrimaryKeyConstraint(containerName, username), {})
 
     def __repr__(self):
@@ -458,7 +459,8 @@ class Compute_Manager():
                 raise ValueError("Missing %s" % key)
 
         self.validate_compute_params(kwargs)
-        kwargs['remoteName'] = kwargs['username'] + '_' + kwargs['containerName'] + '_' + kwargs['imageName']
+        kwargs['remoteName'] = kwargs['username'] + '_' + kwargs['containerName']
+        kwargs['active'] = True
 
         db_lock.acquire()
         node = Compute(**kwargs)
@@ -545,9 +547,12 @@ class Compute_Manager():
         if 'deviceId' not in kwargs:
             raise  KeyError("missing %s"%'deviceId')
 
+        self.validate_compute_params(kwargs)
+
+        kwargs['active'] = False
         db_lock.acquire()
         try:
-            db_session.query(Compute).filter_by(deviceId = kwargs["deviceId"]).delete()
+            db_session.query(Compute).filter_by(deviceId = kwargs["deviceId"]).update(kwargs)
             db_session.commit()
         except Exception, e:
             ret = "{error:%s}" % str(e)
