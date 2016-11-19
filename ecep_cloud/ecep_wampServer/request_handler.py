@@ -328,9 +328,9 @@ application = tornado.web.Application([(r"/handle_request", handleReq),
                                        (r"/image", ImageHandler),
                                        (r"/compute", ComputeHandler),
                                        (r"/location", LocationHandler),
-                                       (r"/cpuinfot", CPUInfoHandler),
-                                       (r"/cpuinfo", CPUInfoHandlerWS),
-                                       (r"/compute_ws", CPUInfoHandlerWS)])
+                                       (r"/cpuinfo", CPUInfoHandler),
+                                       (r"/cpuinfo_ws", CPUInfoHandlerWS),
+                                       (r"/compute_ws", ComputeHandlerWS)])
 
 if __name__ == "__main__":
     # params for wampserver
