@@ -458,7 +458,7 @@ class Compute_Manager():
                 raise ValueError("Missing %s" % key)
 
         self.validate_compute_params(kwargs)
-        kwargs['remoteName'] = kwargs['username'] + '_' + kwargs['containerName']
+        kwargs['remoteName'] = kwargs['username'] + '_' + kwargs['containerName'] + '_' + kwargs['imageName']
 
         db_lock.acquire()
         node = Compute(**kwargs)

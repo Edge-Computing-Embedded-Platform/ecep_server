@@ -28,7 +28,7 @@ def sendCommand(data):
             db = updateDB()
             db.addComputeNode(db_msg)
 
-        msg['containerName'] = msg['username'] + '_' + msg['containerName']
+        msg['containerName'] = msg['username'] + '_' + msg['containerName'] + '_' + msg['imageName']
         packet = {'topic': topic, 'msg': msg, 'valid': True}
 
     else:

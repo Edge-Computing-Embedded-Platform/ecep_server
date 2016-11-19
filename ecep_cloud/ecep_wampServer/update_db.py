@@ -49,8 +49,9 @@ class updateDB(object):
         """
         if data["command"] == 'create':
             data["status"] = "creating"
-            node = Compute_Manager()
-            node.add_new_compute_node(**data)
+        
+        node = Compute_Manager()
+        node.add_new_compute_node(**data)
 
     def updateComputeNode(self, data):
         """
@@ -127,18 +128,39 @@ class updateDB(object):
         """
         Periodic update of status of all containers
         """
+        print '**************** in container status ***********************'
+        
+        compute = Compute_Manager()
+        contList = compute.get_compute_node_list(deviceId=statusList['deviceId'])
+        
         keyList = ('containerName', 'status')
+        
+        infoList = statusList['info']
 
         try:
-            for entries in statusList:
+            for entries in infoList:
+                self._updateCont = False
                 data = dict((key, entries[key]) for key in keyList)
-                print ":P:P:P:P:P"
+                
                 user = entries['containerName'][0].split('_')[0]
                 data['username'] = user.split('/')[1]
-                print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
                 data['containerName'] = entries['containerName'][0].split('_')[1]
-                print data
-                self.updateComputeNode(data)
+                data['imageName'] = entries['containerName'][0].split('_')[2]
+
+                #print data
+
+                for cont in contList:
+                    if (data['username'] in cont['username']) and (data['containerName'] in cont['containerName']):
+                        self.updateComputeNode(data)
+                        self._updateCont = True
+                        print 'updated DB'
+                        
+                if self._updateCont == False:
+                    self.addComputeNode(data)
+                    print 'added a cont in DB'
+                
+            print '********************************************************'
+                
         except Exception as e:
             print 'Could not update the node with periodic status, error: ', e
             pass
