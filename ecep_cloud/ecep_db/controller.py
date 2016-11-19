@@ -561,7 +561,7 @@ class Compute_Manager():
         return ret
 
     def validate_compute_params(self,params):
-        key = ['containerId', 'containerName', 'remoteName', 'imageName', 'deviceId', 'username', 'appPath', 'status']
+        key = ['containerId', 'containerName', 'remoteName', 'imageName', 'deviceId', 'username', 'appPath', 'status', 'active']
         rm = []
         for index in params:
             if index not in key:

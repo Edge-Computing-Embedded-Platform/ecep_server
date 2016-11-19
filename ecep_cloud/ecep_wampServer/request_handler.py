@@ -309,13 +309,16 @@ class ComputeHandlerWS(tornado.websocket.WebSocketHandler):
             get container list by deviceId"""
 
         compute = Compute_Manager()
-
+        
         if data['command'] == 'filter':
             data.__delitem__('command')
             ret = compute.get_compute_node_list(**data)
-            return self.write_message(json.dumps(ret))
-
-        self.close()
+            ret = json.dumps(ret)
+            print "return",ret 
+            self.write_message(ret)
+	else:
+            print("Invalid Params")
+        
 
     def on_close(self):
         print("websocket connecction closed")

@@ -95,7 +95,7 @@ class updateDB(object):
         check if the end node is alive
         """
         global regDevice
-
+	
         while True:
             rm = []
             for device in regDevice:
@@ -129,35 +129,39 @@ class updateDB(object):
         Periodic update of status of all containers
         """
         print '**************** in container status ***********************'
+	print statusList
         
-        print statusList
-        compute = Compute_Manager()
-        contList = compute.get_compute_node_list(deviceId=statusList['deviceId'])
-        
-        keyList = ('containerName', 'status')
-        
+	infoList = []        
         infoList = statusList['info']
 
-        try:
-            for cont in contList:
+        compute = Compute_Manager()
+        contList = compute.get_compute_node_list(deviceId=statusList['deviceId'])['compute']
 
-                for entries in infoList:
-                    self._updateCont = False
-                    data = dict((key, entries[key]) for key in keyList)
+	print contList
+        
+        keyList = ('containerName', 'status')
+
+        try:
+	    if len(contList):
+	        for cont in contList:
+                    _updateCont = False
+                    if len(infoList):
+			for entries in infoList:
+                    	    data = dict((key, entries[key]) for key in keyList)
                     
-                    user = entries['containerName'][0].split('_')[0]
-                    data['username'] = user.split('/')[1]
-                    data['containerName'] = entries['containerName'][0].split('_')[1]
-                    data['active'] = True
-    
-                    if (data['username'] == cont['username']) and (data['containerName'] == cont['containerName']):
-                        self.updateComputeNode(data)
-                        self._updateCont = True
-                        print 'updated DB'
+                    	    user = entries['containerName'][0].split('_')[0]
+                    	    data['username'] = user.split('/')[1]
+                    	    data['containerName'] = entries['containerName'][0].split('_')[1]
+                    	    data['active'] = True	
+
+                    	    if (data['username'] == cont['username']) and (data['containerName'] == cont['containerName']):
+                        	self.updateComputeNode(data)
+                        	_updateCont = True
+                        	print 'updated DB'
                             
-                if self._updateCont == False:
-                    self.removeComputeNode(cont['containerName'])
-                    print 'removed a cont in DB'
+                    if _updateCont == False:
+                    	self.removeComputeNode(cont['username']+'_'+cont['containerName'])
+                    	print 'removed a cont in DB'
                 
             print '********************************************************'
                 
