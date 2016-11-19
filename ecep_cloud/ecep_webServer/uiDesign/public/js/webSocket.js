@@ -5,13 +5,14 @@
 $(document).ready(function() {
     data = JSON.stringify({
         "command":"filter",
-        "username":"admin"
+        "username":"admin",
+        "active":"True"
 
     });
 });
 
-var wsUri = "ws://192.168.0.121:9000/compute_ws ";
-//var wsUri = "ws://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute_ws ";
+//var wsUri = "ws://192.168.0.121:9000/compute_ws ";
+var wsUri = "ws://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute_ws ";
 //var wsUri = "ws://echo.websocket.org/";
 var output;
 

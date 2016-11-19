@@ -199,7 +199,7 @@
     function loadTable() {
 
         $.ajax({
-            url: ip+"/compute?command=filter&username=admin",
+            url: ip+"/compute?command=filter&username=admin&active=True",
             type: "GET",
 
             crossDomain: true,
@@ -315,7 +315,7 @@ function loadDeviceCount() {
 function loadContainerCount() {
 
     $.ajax({
-        url:ip+"/compute?command=filter&username=admin",
+        url:ip+"/compute?command=filter&username=adminactive=True",
         type: "GET",
 
         crossDomain: true,
