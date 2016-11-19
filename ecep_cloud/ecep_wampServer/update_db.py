@@ -148,16 +148,18 @@ class updateDB(object):
                     if len(infoList):
 			for entries in infoList:
                     	    data = dict((key, entries[key]) for key in keyList)
-                    
-                    	    user = entries['containerName'][0].split('_')[0]
-                    	    data['username'] = user.split('/')[1]
-                    	    data['containerName'] = entries['containerName'][0].split('_')[1]
-                    	    data['active'] = True	
 
-                    	    if (data['username'] == cont['username']) and (data['containerName'] == cont['containerName']):
-                        	self.updateComputeNode(data)
-                        	_updateCont = True
-                        	print 'updated DB'
+			    if '_' in entries['containerName']:                    
+                    	    	user = entries['containerName'][0].split('_')[0]
+                    	    	data['username'] = user.split('/')[1]
+                    	    	data['containerName'] = entries['containerName'][0].split('_')[1]
+                    	    	data['active'] = True	
+				print data
+
+                    	    	if (data['username'] == cont['username']) and (data['containerName'] == cont['containerName']):
+                        	    self.updateComputeNode(data)
+                        	    _updateCont = True
+                        	    print 'updated DB'
                             
                     if _updateCont == False:
                     	self.removeComputeNode(cont['username']+'_'+cont['containerName'])
