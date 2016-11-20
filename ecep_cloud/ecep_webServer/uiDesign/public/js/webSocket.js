@@ -6,7 +6,7 @@ $(document).ready(function() {
     data = JSON.stringify({
         "command":"filter",
         "username":"admin",
-        "active":"True"
+        "active":true
 
     });
 });
@@ -54,59 +54,70 @@ function onOpen(evt)
 
 function onClose(evt)
 {
-    //writbeToScreen("DISCONNECTED");
+    writeToScreen("DISCONNECTED");
+    websocket = new WebSocket(wsUri);
+
+    setTimeout(function() {
+        // send data to client every 1ms
+        testWebSocket();
+    }, 30000);
+
 }
 
 function onMessage(evt)
 {
     console.log(evt);
     container=JSON.parse(evt.data).compute;
+
+
     // var loca = document.getElementById("location-dropdown");
     console.log(container);
-
+    var htmlstring = "";
     // alert("success");
+    console.log(container.length);
+    if(container.length>0) {
 
-   /* for(var i=0; i<container.length;i++)
 
-    {
-        var devId=container[i].deviceId;
-        var cName=container[i].containerName;
+        for (var i = 0; i < container.length; i++) {
+            console.log(container[i]);
+            var devId = container[i].deviceId;
+            var cName = container[i].containerName;
 
-        if (status.search("created"))
-        {
+            if (status.search("created")) {
 
-            bgColor="label-default label label-danger";
+                bgColor = "label-default label label-danger";
+            }
+            if (status.search("Exited")) {
+                bgColor = "label-warning label label-default";
+            }
+
+
+            htmlstring = htmlstring + "<tr >";
+            htmlstring = htmlstring + "<td class='center'>" + cName + "</td>";
+            htmlstring = htmlstring + "<td class='center'>" + devId + "</td>";
+            htmlstring = htmlstring + "<td class='center'>" + container[i].imageName + "</td>";
+            htmlstring = htmlstring + "<td class='center'><span class='label-warning label label-default'>" + container[i].status + "</span>" + "</td>";
+            htmlstring = htmlstring + '<td class="center"><a class="btn btn-success" href="#" onclick="startContainer(' + i + ')"';
+            htmlstring = htmlstring + '<i class="glyphicon glyphicon-start icon-white" ></i>';
+            htmlstring = htmlstring + 'Start Container</a>';
+            htmlstring = htmlstring + '<a class="btn btn-info" href="#" onclick="removeContainer(' + i + ')"';
+            htmlstring = htmlstring + '<i class="glyphicon glyphicon-remove icon-white" ></i>';
+            htmlstring = htmlstring + 'Remove Container</a>';
+
+            htmlstring = htmlstring + '<a class="btn btn-danger" href="#" onclick="stopContainer(' + i + ')"';
+            htmlstring = htmlstring + '<i class="glyphicon glyphicon-stop icon-white" ></i>';
+            htmlstring = htmlstring + 'Stop Container</a>';
+            htmlstring = htmlstring + "</td>";
+            htmlstring = htmlstring + "</tr>";
+            // $("#containerRow").append(htmlstring);
+
+
         }
-        if (status.search("Exited"))
-        {
-            bgColor="label-warning label label-default";
-        }
-
-        var htmlstring="";
-        htmlstring=htmlstring+"<tr >";
-        htmlstring=htmlstring+"<td class='center'>"+cName+"</td>";
-        htmlstring=htmlstring+"<td class='center'>"+devId+"</td>";
-        htmlstring=htmlstring+"<td class='center'>"+container[i].imageName+"</td>";
-        htmlstring=htmlstring+"<td class='center'><span class='label-warning label label-default'>"+container[i].status+"</span>" +"</td>" ;
-        htmlstring=htmlstring+'<td class="center"><a class="btn btn-success" href="#" onclick="startContainer('+i+')"';
-        htmlstring=htmlstring+'<i class="glyphicon glyphicon-start icon-white" ></i>' ;
-        htmlstring=htmlstring+ 'Start Container</a>';
-        htmlstring=htmlstring+'<a class="btn btn-info" href="#" onclick="removeContainer('+i+')"';
-        htmlstring=htmlstring+'<i class="glyphicon glyphicon-remove icon-white" ></i>' ;
-        htmlstring=htmlstring+ 'Remove Container</a>';
-
-        htmlstring=htmlstring+'<a class="btn btn-danger" href="#" onclick="stopContainer('+i+')"';
-        htmlstring=htmlstring+'<i class="glyphicon glyphicon-stop icon-white" ></i>';
-        htmlstring=htmlstring+   'Stop Container</a>';
-        htmlstring=htmlstring+"</td>";
-        htmlstring=htmlstring+"</tr>";
-       // $("#containerRow").append(htmlstring);
-
-
     }
     debugger;
+    console.log(htmlstring);
    //writeToScreen(htmlstring);
-    output.innerHTML = htmlstring;*/
+    output.innerHTML = htmlstring;
 
         setTimeout(function() {
             // send data to client every 1ms

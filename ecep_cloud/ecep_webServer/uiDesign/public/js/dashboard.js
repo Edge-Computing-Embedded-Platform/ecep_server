@@ -29,7 +29,7 @@ debugger;
 });
 function fillContianerTable() {
     $.ajax({
-        url: ip+"/compute?command=filter&username=admin",
+        url: ip+"/compute?command=filter&username=admin&active=true",
         type: "GET",
 
         crossDomain: true,
