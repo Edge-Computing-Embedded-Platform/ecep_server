@@ -4,7 +4,7 @@
 
 $(document).ready(function() {
     google.charts.load('current', {'packages':['corechart']});
-
+    output = document.getElementById("containerRow");
     // Set a callback to run when the Google Visualization API is loaded.
     google.charts.setOnLoadCallback(drawChart);
     cpuUsagePercent=0;
@@ -20,9 +20,10 @@ $(document).ready(function() {
     });
     $("#dashboard").click(function(){
 
-
+debugger;
         $("#load").load("../partial_html/dashboard.html");
-        output = document.getElementById("containerRow1");
+        output = document.getElementById("containerRow");
+        testWebSocket();
     });
     $("#device_CPUinfo").change(function () {
         debugger;
@@ -92,14 +93,11 @@ $("#device").change(function () {
 var wsUri = "ws://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute_ws ";
 var wsCPUUri = "ws://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/cpuinfo_ws ";
 //var wsUri = "ws://echo.websocket.org/";
-var output;
-//var output1;
-var output2;
-var cpuOutput;
+
 
 function init()
 {
-    output = document.getElementById("containerRow");
+
    // output2 = document.getElementById("containerRow1");
   //  output1 = document.getElementById("output");
 
