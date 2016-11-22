@@ -45,11 +45,11 @@
 
             $("#load").load("../partial_html/applicationForm.html");
         });
-        $("#device_CPUinfo").change(function () {
-
-
-            $("#graphDisply").show();
-        });
+        // $("#device_CPUinfo").change(function () {
+        //
+        //
+        //     $("#graphDisply").show();
+        // });
 
     });
     function sendit()
@@ -236,6 +236,7 @@
                     htmlstring=htmlstring+"<td class='center'>"+devId+"</td>";
                     htmlstring=htmlstring+"<td class='center'>"+container[i].imageName+"</td>";
                     htmlstring=htmlstring+"<td class='center'><span class='label-warning label label-default'>"+container[i].status+"</span>" +"</td>" ;
+                   // htmlstring=htmlstring+"<td class='center'>"+container[i].status +"</td>" ;
                     htmlstring=htmlstring+'<td class="center"><a class="btn btn-success" href="#" onclick="startContainer('+i+')"';
                     htmlstring=htmlstring+'<i class="glyphicon glyphicon-start icon-white" ></i>' ;
                     htmlstring=htmlstring+ 'Start Container</a>';

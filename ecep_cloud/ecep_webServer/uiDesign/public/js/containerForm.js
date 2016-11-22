@@ -58,41 +58,7 @@ $("#location_dropdown").change(function () {
 
 });
 
-$("#device").change(function () {
-    console.log("location changed");
 
-    $("#architecture").show();
-    debugger;
-    var selectedDevice=$("#device").val();
-
-    var url=ip+"/device?command=filter&location="+ $("#location_dropdown").val()+"&deviceId="+selectedDevice;
-    console.log(url);
-    $.ajax({
-
-        url: url,
-        type: "GET",
-
-        crossDomain: true,
-
-        success: function (response) {
-
-            var archi=JSON.parse(response).device
-            for(var i=0; i<archi.length;i++)
-            {
-                var arh=archi[i];
-                console.log(arh.deviceId);
-
-                $("#architecture").append($("<option>"+arh.arch+"</option>"));
-
-            }
-
-        },
-        error: function (xhr, status) {
-            alert("error");
-        }
-    });
-
-});
 
 $("#architecture").change(function () {
 
