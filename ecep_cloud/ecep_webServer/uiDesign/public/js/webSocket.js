@@ -3,9 +3,12 @@
  */
 
 $(document).ready(function() {
-    google.charts.load('current', {'packages':['corechart']});
+
     output = document.getElementById("containerRow");
+    diskMem = document.getElementById("diskMem");
+    phyMem = document.getElementById("phyMem");
     // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
     cpuUsagePercent=0;
     physicalMemTotal=0;
@@ -23,6 +26,8 @@ $(document).ready(function() {
 debugger;
         $("#load").load("../partial_html/dashboard.html");
         output = document.getElementById("containerRow");
+        diskMem = document.getElementById("diskMem");
+        phyMem = document.getElementById("phyMem");
         testWebSocket();
     });
     $("#device_CPUinfo").change(function () {
@@ -242,13 +247,14 @@ function onMessage1(evt)
     console.log(evt);
     cpu=JSON.parse(evt.data).info;
 
-    cpuUsagePercent=cpu[0].CPUUsage;
-    physicalMemTotal=cpu[0].physicalMem;
-    physicalMemUsed=cpu[0].physicalUsed;
-    diskMemTotal=cpu[0].diskMem;
-    diskMemUsed=cpu[0].diskUsed;
+    cpuUsagePercent=parseFloat(cpu[0].CPUUsage).toFixed(2);
+    physicalMemTotal=parseFloat(cpu[0].physicalMem).toFixed(2);
+    physicalMemUsed=parseFloat(cpu[0].physicalUsed).toFixed(2);
+    diskMemTotal=parseFloat(cpu[0].diskMem).toFixed(2);
+    diskMemUsed=parseFloat(cpu[0].diskUsed).toFixed(2);
     drawChart();
-
+    diskMem.innerHTML =parseFloat(cpu[0].diskMem).toFixed(2);
+    phyMem.innerHTML=parseFloat(cpu[0].physicalMem).toFixed(2);
     var htmlstring1 = "";
 
     htmlstring1 = htmlstring1 + "<h5>Device Name:" +cpu[0].deviceName+"</h5>";
