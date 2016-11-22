@@ -23,7 +23,7 @@ var users = require('./routes/users');
 var create= require('./routes/createDocker');
 var apps= require('./routes/createApplication');
 var signin= require('./routes/index');
-var home=require('./routes/home');
+//var home=require('./routes/home');
 //var home=require('./routes/home');
 
 
@@ -47,9 +47,9 @@ app.use('/apps', apps);
 app.use('/', routes);
 app.use('/users', users);
 
-app.get('/homepage',function (req,res) {
-  home.homepage(req,res);
-});
+// app.get('/homepage',function (req,res) {
+//   home.homepage(req,res);
+// });
 
 app.get('/signin',function (req,res) {
   home.signin(req,res);
