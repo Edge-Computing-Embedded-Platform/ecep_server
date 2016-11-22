@@ -118,8 +118,12 @@ class updateDB(object):
             # Remove all the dead devices from the local data
             for item in rm:
                 regDevice.pop(item, None)
+<<<<<<< 1d5e2b056ea3d4f2221e2b84a8a4227be252d234
 
 
+=======
+                
+>>>>>>> indents error handled
             """            # Removing 'create failed' containers
             compute = Compute_Manager()
             contList = compute.get_compute_node_list(status='Create failed')
@@ -137,7 +141,6 @@ class updateDB(object):
         print '**************** in container status ***********************'
         print statusList
 
-        infoList = []
         infoList = statusList['info']
 
         compute = Compute_Manager()
@@ -159,19 +162,20 @@ class updateDB(object):
                                 data['username'] = user.split('/')[1]
                                 data['containerName'] = entries['containerName'][0].split('_')[1]
                                 data['active'] = True
-                            print data
+                                print data
 
-                            if (data['username'] == cont['username']) and (data['containerName'] == cont['containerName']):
-                                self.updateComputeNode(data)
-                                _updateCont = True
-                                print 'updated DB'
+                                if (data['username'] == cont['username']) and (
+                                    data['containerName'] == cont['containerName']):
+                                    self.updateComputeNode(data)
+                                    _updateCont = True
+                                    print 'updated DB'
 
                 if _updateCont == False:
                     self.removeComputeNode(cont['username'] + '_' + cont['containerName'])
                     print 'removed a cont in DB'
 
             print '********************************************************'
-
+                
         except Exception as e:
             print 'Could not update the node with periodic status, error: ', e
             pass
