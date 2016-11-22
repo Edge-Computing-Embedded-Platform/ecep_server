@@ -3,11 +3,26 @@
  */
 
 $(document).ready(function() {
+    google.charts.load('current', {'packages':['corechart']});
+
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawChart);
+    cpuUsagePercent=0;
+    physicalMemTotal=0;
+    physicalMemUsed=0;
+    diskMemTotal=0;
+    diskMemUsed=0;
     data = JSON.stringify({
         "command":"filter",
         "username":"admin",
         "active":true
 
+    });
+    $("#dashboard").click(function(){
+
+
+        $("#load").load("../partial_html/dashboard.html");
+        output = document.getElementById("containerRow1");
     });
     $("#device_CPUinfo").change(function () {
         debugger;
@@ -31,7 +46,7 @@ $(document).ready(function() {
 
 $("#device").change(function () {
     console.log("location changed");
-
+    $("#graphDisply1").show();
     $("#architecture").show();
     debugger;
     var selectedDevice=$("#device").val();
@@ -78,13 +93,15 @@ var wsUri = "ws://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/compute
 var wsCPUUri = "ws://ec2-52-39-130-106.us-west-2.compute.amazonaws.com:9000/cpuinfo_ws ";
 //var wsUri = "ws://echo.websocket.org/";
 var output;
-var output1;
+//var output1;
+var output2;
 var cpuOutput;
 
 function init()
 {
     output = document.getElementById("containerRow");
-    output1 = document.getElementById("output");
+   // output2 = document.getElementById("containerRow1");
+  //  output1 = document.getElementById("output");
 
 
         testWebSocket();
@@ -117,20 +134,20 @@ function testWebSocket1()
 function onOpen(evt)
 {
 
-    writeToScreen("CONNECTED");
+   // writeToScreen("CONNECTED");
     doSend(data);
 
 }
 function onOpen1(evt)
 {
 
-    writeToScreen("CONNECTED1");
+   // writeToScreen("CONNECTED1");
     doSend1(data1);
 
 }
 function onClose(evt)
 {
-    writeToScreen("DISCONNECTED");
+   // writeToScreen("DISCONNECTED");
 
 
     setTimeout(function() {
@@ -142,7 +159,7 @@ function onClose(evt)
 
 function onClose1(evt)
 {
-    writeToScreen("DISCONNECTED1");
+   // writeToScreen("DISCONNECTED1");
 
 
     setTimeout(function() {
@@ -206,6 +223,7 @@ function onMessage(evt)
     console.log(htmlstring);
    //writeToScreen(htmlstring);
     output.innerHTML = htmlstring;
+    //output2.innerHTML = htmlstring;
 
         setTimeout(function() {
             // send data to client every 1ms
@@ -226,6 +244,13 @@ function onMessage1(evt)
     console.log(evt);
     cpu=JSON.parse(evt.data).info;
 
+    cpuUsagePercent=cpu[0].CPUUsage;
+    physicalMemTotal=cpu[0].physicalMem;
+    physicalMemUsed=cpu[0].physicalUsed;
+    diskMemTotal=cpu[0].diskMem;
+    diskMemUsed=cpu[0].diskUsed;
+    drawChart();
+
     var htmlstring1 = "";
 
     htmlstring1 = htmlstring1 + "<h5>Device Name:" +cpu[0].deviceName+"</h5>";
@@ -239,6 +264,10 @@ function onMessage1(evt)
     console.log(htmlstring1);
     //writeToScreen(htmlstring);
     cpuOutput.innerHTML = htmlstring1;
+
+
+
+
      setTimeout(function() {
     //     // send data to client every 1ms
         doSend1(data1);
@@ -254,11 +283,11 @@ function onMessage1(evt)
 
 function onError(evt)
 {
-    writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+   // writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
 }
 function onError1(evt)
 {
-    writeToScreen('<span style="color: red;">ERROR1:</span> ' + evt.data);
+   // writeToScreen('<span style="color: red;">ERROR1:</span> ' + evt.data);
 }
 
 function doSend(message)
@@ -278,7 +307,7 @@ function doSend1(message)
     //drawChart(message);
 }
 
-function writeToScreen(message)
+/*function writeToScreen(message)
 {
     var pre = document.createElement("p");
     pre.style.wordWrap = "break-word";
@@ -287,10 +316,106 @@ function writeToScreen(message)
         output1.innerHTML = message;
     //output.append(pre);
     //output.replace(pre);
-}
+}*/
 
 window.addEventListener("load", init, false);
 
 /*
 */
 
+function drawChart() {
+
+    //console.log("data:"+a);
+
+    // Create the data table for disk Memory.
+    var diskMem = new google.visualization.DataTable();
+    diskMem.addColumn('string', 'Disk Memory');
+    diskMem.addColumn('number', 'Gb');
+    diskMem.addRows([
+        ['Used Disk Memory', 0],
+        ['Free Disk Memory', 1],
+    ]);
+
+    // Set chart options for disk memory
+    var diskMem_options = {'title':'Disk Memory', 'width':400, 'height':400,
+        'animation': {'startup': true, 'duration': 1000, 'easing': 'inAndOut'},
+        'pieHole': 0.4, 'pieSliceText':  'value', 'pieSliceTextStyle': {'color': '#3F5059'},
+        'titleTextStyle': {fontSize: 15}, 'tooltip': {'text':'percentage'},
+        'slices': [{color: '#FF5733'}, {offset: 0.2, color: '#26D67B'}]};
+
+    // create the data table for physical memory
+    var physicalMem = new google.visualization.DataTable();
+    physicalMem.addColumn('string', 'Disk Memory');
+    physicalMem.addColumn('number', 'Gb');
+    physicalMem.addRows([
+        ['Used Physical Memory', 0],
+        ['Free Physical Memory', 1],
+    ]);
+
+    // Set chart options for physical memory
+    var physicalMem_options = {'title':'Physical Memory', 'width':400, 'height':400,
+        'animation': {'startup': true, 'duration': 1000, 'easing': 'inAndOut'},
+        'pieSliceText': 'value', 'pieSliceTextStyle': {'color': '#3F5059'},
+        'titleTextStyle': {fontSize: 15}, 'pieHole': 0.4, 'tooltip': {'text':'percentage'},
+        'slices': [{color: '#FF5733'}, {offset: 0.2, color: '#26D67B'}]};
+
+    var cpuInfo = new google.visualization.DataTable();
+    cpuInfo.addColumn('string', 'Disk Memory');
+    cpuInfo.addColumn('number', 'Gb');
+    cpuInfo.addRows([
+        ['CPU Usage', 0],
+        ['CPU Free', 1]
+    ]);
+
+    // Set chart options for physical memory
+    var cpuInfo_options = {'title':'CPU Usage', 'width':400, 'height':400, 'pieHole': 0.4,
+        'animation': {'startup': true, 'duration': 1000, 'easing': 'inAndOut'}, 'tooltip': {'text':'percentage'},
+        'pieSliceText':  'percentage', 'pieSliceTextStyle': {'color': '#3F5059'},
+        'titleTextStyle': {fontSize: 15}, 'slices': [{color: '#FF5733'}, {color: '#CFD1D3'}]};
+
+
+    // Instantiate and draw our chart, passing in some options.
+    var diskMem_chart = new google.visualization.PieChart(document.getElementById('diskMem_div'));
+    diskMem_chart.draw(diskMem, diskMem_options);
+
+    var physicalMem_chart = new google.visualization.PieChart(document.getElementById('physicalMem_div'));
+    physicalMem_chart.draw(physicalMem, physicalMem_options);
+
+    var cpuUsage_chart = new google.visualization.PieChart(document.getElementById('cpuUsage_div'));
+    cpuUsage_chart.draw(cpuInfo, cpuInfo_options);
+
+    // variables or constants used to update corresponding values
+    var phyMemUsageRow = 0;
+    var phyMemFreeRow = 1;
+    var phyMemUpdateCol = 1;
+
+    var cpuUsageRow = 0;
+    var cpuFreeRow = 1;
+    var cpuUpdateCol = 1;
+
+    var diskMemUsageRow = 0;
+    var diskMemFreeRow = 1;
+    var diskMemUpdateCol = 1;
+
+    // This whole function runs in a continous loop
+    //var cpuUsagePercent = 70; // continous value fetch
+    cpuInfo.setValue(cpuUsageRow, cpuUpdateCol, cpuUsagePercent);
+    cpuInfo.setValue(cpuFreeRow, cpuUpdateCol, (100 - cpuUsagePercent));
+    cpuUsage_chart.draw(cpuInfo, cpuInfo_options);
+
+    //var physicalMemTotal = 7540; // only once during device selection
+    // This whole function runs in a continous loop
+    //var physicalMemUsed = 6543; // continous value fetch
+    physicalMem.setValue(phyMemUsageRow, phyMemUpdateCol, physicalMemUsed);
+    physicalMem.setValue(phyMemFreeRow, phyMemUpdateCol, (physicalMemTotal - physicalMemUsed));
+    physicalMem_chart.draw(physicalMem, physicalMem_options);
+
+
+   // var diskMemTotal = 120; //only once during device selection
+    // This whole function runs in a continous loop
+    //var diskMemUsed = 0; // continous value fetch
+    diskMem.setValue(diskMemUsageRow, diskMemUpdateCol, diskMemUsed);
+    diskMem.setValue(diskMemFreeRow, diskMemUpdateCol, (diskMemTotal - diskMemUsed));
+    diskMem_chart.draw(diskMem, diskMem_options);
+
+}

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>ECEP</title>
+    <title>Bootstrap Case</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -12,8 +12,8 @@
 </head>
 <body style="font-size:20px" ng-app="myapp" ng-controller="myctrl">
 <p style="text-align: center">
-			 <span style="color:#e53238;font-size:40px">ecep</span>
-			</p>
+			 <span style="color:#e53238;font-size:40px">e<span style="color:#0064d3">b</span><span style="color:#f4ae01">a</span><span style="color:#88b719">y</span>
+			</span></p>
 <div class="container" style="width:436px;margin:0 auto;style="border: 2px solid black">
 
 <div class="panel panel-default">
@@ -33,13 +33,13 @@
             <div id="Signin" class="tab-pane fade in active">
                 <form id="logininform">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="email" placeholder="username" style="margin-left:-5px;width:385px">
+                        <input type="text" class="form-control" id="email" placeholder="username" style="margin-left:-5px;width:385px" ng-model="username">
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" id="pwd" placeholder="Password" style="margin-left:-5px;width:385px">
+                        <input type="password" class="form-control" id="pwd" placeholder="Password" style="margin-left:-5px;width:385px" ng-model="password">
                     </div>
                     <div class="form-group">
-                        <input type="submit" class="btn btn-primary " value="Sign in" style="margin-left:-5px;width:385px" >
+                        <input type="submit" class="btn btn-primary " value="Sign in" style="margin-left:-5px;width:385px" ng-click="validatecheckin()">
                     </div>
                     <div class="text-center">
                         <a href="" tabindex="5" class="forgot-password">Forgot Password?</a>
@@ -53,24 +53,23 @@
                     <div>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="user" placeholder="username" style="margin-left:-5px;width:385px" >
+                        <input type="text" class="form-control" id="user" placeholder="username" style="margin-left:-5px;width:385px" ng-model="newuser">
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" id="pwd" placeholder="Password" style="margin-left:-5px;width:385px">
+                        <input type="password" class="form-control" id="pwd" placeholder="Password" style="margin-left:-5px;width:385px" ng-model="newpass">
                     </div>
                     <div class="form-group">
-                        <input type="password" class="form-control" id="pwdcheck" placeholder="Re-Enter the Password" style="margin-left:-5px;width:385px" >
+                        <input type="password" class="form-control" id="pwdcheck" placeholder="Re-Enter the Password" style="margin-left:-5px;width:385px" ng-model="newpass1">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="firstname" placeholder="First Name" style="margin-left:-5px;width:185px;float:left" />
-                        <input type="text" class="form-control" id="lastname" placeholder="Last Name" style="margin-right:-5px;width:185px;float:right" />
+                        <input type="text" class="form-control" id="firstname" placeholder="First Name" style="margin-left:-5px;width:185px;float:left" ng-model="fname"/>  <input type="text" class="form-control" id="lastname" placeholder="Last Name" style="margin-right:-5px;width:185px;float:right" ng-model="sname"/>
                     </div>
                     </br>
                     </br>
                     <div class="form-group">
 
 
-                        <input type="submit" class="btn btn-primary " value="Sign up" style="margin-left:-5px;width:385px" >
+                        <input type="submit" class="btn btn-primary " value="Sign up" style="margin-left:-5px;width:385px" ng-click="registeruser()">
                     </div>
                 </form>
             </div>
@@ -82,6 +81,71 @@
 </div>
 
 </body>
-<script src="js/signin.js"></script>
+<script>
+
+var app=angular.module("myapp",[]);
+app.controller("myctrl",function($scope,$http){
+
+    console.log("inside signin");
+    $scope.validatecheckin=function () {
+
+
+        var user = $scope.username;
+        var pass = $scope.password;
+        console.log(user);
+        $http({
+            method: 'POST',
+            url: '/checklogin',
+            data :{
+                'user':$scope.username,
+                'password':$scope.password
+            }
+        }).success(function mysucess(response){
+            console.log(response);
+
+            if(response.statusCode==200)
+            {
+                window.alert("signin successfull");
+                window.location.assign("/homepage");
+
+            }
+            else
+            {
+                window.alert("signin unsuccessfull");
+            }
+
+        });
+    }
+
+    $scope.registeruser=function(){
+
+       console.log("inside register html function");
+
+        $http({
+            method:'POST',
+            url:'/registeruser',
+            data:{
+                'newuser':$scope.newuser,
+                'password':$scope.newpass,
+                'firstname':$scope.fname,
+                'lastname':$scope.sname
+            }
+        }).success(function mysuccess(response){
+            console.log(response);
+            if(response.statusCode==200)
+            {
+                window.alert("user added!!! sign in ");
+                window.location.assign("/signin");
+            }
+            else
+            {
+                window.alert("user already exists");
+            }
+        });
+
+    }
+});
+
+</script>
 </html>
 

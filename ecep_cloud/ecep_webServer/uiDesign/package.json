@@ -22,6 +22,7 @@
     "multer-storage-s3": "^1.1.1",
     "multipart": "^0.1.5",
     "mv": "^2.1.1",
+    "mysql": "^2.12.0",
     "request": "^2.78.0",
     "serve-favicon": "~2.3.0",
     "sqlite3": "^3.1.8",
