@@ -49,7 +49,7 @@ class updateDB(object):
         """
         if data["command"] == 'create':
             data["status"] = "creating"
-        
+
         node = Compute_Manager()
         node.add_new_compute_node(**data)
 
@@ -60,14 +60,12 @@ class updateDB(object):
         node = Compute_Manager()
         node.update_compute_node(**data)
 
-
     def removeComputeNode(self, container):
         """
         Used to remove the container entry
         """
         node = Compute_Manager()
         node.remove_compute_node(containerName=container)
-
 
     def deviceReg(self, deviceInfo):
         """
@@ -88,14 +86,13 @@ class updateDB(object):
 
         regDevice[deviceInfo['deviceId']] = True
 
-
     @threaded
     def checkHeartbeat(self, name='checkHeartbeat'):
         """
         check if the end node is alive
         """
         global regDevice
-	
+
         while True:
             rm = []
             for device in regDevice:
@@ -105,13 +102,13 @@ class updateDB(object):
                     try:
                         devManager = Device_Manager()
                         devManager.remove_device(deviceId=device)
-    
+
                         info = Info_Manager()
                         info.remove_device_info(deviceId=device)
-                        
+
                         node = Compute_Manager()
                         node.remove_compute_node_by_device(deviceId=device)
-    
+
                         rm.append(device)
                     except Exception as e:
                         print 'error while removing: ', e
@@ -121,31 +118,33 @@ class updateDB(object):
             # Remove all the dead devices from the local data
             for item in rm:
                 regDevice.pop(item, None)
-                
-"""            # Removing 'create failed' containers
+
+
+            """            # Removing 'create failed' containers
             compute = Compute_Manager()
             contList = compute.get_compute_node_list(status='Create failed')
             
             for cont in contList:
                 self.removeComputeNode(cont['username'] + '_' + cont['containerName'])
-"""
+            """
             time.sleep(100)
+
 
     def updateContainerStatus(self, **statusList):
         """
         Periodic update of status of all containers
         """
         print '**************** in container status ***********************'
-	print statusList
-        
-	infoList = []        
+        print statusList
+
+        infoList = []
         infoList = statusList['info']
 
         compute = Compute_Manager()
         contList = compute.get_compute_node_list(deviceId=statusList['deviceId'])['compute']
 
-	print contList
-        
+        print contList
+
         keyList = ('containerName', 'status')
 
         try:
@@ -157,26 +156,26 @@ class updateDB(object):
                             data = dict((key, entries[key]) for key in keyList)
                             if '_' in entries['containerName']:
                                 user = entries['containerName'][0].split('_')[0]
-                        	    data['username'] = user.split('/')[1]
-                        	    data['containerName'] = entries['containerName'][0].split('_')[1]
-                        	    data['active'] = True	
-                                print data
+                                data['username'] = user.split('/')[1]
+                                data['containerName'] = entries['containerName'][0].split('_')[1]
+                                data['active'] = True
+                            print data
 
-                                if (data['username'] == cont['username']) and (data['containerName'] == cont['containerName']):
-                                    self.updateComputeNode(data)
-                                    _updateCont = True
-                                    print 'updated DB'
-                            
-                    if _updateCont == False:
-                    	self.removeComputeNode(cont['username']+'_'+cont['containerName'])
-                    	print 'removed a cont in DB'
+                            if (data['username'] == cont['username']) and (data['containerName'] == cont['containerName']):
+                                self.updateComputeNode(data)
+                                _updateCont = True
+                                print 'updated DB'
 
-                
+                if _updateCont == False:
+                    self.removeComputeNode(cont['username'] + '_' + cont['containerName'])
+                    print 'removed a cont in DB'
+
             print '********************************************************'
-                
+
         except Exception as e:
             print 'Could not update the node with periodic status, error: ', e
             pass
+
 
     def updateDeviceResponse(self, response):
         """
