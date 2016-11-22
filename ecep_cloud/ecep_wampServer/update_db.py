@@ -143,39 +143,37 @@ class updateDB(object):
 
         global containerThread
 
-        infoList = statusList['info']
-
         compute = Compute_Manager()
         contList = compute.get_compute_node_list(deviceId=statusList['deviceId'])['compute']
 
-        print contList
+        print 'from DB: ', contList
 
         keyList = ('containerName', 'status')
 
         try:
+            infoList = statusList['info']
             if len(contList):
                 for cont in contList:
                     _updateCont = False
                     if len(infoList):
                         for entries in infoList:
                             data = dict((key, entries[key]) for key in keyList)
-                            if '_' in entries['containerName']:
-                                user = entries['containerName'][0].split('_')[0]
-                                data['username'] = user.split('/')[1]
-                                data['containerName'] = entries['containerName'][0].split('_')[1]
-                                data['active'] = True
-                                print data
+                            user = entries['containerName'][0].split('_')[0]
+                            data['username'] = user.split('/')[1]
+                            data['containerName'] = entries['containerName'][0].split('_')[1]
+                            data['active'] = True
+                            print 'in container check: ', data
 
-                                if (data['username'] == cont['username']) and \
-                                        (data['containerName'] == cont['containerName']):
+                            if (data['username'] == cont['username']) and \
+                                    (data['containerName'] == cont['containerName']):
 
-                                    containerThread.acquire()
-                                    try:
-                                        self.updateComputeNode(data)
-                                    finally:
-                                        containerThread.release()
-                                    _updateCont = True
-                                    print 'updated DB'
+                                containerThread.acquire()
+                                try:
+                                    self.updateComputeNode(data)
+                                finally:
+                                    containerThread.release()
+                                _updateCont = True
+                                print 'updated DB'
 
                     if _updateCont == False:
                         containerThread.acquire()
