@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var session=require('express-session');
+//var session=require('express-session');
 var app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -34,12 +34,12 @@ app.use('/apps', apps);
 
 
 
-app.use(session({
+/*app.use(session({
   cookieName : 'session',
   secret : 'session_ass_test',
   duration: 30 * 60 * 1000,
   activeDuration: 5 * 60 * 1000
-}));
+}));*/
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
