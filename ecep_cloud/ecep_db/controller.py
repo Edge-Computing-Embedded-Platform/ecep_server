@@ -1,3 +1,9 @@
+"""
+Edge Computing Embedded Platform
+Developed by Abhishek Gurudutt, Chinmayi Divakara,
+Praveen Prabhakaran, Tejeshwar Chandra Kamaal
+"""
+
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, ForeignKey, ForeignKeyConstraint, Float, Boolean

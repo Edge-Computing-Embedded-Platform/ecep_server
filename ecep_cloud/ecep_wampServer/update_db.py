@@ -1,6 +1,6 @@
 """
 Edge Computing Embedded Platform
-Developed by Abhishek Gurudutt, Chinmayi Divakar,
+Developed by Abhishek Gurudutt, Chinmayi Divakara,
 Praveen Prabhakaran, Tejeshwar Chandra Kamaal
 
 Function to update the database according to the
@@ -14,6 +14,7 @@ from ..ecep_db.controller import *
 
 # maintain all the registered devices
 regDevice = {}
+containerThread = None
 
 
 def device_init():
@@ -24,6 +25,9 @@ def device_init():
 
     for dev in devices:
         regDevice[dev['deviceId']] = True
+
+    global containerThread
+    containerThread = threading.RLock()
 
 
 # decorator for threads
@@ -118,12 +122,7 @@ class updateDB(object):
             # Remove all the dead devices from the local data
             for item in rm:
                 regDevice.pop(item, None)
-<<<<<<< 1d5e2b056ea3d4f2221e2b84a8a4227be252d234
 
-
-=======
-                
->>>>>>> indents error handled
             """            # Removing 'create failed' containers
             compute = Compute_Manager()
             contList = compute.get_compute_node_list(status='Create failed')
@@ -134,12 +133,15 @@ class updateDB(object):
             time.sleep(100)
 
 
-    def updateContainerStatus(self, **statusList):
+    @threaded
+    def updateContainerStatus(self, statusList):
         """
         Periodic update of status of all containers
         """
         print '**************** in container status ***********************'
         print statusList
+
+        global containerThread
 
         infoList = statusList['info']
 
@@ -164,15 +166,24 @@ class updateDB(object):
                                 data['active'] = True
                                 print data
 
-                                if (data['username'] == cont['username']) and (
-                                    data['containerName'] == cont['containerName']):
-                                    self.updateComputeNode(data)
+                                if (data['username'] == cont['username']) and \
+                                        (data['containerName'] == cont['containerName']):
+
+                                    containerThread.acquire()
+                                    try:
+                                        self.updateComputeNode(data)
+                                    finally:
+                                        containerThread.release()
                                     _updateCont = True
                                     print 'updated DB'
 
-                if _updateCont == False:
-                    self.removeComputeNode(cont['username'] + '_' + cont['containerName'])
-                    print 'removed a cont in DB'
+                    if _updateCont == False:
+                        containerThread.acquire()
+                        try:
+                            self.removeComputeNode(cont['username'] + '_' + cont['containerName'])
+                        finally:
+                            containerThread.release()
+                        print 'removed a cont in DB'
 
             print '********************************************************'
                 

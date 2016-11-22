@@ -75,7 +75,7 @@ class ClientReader(ApplicationSession):
             log.msg('Container status: ', args)
             uDB_instance = uDB()
             # handle the status updates
-            uDB_instance.updateContainerStatus(**args)
+            uDB_instance.updateContainerStatus(args)
         
         try:
             yield self.subscribe(containerStatus, self.contStat)
