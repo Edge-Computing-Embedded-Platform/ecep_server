@@ -16,6 +16,17 @@ from ..ecep_db.controller import Compute_Manager, Image_Manager, Device_Manager,
 from wamp_server import *
 import urlparse
 import sys
+from update_db import threaded
+
+@threaded
+def checkConnection(name='checkConnection'):
+    """
+    This function broadcasts a message to all the registered
+    devices
+    """
+    topic = "com.ecep.server.checkConnection"
+    data = True
+    sendTo(topic, data)
 
 # Handle command request
 def handleCmd(entries):
@@ -29,6 +40,8 @@ def handleCmd(entries):
         sendTo(packet['topic'], packet['msg'])
     else:
         print 'invalid command passed'
+        
+
 
 
 # Handle request from user
@@ -343,11 +356,16 @@ if __name__ == "__main__":
     server = wampserver()
     check = server.connect(ip, port, realm)
 
+    #wait till the initialization of the wamp router
+    time.sleep(5)
+    
     # start a thread to check heartbeat
     uDB_instance = updateDB()
-    handle = uDB_instance.checkHeartbeat()
+    handle_checkHeartbeat = uDB_instance.checkHeartbeat()
+#    handle_checkConnection = checkConnection()
     
     # start a tornado server to handle user requests
     application.listen(9000)
     tornado.ioloop.IOLoop.instance().start()
-    handle.join()
+    handle_checkHeartbeat.join()
+#    handle_checkConnection.join()

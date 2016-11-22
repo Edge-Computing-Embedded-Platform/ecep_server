@@ -121,10 +121,17 @@ class updateDB(object):
             # Remove all the dead devices from the local data
             for item in rm:
                 regDevice.pop(item, None)
-
+                
+"""            # Removing 'create failed' containers
+            compute = Compute_Manager()
+            contList = compute.get_compute_node_list(status='Create failed')
+            
+            for cont in contList:
+                self.removeComputeNode(cont['username'] + '_' + cont['containerName'])
+"""
             time.sleep(100)
 
-    def updateContainerStatus(self, statusList):
+    def updateContainerStatus(self, **statusList):
         """
         Periodic update of status of all containers
         """
@@ -142,28 +149,28 @@ class updateDB(object):
         keyList = ('containerName', 'status')
 
         try:
-	    if len(contList):
-	        for cont in contList:
+            if len(contList):
+                for cont in contList:
                     _updateCont = False
                     if len(infoList):
-			for entries in infoList:
-                    	    data = dict((key, entries[key]) for key in keyList)
+                        for entries in infoList:
+                            data = dict((key, entries[key]) for key in keyList)
+                            if '_' in entries['containerName']:
+                                user = entries['containerName'][0].split('_')[0]
+                        	    data['username'] = user.split('/')[1]
+                        	    data['containerName'] = entries['containerName'][0].split('_')[1]
+                        	    data['active'] = True	
+                                print data
 
-			    if '_' in entries['containerName']:                    
-                    	    	user = entries['containerName'][0].split('_')[0]
-                    	    	data['username'] = user.split('/')[1]
-                    	    	data['containerName'] = entries['containerName'][0].split('_')[1]
-                    	    	data['active'] = True	
-				print data
-
-                    	    	if (data['username'] == cont['username']) and (data['containerName'] == cont['containerName']):
-                        	    self.updateComputeNode(data)
-                        	    _updateCont = True
-                        	    print 'updated DB'
+                                if (data['username'] == cont['username']) and (data['containerName'] == cont['containerName']):
+                                    self.updateComputeNode(data)
+                                    _updateCont = True
+                                    print 'updated DB'
                             
                     if _updateCont == False:
                     	self.removeComputeNode(cont['username']+'_'+cont['containerName'])
                     	print 'removed a cont in DB'
+
                 
             print '********************************************************'
                 
@@ -182,10 +189,10 @@ class updateDB(object):
             data['username'] = response['containerName'].split('_')[0]
             data['containerName'] = response['containerName'].split('_')[1]
 
-            if data['status'] == 'created':
+            if data['status'] == 'Created':
                 data['container_id'] = response['ID']
 
-            if data['status'] == 'removed':
+            if data['status'] == 'Removed':
                 self.removeComputeNode(response['containerName'])
             else:
                 self.updateComputeNode(data)
@@ -195,7 +202,7 @@ class updateDB(object):
             pass
 
 
-    def updateCPUinfo(self, info):
+    def updateCPUinfo(self, **info):
         """
         update the cpu information from end node
         """
