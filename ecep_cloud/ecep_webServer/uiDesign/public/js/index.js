@@ -159,15 +159,10 @@
         console.log(deviceId,containerName);
         debugger;
         $.ajax({
-            url: ip+"/log",
+            url: ip+"/log?command=download&username=admin&containerName="+ containerName+"&deviceId="+deviceId,
+
             type : "GET",
-            dataType: "json",
-            data:{
-                "username": "admin",
-                "containerName": containerName,
-                "deviceId": deviceId,
-                "command":"download"
-            },
+           
 
             crossDomain: true,
 
@@ -186,7 +181,7 @@
                     },
                     success : function(response) {
                         debugger;
-                        $("#load").load("../partial_html/containerForm.html");
+                        //$("#load").load("../partial_html/containerForm.html");
 
                         console.log("S");
                     },
