@@ -166,29 +166,10 @@
             success: function (response) {
                 //event.preventDefault();
                 console.log(response);
-                $.ajax({
-                    type : "post",
-                    url : "download",
-                    dataType: "json",
-                    data:{
-                        "containerName": containerName,
-                        "deviceId": deviceId,
-
-
-                    },
-                    success : function(response) {
-                        debugger;
-                        //$("#load").load("../partial_html/containerForm.html");
-
-                        console.log("S");
-                    },
-                    //If there was no resonse from the server
-                    error : function(res) {
-                        console.log(res);
-                    }
-                });
-
-
+                var form = $('<form>', {action: '/download', method: 'POST'});
+                form.append($('<input>', {name: 'containerName', value: containerName}));
+                form.append($('<input>', {name: 'deviceId', value: deviceId}));
+                form.submit();
             },
             error: function (xhr, status) {
                 swal({

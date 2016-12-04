@@ -18,7 +18,7 @@ router.post('/', function (req, res) {
         var logpath='/home/ubuntu/ecep/'+'admin'+'_'+req.body.containerName+'/' +filename;
         console.log(logpath)
         res.download( logpath );
-        res.send({"data":"success"});
+        //res.send({"data":"success"});
 });
 
 module.exports = router;
