@@ -14,12 +14,12 @@ def sendCommand(data):
         elif data['command'] == 'upStart':
             keyList = ('containerName', 'command', 'username', 'filename')
 
-        elif data['command'] == 'stop' or data['command'] == 'remove' or data['command'] == 'start':
+        elif data['command'] == 'stop' or data['command'] == 'remove' or data['command'] == 'start' or data['command'] == 'download':
             keyList = ('containerName', 'command', 'username')
 
         try:
             msg = dict((key, data[key]) for key in keyList)
-        except Exception,e:
+        except Exception as e:
             print e
 
         if msg['command'] == 'create':
@@ -27,6 +27,10 @@ def sendCommand(data):
             db_msg['deviceId'] = data['deviceId']
             db = updateDB()
             db.addComputeNode(db_msg)
+
+        if msg['command'] == 'download':
+            db = updateDB()
+            msg['filename'] = db.getFilename(**data)
 
         msg['containerName'] = msg['username'] + '_' + msg['containerName']
         packet = {'topic': topic, 'msg': msg, 'valid': True}
@@ -48,7 +52,7 @@ def checkValidity(command, param):
         valid = ('deviceId' in param) and ('imageName' in param) and ('containerName' in param) and (
         'username' in param)
 
-    elif command == 'stop' or command == 'remove' or command == 'start':
+    elif command == 'stop' or command == 'remove' or command == 'start' or command == 'download':
         valid = ('deviceId' in param) and ('containerName' in param) and ('username' in param)
 
     elif command == 'upStart':

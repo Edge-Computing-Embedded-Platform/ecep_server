@@ -71,6 +71,14 @@ class updateDB(object):
         node = Compute_Manager()
         node.remove_compute_node(containerName=container)
 
+    def getFilename(self, **kwargs):
+        """
+        used to get the filename to download
+        """
+        #node = Compute_Manager()
+        #node.get_compute_node_list()
+        return 'for_testing.tar'
+
     def deviceReg(self, deviceInfo):
         """
         The device registers when there is no previous device
@@ -123,13 +131,6 @@ class updateDB(object):
             for item in rm:
                 regDevice.pop(item, None)
 
-            """            # Removing 'create failed' containers
-            compute = Compute_Manager()
-            contList = compute.get_compute_node_list(status='Create failed')
-            
-            for cont in contList:
-                self.removeComputeNode(cont['username'] + '_' + cont['containerName'])
-            """
             time.sleep(100)
 
 
