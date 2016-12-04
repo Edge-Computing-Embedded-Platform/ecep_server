@@ -9,15 +9,20 @@ import tornado.escape
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
+from tornado import gen
+from tornado.concurrent import run_on_executor
+from concurrent.futures import ThreadPoolExecutor
 import time
 import json
 from container_control import *
-from ..ecep_db.controller import Compute_Manager, Image_Manager, Device_Manager, Location_Manager, Info_Manager, init_db_lock
+from ..ecep_db.controller import Compute_Manager, Image_Manager, Device_Manager, Location_Manager, Info_Manager, \
+    init_db_lock
 from wamp_server import *
 import urlparse
 import sys
 from update_db import threaded
-
+from Queue import Queue
+q = Queue()
 @threaded
 def checkConnection(name='checkConnection'):
     """
@@ -27,6 +32,7 @@ def checkConnection(name='checkConnection'):
     topic = "com.ecep.server.checkConnection"
     data = True
     sendTo(topic, data)
+
 
 # Handle command request
 def handleCmd(entries):
@@ -40,8 +46,6 @@ def handleCmd(entries):
         sendTo(packet['topic'], packet['msg'])
     else:
         print 'invalid command passed'
-        
-
 
 
 # Handle request from user
@@ -49,6 +53,7 @@ class handleReq(tornado.web.RequestHandler):
     """
     Handle user command request
     """
+
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", 'x-requested-with,Origin')
@@ -115,6 +120,28 @@ class Download(tornado.web.RequestHandler):
         except Exception, e:
             print(e)
 
+
+class Upload(tornado.web.RequestHandler):
+    @gen.coroutine
+    def post(self, **kwargs):
+        file_root_path = "/home/chinmayi/ecep/"
+        chunk = 2048
+        keys = ['username', 'containerName', 'filename']
+        #print self.request.body
+        username = self.get_argument(name='username')
+        containerName = self.get_argument(name='containerName')
+        filename = "output.log"
+
+        fileinfo = self.request.files['file'][0]
+
+        file_path = file_root_path + username + '_' + containerName+'/' + 'output.log'
+
+        if fileinfo['body'] is None:
+            q.put({'status':'fail'})
+        fh = open(file_path, 'wb')
+        fh.write(fileinfo['body'])
+        ret = {'status':'success'}
+        q.put(ret)
 
 class DeviceHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
@@ -272,12 +299,11 @@ class CPUInfoHandler(tornado.web.RequestHandler):
 
         info = Info_Manager()
         ret = info.get_device_info(**data)
-        self.write (json.dumps(ret))
+        self.write(json.dumps(ret))
         self.finish()
 
 
 class CPUInfoHandlerWS(tornado.websocket.WebSocketHandler):
-
     def check_origin(self, origin):
         return True
 
@@ -287,7 +313,6 @@ class CPUInfoHandlerWS(tornado.websocket.WebSocketHandler):
 
     @tornado.web.asynchronous
     def on_message(self, message):
-
         data = json.loads(message)
         print data
         if 'deviceId' not in data:
@@ -304,7 +329,6 @@ class CPUInfoHandlerWS(tornado.websocket.WebSocketHandler):
 
 
 class ComputeHandlerWS(tornado.websocket.WebSocketHandler):
-
     def check_origin(self, origin):
         return True
 
@@ -322,20 +346,51 @@ class ComputeHandlerWS(tornado.websocket.WebSocketHandler):
             get container list by deviceId"""
 
         compute = Compute_Manager()
-        
+
         if data['command'] == 'filter':
             data.__delitem__('command')
             ret = compute.get_compute_node_list(**data)
             ret = json.dumps(ret)
-            print "return",ret 
+            print "return", ret
             self.write_message(ret)
-	else:
+        else:
             print("Invalid Params")
-        
 
     def on_close(self):
         print("websocket connecction closed")
         pass
+
+
+
+class logHandler(tornado.web.RequestHandler):
+    executor = ThreadPoolExecutor(max_workers=16)
+    def set_default_header(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers", 'x-requested-with,Origin')
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT')
+
+    @run_on_executor
+    def background_task(self):
+        return q.get()
+
+    @gen.coroutine
+    def get(self, **kwargs):
+        try:
+            data = json.loads(self.request.body)
+        except:
+            data = dict(urlparse.parse_qsl(self.request.query))
+        if 'deviceId' not in data:
+            self.set_status(400, reason="param %s missing" % 'deviceId')
+            raise tornado.web.HTTPError(400)
+        print data
+
+        handleCmd(data)
+
+        item = yield self.background_task()
+
+        self.write(json.dumps(item))
+        self.finish()
+
 
 
 application = tornado.web.Application([(r"/handle_request", handleReq),
@@ -345,6 +400,8 @@ application = tornado.web.Application([(r"/handle_request", handleReq),
                                        (r"/compute", ComputeHandler),
                                        (r"/location", LocationHandler),
                                        (r"/cpuinfo", CPUInfoHandler),
+                                       (r"/log", logHandler),
+                                       (r'/upload', Upload),
                                        (r"/cpuinfo_ws", CPUInfoHandlerWS),
                                        (r"/compute_ws", ComputeHandlerWS)])
 
@@ -356,16 +413,17 @@ if __name__ == "__main__":
     server = wampserver()
     check = server.connect(ip, port, realm)
 
-    #wait till the initialization of the wamp router
+    # wait till the initialization of the wamp router
     time.sleep(5)
-    
+
     # start a thread to check heartbeat
     uDB_instance = updateDB()
     handle_checkHeartbeat = uDB_instance.checkHeartbeat()
-#    handle_checkConnection = checkConnection()
-    
+    #    handle_checkConnection = checkConnection()
+
     # start a tornado server to handle user requests
     application.listen(9000)
     tornado.ioloop.IOLoop.instance().start()
     handle_checkHeartbeat.join()
-#    handle_checkConnection.join()
+    q.join()
+# handle_checkConnection.join()
