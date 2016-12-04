@@ -19,7 +19,7 @@ app.set('view engine', 'ejs');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var downloads = require('./routes/download');
+var download = require('./routes/download');
 var create= require('./routes/createDocker');
 var apps= require('./routes/createApplication');
 var signin= require('./routes/index');
@@ -30,7 +30,7 @@ var signin= require('./routes/index');
 app.use('/', routes);
 app.use('/users', users);
 app.use('/create', create);
-app.use('/dowload', downloads);
+app.use('/download', download);
 app.use('/apps', apps);
 
 

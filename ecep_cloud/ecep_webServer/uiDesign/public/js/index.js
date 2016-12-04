@@ -160,10 +160,7 @@
         debugger;
         $.ajax({
             url: ip+"/log?command=download&username=admin&containerName="+ containerName+"&deviceId="+deviceId,
-
             type : "GET",
-           
-
             crossDomain: true,
 
             success: function (response) {
@@ -171,7 +168,7 @@
                 console.log(response);
                 $.ajax({
                     type : "post",
-                    url : "downloads",
+                    url : "download",
                     dataType: "json",
                     data:{
                         "containerName": containerName,

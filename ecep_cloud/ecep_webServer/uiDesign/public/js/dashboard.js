@@ -197,20 +197,34 @@ function download1(i)
     console.log(deviceId,containerName);
     debugger;
     $.ajax({
-        url: ip+"/log",
+        url: ip+"/log?command=download&username=admin&containerName="+ containerName+"&deviceId="+deviceId,
         type : "GET",
-        dataType: "json",
-        data:{
-            "username": "admin",
-            "containerName": containerName,
-            "deviceId": deviceId
-        },
-
         crossDomain: true,
 
         success: function (response) {
             //event.preventDefault();
-            console.log("S");
+            console.log(response);
+            $.ajax({
+                type : "post",
+                url : "downloads",
+                dataType: "json",
+                data:{
+                    "containerName": containerName,
+                    "deviceId": deviceId,
+
+
+                },
+                success : function(response) {
+                    debugger;
+                    //$("#load").load("../partial_html/containerForm.html");
+
+                    console.log("S");
+                },
+                //If there was no resonse from the server
+                error : function(res) {
+                    console.log(res);
+                }
+            });
 
 
         },
