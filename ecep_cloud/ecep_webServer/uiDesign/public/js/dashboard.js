@@ -78,6 +78,9 @@ function fillContianerTable() {
                 htmlstring=htmlstring+'<a class="btn btn-danger" href="#" onclick="stopContainer1('+i+')"';
                 htmlstring=htmlstring+'<i class="glyphicon glyphicon-stop icon-white" ></i>';
                 htmlstring=htmlstring+   'Stop Container</a>';
+                htmlstring=htmlstring+'<a class="btn btn-danger" href="#" onclick="download1('+i+')"';
+                htmlstring=htmlstring+'<i class="glyphicon glyphicon-download icon-white" ></i>';
+                htmlstring=htmlstring+   'Download Logs</a>';
                 htmlstring=htmlstring+"</td>";
                 htmlstring=htmlstring+"</tr>";
                 $("#containerRow").append(htmlstring);
@@ -159,6 +162,47 @@ function startContainer1(i)
             "username": "admin",
             "containerName": containerName,
             "command": "start",
+            "deviceId": deviceId
+        },
+
+        crossDomain: true,
+
+        success: function (response) {
+            //event.preventDefault();
+            console.log("S");
+
+
+        },
+        error: function (xhr, status) {
+            swal({
+                title:"ERROR",
+                text: xhr.responseText,
+                type: "error",
+                showCancelButton: false,
+                confirmButtonClass: 'btn-info',
+                confirmButtonText: 'Close!'
+            });
+        }
+    });
+
+    return false;
+}
+
+function download1(i)
+{
+    event.preventDefault();
+    debugger
+    var deviceId=container[i].deviceId;
+    var containerName=container[i].containerName;
+    console.log(deviceId,containerName);
+    debugger;
+    $.ajax({
+        url: ip+"/log",
+        type : "GET",
+        dataType: "json",
+        data:{
+            "username": "admin",
+            "containerName": containerName,
             "deviceId": deviceId
         },
 
