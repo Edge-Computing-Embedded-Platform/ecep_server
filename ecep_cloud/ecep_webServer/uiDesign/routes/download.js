@@ -15,7 +15,8 @@ var util = require('util');
 router.post('/', function (req, res) {
          console.log("In downloads")
         var filename="output.log";
-        var logpath='/home/ubuntu/ecep/'+'admin'+'_'+req.body.containerName+ +filename;
+        var logpath='/home/ubuntu/ecep/'+'admin'+'_'+req.body.containerName+'/' +filename;
+        console.log(logpath)
         res.download( logpath );
         res.send({"data":"success"});
 });
