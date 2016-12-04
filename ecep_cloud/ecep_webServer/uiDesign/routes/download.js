@@ -12,10 +12,10 @@ var util = require('util');
 
 
 
-app.get('/download_logs', function (req, res) {
-
-        var filename=req.session.username+"_recieved_bds_log";
-        var logpath=__dirname + "/public/pythonfiles/" +filename;
+router.post('/', function (req, res) {
+         console.log("In downloads")
+        var filename="output.log";
+        var logpath='/home/ubuntu/ecep/'+'admin'+'_'+req.body.containerName+ +filename;
         res.download( logpath );
 
 });

@@ -215,6 +215,9 @@ function onMessage(evt)
             htmlstring = htmlstring + '<a class="btn btn-danger" href="#" onclick="stopContainer(' + i + ')"';
             htmlstring = htmlstring + '<i class="glyphicon glyphicon-stop icon-white" ></i>';
             htmlstring = htmlstring + 'Stop Container</a>';
+            htmlstring=htmlstring+'<a class="btn btn-danger" href="#" onclick="downloads('+i+')"';
+            htmlstring=htmlstring+'<i class="glyphicon glyphicon-stop icon-white" ></i>';
+            htmlstring=htmlstring+   'Download Logs</a>';
             htmlstring = htmlstring + "</td>";
             htmlstring = htmlstring + "</tr>";
             // $("#containerRow").append(htmlstring);

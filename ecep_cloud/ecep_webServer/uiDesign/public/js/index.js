@@ -150,7 +150,7 @@
 
         return false;
     }
-    function download(i)
+    function downloads(i)
     {
         event.preventDefault();
         debugger
@@ -165,7 +165,8 @@
             data:{
                 "username": "admin",
                 "containerName": containerName,
-                "deviceId": deviceId
+                "deviceId": deviceId,
+                "command":"download"
             },
 
             crossDomain: true,
@@ -173,6 +174,27 @@
             success: function (response) {
                 //event.preventDefault();
                 console.log(response);
+                $.ajax({
+                    type : "post",
+                    url : "downloads",
+                    dataType: "json",
+                    data:{
+                        "containerName": containerName,
+                        "deviceId": deviceId,
+
+
+                    },
+                    success : function(response) {
+                        debugger;
+                        $("#load").load("../partial_html/containerForm.html");
+
+                        console.log("S");
+                    },
+                    //If there was no resonse from the server
+                    error : function(res) {
+                        console.log(res);
+                    }
+                });
 
 
             },
@@ -281,11 +303,13 @@
                     htmlstring=htmlstring+'<a class="btn btn-danger" href="#" onclick="stopContainer('+i+')"';
                     htmlstring=htmlstring+'<i class="glyphicon glyphicon-stop icon-white" ></i>';
                     htmlstring=htmlstring+   'Stop Container</a>';
-                    htmlstring=htmlstring+'<a class="btn btn-danger" href="#" onclick="download('+i+')"';
-                    htmlstring=htmlstring+'<i class="glyphicon glyphicon-download icon-white" ></i>';
+                    htmlstring=htmlstring+'<a class="btn btn-danger" href="#" onclick="downloads('+i+')"';
+                    htmlstring=htmlstring+'<i class="glyphicon glyphicon-stop icon-white" ></i>';
                     htmlstring=htmlstring+   'Download Logs</a>';
                     htmlstring=htmlstring+"</td>";
                     htmlstring=htmlstring+"</tr>";
+
+                    console.log(htmlstring);
                     $("#containerRow").append(htmlstring);
 
 
