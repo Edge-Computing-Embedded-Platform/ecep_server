@@ -50,13 +50,13 @@
     function sendit()
     {
         debugger;
-
+        console.time('test');
         var form = document.getElementById("application"),
             formData = new FormData(form),
             xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {//success
-
+                console.timeEnd('test');
                 $("#load").load("../partial_html/applicationForm.html");
             }
 
