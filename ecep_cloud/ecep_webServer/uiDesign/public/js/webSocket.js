@@ -245,7 +245,7 @@ function onMessage(evt)
 
 function onMessage1(evt)
 {
-
+  debugger;
     cpuOutput=document.getElementById("displayCPU");
     console.log(evt);
     cpu=JSON.parse(evt.data).info;
@@ -256,8 +256,8 @@ function onMessage1(evt)
     diskMemTotal=parseFloat(cpu[0].diskMem).toFixed(2);
     diskMemUsed=parseFloat(cpu[0].diskUsed).toFixed(2);
     drawChart();
-    diskMem.innerHTML =parseFloat(cpu[0].diskMem).toFixed(2);
-    phyMem.innerHTML=parseFloat(cpu[0].physicalMem).toFixed(2);
+    //diskMem.innerHTML =parseFloat(cpu[0].diskMem).toFixed(2);
+    //phyMem.innerHTML=parseFloat(cpu[0].physicalMem).toFixed(2);
     var htmlstring1 = "";
 
     htmlstring1 = htmlstring1 + "<h5>Device Name:" +cpu[0].deviceName+"</h5>";
