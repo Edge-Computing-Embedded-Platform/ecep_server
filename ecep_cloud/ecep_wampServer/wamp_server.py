@@ -49,7 +49,7 @@ class ClientReader(ApplicationSession):
             yield self.subscribe(onHeartbeat, self.heartbeat)
             print ("Subscribed to topic: " + self.heartbeat)
         except Exception as e:
-            print("could not subscribe to topic:" + self.heartbeat + ', error: '+ e)
+            print("******* could not subscribe to topic:" + self.heartbeat)
 
         
         # This is to handle response from end node
@@ -65,7 +65,7 @@ class ClientReader(ApplicationSession):
             yield self.subscribe(deviceResponse, self.devResp)
             print ("Subscribed to topic: " + self.devResp)
         except Exception as e:
-            print("could not subscribe to topic:" + self.devResp + ', error: '+ e)
+            print("******* could not subscribe to topic:" + self.devResp)
 
 
         # This is to handle container status sync
@@ -81,7 +81,7 @@ class ClientReader(ApplicationSession):
             yield self.subscribe(containerStatus, self.contStat)
             print ("Subscribed to topic: " + self.contStat)
         except Exception as e:
-            print("could not subscribe to topic:" + self.contStat + ', error: '+ e)
+            print("******* could not subscribe to topic:" + self.contStat)
         
         
         # This is to handle cpu info
@@ -97,7 +97,7 @@ class ClientReader(ApplicationSession):
             yield self.subscribe(cpuInfo, self.cpuInfo)
             print ("Subscribed to topic: " + self.cpuInfo)
         except Exception as e:
-            print("could not subscribe to topic:" + self.cpuInfo + ', error: '+ e)
+            print("******* could not subscribe to topic:" + self.cpuInfo)
         
 
 class wampserver(ApplicationSession):

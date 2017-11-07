@@ -7,4 +7,22 @@ realm="realm1"
 cat .banner/display
 
 #do not modify this line
-python -m ecep_cloud.ecep_wampServer.request_handler $port $realm&
+process_id=`/bin/ps -fu $USER| grep "crossbar" | grep -v "grep" | awk '{print $2}'`
+if [ "$process_id" ]
+then
+    kill $process_id &
+fi
+
+process_id=`/bin/ps -fu $USER| grep "request_handler" | grep -v "grep" | awk '{print $2}'`
+if [ "$process_id" ]
+then
+    kill $process_id &
+fi
+
+sleep 3
+
+cd ecep_cloud/ecep_wampServer
+crossbar start &
+sleep 5
+cd ../../
+python2.7 -m ecep_cloud.ecep_wampServer.request_handler $port $realm&
