@@ -2,10 +2,10 @@
 Project aims at providing a common platform for edge computing applications such as video analytics, smart city and so on.
 Deploy a webserver and launch user dashboard through this repo.
 
-###Hardware Requirements: 
+### Hardware Requirements: 
 A server which never turns off. (Ex. AWS)
 
-###Software Requirements: 
+### Software Requirements: 
 **Server:** 
 * Crossbar, Used for wamp messaging. Libraries to be installed are crossbar.io, autobahn, twisted.
 
@@ -24,3 +24,8 @@ A server which never turns off. (Ex. AWS)
 
       `apt-get install sqlite` for debian
 
+
+### Run install_dependencies.sh with sudo command to install all the required packages.
+### Then run ecep_server.sh
+
+## The current software is tested on Python2.
