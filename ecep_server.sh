@@ -19,6 +19,15 @@ then
     kill $process_id &
 fi
 
+if [ -f ecep_cloud/ecep_wampServer/.crossbar/key.priv ]
+then
+    rm ecep_cloud/ecep_wampServer/.crossbar/key.priv
+fi
+
+if [ -f ecep_cloud/ecep_wampServer/.crossbar/key.pub ]
+then
+     rm ecep_cloud/ecep_wampServer/.crossbar/key.pub
+fi
 sleep 3
 
 cd ecep_cloud/ecep_wampServer
