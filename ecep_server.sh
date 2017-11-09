@@ -34,4 +34,4 @@ cd ecep_cloud/ecep_wampServer
 crossbar start &
 sleep 5
 cd ../../
-python2.7 -m ecep_cloud.ecep_wampServer.request_handler $port $realm&
+python3 -m ecep_cloud.ecep_wampServer.request_handler $port $realm&
