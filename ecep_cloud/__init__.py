@@ -5,5 +5,5 @@ Praveen Prabhakaran, Tejeshwar Chandra Kamaal
 
 """
 
-import ecep_db as ecep_db
-import ecep_wampServer as ecep_wampServer
+import ecep_cloud.ecep_db as ecep_db
+import ecep_cloud.ecep_wampServer as ecep_wampServer
