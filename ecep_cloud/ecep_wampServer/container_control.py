@@ -20,7 +20,7 @@ def sendCommand(data):
         try:
             msg = dict((key, data[key]) for key in keyList)
         except Exception as e:
-            print e
+            print (e)
 
         if msg['command'] == 'create':
             db_msg = msg.copy()
@@ -45,7 +45,7 @@ def checkValidity(command, param):
     """
     Check the validity of user commands
     """
-    print command + ' received'
+    print (command + ' received')
     valid = False
     
     if command == 'create':
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     server = wampserver()
     check = server.connect(ip, port, realm)
     value = {'name': 'abhi'}
-    print value
+    print (value)
     while True:
         time.sleep(5)
         # heartbeat()

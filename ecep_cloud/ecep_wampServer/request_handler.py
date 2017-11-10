@@ -42,10 +42,10 @@ def handleCmd(entries):
     """
     packet = sendCommand(entries)
     if packet['valid']:
-        print 'valid command passed'
+        print ('valid command passed')
         sendTo(packet['topic'], packet['msg'])
     else:
-        print 'invalid command passed'
+        print ('invalid command passed')
 
 
 # Handle request from user
@@ -77,7 +77,7 @@ class handleReq(tornado.web.RequestHandler):
 
         for entry in data:
             if entry == 'command':
-                print 'command'
+                print ('command')
                 handleCmd(data)
         self.write(data)
 
@@ -106,7 +106,7 @@ class Download(tornado.web.RequestHandler):
                 raise tornado.web.HTTPError(400)
 
         file_path = file_root_path + data['username'] + '_' + data['containerName'] + '/' + data['filename']
-        print file_path
+        print (file_path)
         try:
             file_object = open(file_path, 'rb')
 
@@ -117,7 +117,7 @@ class Download(tornado.web.RequestHandler):
                 self.write(d)
                 self.flush()
             self.finish()
-        except Exception, e:
+        except Exception as e:
             print(e)
 
 
@@ -174,7 +174,7 @@ class DeviceHandler(tornado.web.RequestHandler):
         except:
             data = dict(urlparse.parse_qsl(self.request.query))
 
-        print data
+        print (data)
 
         if data['command'] == 'filter':
             data.__delitem__('command')
@@ -186,7 +186,7 @@ class DeviceHandler(tornado.web.RequestHandler):
         if data['command'] == 'all':
             data.__delitem__('command')
             device = Device_Manager()
-            ret = device.get_device_list();
+            ret = device.get_device_list()
             self.write(json.dumps(ret))
             self.finish()
             return
@@ -226,9 +226,9 @@ class ImageHandler(tornado.web.RequestHandler):
             self.finish()
             return
         if data['command'] == 'all':
-            print data
+            print (data)
             data.__delitem__('command')
-            ret = image.get_image_list(**data);
+            ret = image.get_image_list(**data)
             self.write(json.dumps(ret))
             self.finish()
             return
@@ -278,7 +278,7 @@ class LocationHandler(tornado.web.RequestHandler):
         loc = loc_list.get_location()
         ret = json.dumps(loc)
         self.write(ret)
-        self.finish();
+        self.finish()
 
 
 class CPUInfoHandler(tornado.web.RequestHandler):
@@ -314,7 +314,7 @@ class CPUInfoHandlerWS(tornado.websocket.WebSocketHandler):
     @tornado.web.asynchronous
     def on_message(self, message):
         data = json.loads(message)
-        print data
+        print (data)
         if 'deviceId' not in data:
             self.write_message("error")
             return
@@ -351,7 +351,7 @@ class ComputeHandlerWS(tornado.websocket.WebSocketHandler):
             data.__delitem__('command')
             ret = compute.get_compute_node_list(**data)
             ret = json.dumps(ret)
-            print "return", ret
+            print ("return", ret)
             self.write_message(ret)
         else:
             print("Invalid Params")
@@ -382,7 +382,7 @@ class logHandler(tornado.web.RequestHandler):
         if 'deviceId' not in data:
             self.set_status(400, reason="param %s missing" % 'deviceId')
             raise tornado.web.HTTPError(400)
-        print data
+        print (data)
 
         handleCmd(data)
 

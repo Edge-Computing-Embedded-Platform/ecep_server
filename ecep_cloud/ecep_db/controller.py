@@ -32,7 +32,7 @@ class init_db_lock():
 def set_db_session():
     global db_session
     if db_session is None:
-        print "DB version: %s"% sqlalchemy.__version__
+        print ("DB version: %s"% sqlalchemy.__version__)
         db = create_engine('sqlite:///demo.db', echo=False,connect_args={'check_same_thread':False})
         Base.metadata.create_all(db)
         session = sessionmaker(bind=db)
@@ -140,7 +140,7 @@ class Compute(Base):
         return ret
 
 def create_db_connect(url):
-    print sqlalchemy.__version__
+    print (sqlalchemy.__version__)
     db = create_engine('sqlite:///demo.db', echo=True)
     Base.metadata.create_all(db)
     return db
@@ -165,7 +165,7 @@ class Image_Manager():
         try:
             db_session.add(node)
             db_session.commit()
-        except Exception, e:
+        except Exception as e:
             db_session.rollback();
             ret = "{error:%s}" % str(e)
             pass
@@ -188,7 +188,7 @@ class Image_Manager():
             db_session.query(Image).filter_by(imageName=kwargs.get('ImageName')).update(kwargs)
             db_session.commit()
 
-        except Exception, e:
+        except Exception as e:
             db_session.rollback()
             ret = "{error:%s}" % str(e)
         db_lock.release()
@@ -197,7 +197,7 @@ class Image_Manager():
     def get_image_list(self, **kwargs):
         global db_session
         global db_lock
-        print kwargs
+        print (kwargs)
 
         db_lock.acquire()
         try:
@@ -208,7 +208,7 @@ class Image_Manager():
                 db_arr.append(new)
 
             ret = {'image': db_arr}
-        except Exception, e:
+        except Exception as e:
             ret = "{error:%s}" % str(e)
             return ret
         db_lock.release()
@@ -242,10 +242,10 @@ class Location_Manager():
             node = Location(location = kwargs["location"])
             db_session.add(node)
             db_session.commit()
-        except Exception, e:
+        except Exception as e:
             db_session.rollback();
             ret = {'status': e}
-            print ret
+            print (ret)
             pass
         db_lock.release()
         return ret
@@ -259,7 +259,7 @@ class Location_Manager():
         db_lock.acquire()
         try:
             node = db_session.query(Compute).filter_by(location = kwargs["location"]).delete()
-        except Exception, e:
+        except Exception as e:
             db_session.rollback();
             ret = {'status': e}
             pass
@@ -274,9 +274,9 @@ class Location_Manager():
 
         try:
             db_lock.acquire()
-        except Exception,e:
-            print e
-        print " lock acquired"
+        except Exception as e:
+            print (e)
+        print (" lock acquired")
         try:
             list_db = db_session.query(Location).all()
             db_arr = []
@@ -285,10 +285,10 @@ class Location_Manager():
                 db_arr.append(new)
 
             ret = {'location':db_arr}
-        except Exception, e:
+        except Exception as e:
             db_session.rollback();
             ret = {'status': e}
-            print ret
+            print (ret)
             pass
         db_lock.release()
         return ret
@@ -309,7 +309,7 @@ class Device_Manager():
 
         args = self.pk
         ret = "{error:OK}"
-        print threading.currentThread()
+        print (threading.currentThread())
         print(kwargs)
         for key in args:
             if key not in kwargs:
@@ -325,7 +325,7 @@ class Device_Manager():
         try:
             db_session.add(node)
             db_session.commit()
-        except Exception, e:
+        except Exception as e:
             db_session.rollback()
             ret = "{error:%s}" % str(e)
             pass
@@ -344,7 +344,7 @@ class Device_Manager():
         try:
             count = db_session.query(Device).filter_by(deviceId=kwargs.get('deviceId')).count()
             ret = {'count': count}
-        except Exception, e:
+        except Exception as e:
             ret = "{error:%s}" % str(e)
         db_lock.release()
         return ret
@@ -364,7 +364,7 @@ class Device_Manager():
             db_session.query(Device).filter_by(deviceId=kwargs.get('deviceId')).update(kwargs)
             db_session.commit()
 
-        except Exception, e:
+        except Exception as e:
             ret = "{error:%s}" % str(e)
         db_lock.release()
         return ret
@@ -384,7 +384,7 @@ class Device_Manager():
 
             ret = {'device': db_arr}
             print ret
-        except Exception, e:
+        except Exception as e:
             ret = "{error:%s}" % str(e)
             pass
         db_lock.release()
@@ -403,7 +403,7 @@ class Device_Manager():
                 db_arr.append(new)
 
             ret = {'device': db_arr}
-        except Exception, e:
+        except Exception as e:
             ret = "{error:%s}" % str(e)
             pass
         db_lock.release()
@@ -417,14 +417,14 @@ class Device_Manager():
         try:
             node = db_session.query(Device).filter_by(deviceId = kwargs['deviceId']).first()
             count = db_session.query(Device).filter_by(location = node.location).count()
-            print count
+            print (count)
             if count is 1:
                 db_session.query(Location).filter_by(location = node.location).delete()
 
             db_session.query(Device).filter_by(deviceId = kwargs['deviceId']).delete()
             db_session.commit()
 
-        except Exception, e:
+        except Exception as e:
             ret = {'status':e}
             pass
         db_lock.release()
@@ -474,7 +474,7 @@ class Compute_Manager():
         try:
             db_session.add(node)
             db_session.commit()
-        except Exception, e:
+        except Exception as e:
             db_session.rollback();
             ret = "{error:%s}" % str(e)
             pass
@@ -495,12 +495,12 @@ class Compute_Manager():
         self.validate_compute_params(kwargs)
         db_lock.acquire()
         try:
-            print kwargs
+            print (kwargs)
             db_session.query(Compute).filter_by(username = kwargs.get('username'), \
                                                 containerName=kwargs.get('containerName')).update(kwargs)
             db_session.commit()
 
-        except Exception, e:
+        except Exception as e:
             db_session.rollback()
             ret = "{error:%s}" % str(e)
             pass
@@ -521,7 +521,7 @@ class Compute_Manager():
                 db_arr.append(new)
 
             ret = {'compute': db_arr}
-        except Exception, e:
+        except Exception as e:
             ret = "{error:%s}" % str(e)
             pass
         db_lock.release()
@@ -537,7 +537,7 @@ class Compute_Manager():
         try:
             db_session.query(Compute).filter_by(remoteName = kwargs["containerName"]).delete()
             db_session.commit()
-        except Exception, e:
+        except Exception as e:
             ret = "{error:%s}" % str(e)
             pass
         db_lock.release()
@@ -560,7 +560,7 @@ class Compute_Manager():
         try:
             db_session.query(Compute).filter_by(deviceId = kwargs["deviceId"]).update(kwargs)
             db_session.commit()
-        except Exception, e:
+        except Exception as e:
             ret = "{error:%s}" % str(e)
             pass
         db_lock.release()
@@ -591,21 +591,21 @@ class Info_Manager():
         info  = db_session.query(Info).filter_by(deviceId=kwargs['deviceId']).all()
 
         if len(info) == 0:
-            print "*****************info is none***********************"
+            print ("*****************info is none***********************")
             try:
                 node = Info(**kwargs)
                 db_session.add(node)
                 db_session.commit()
-            except Exception, e:
+            except Exception as e:
                 db_session.rollback()
-                print e
+                print (e)
         else:
             try:
                 db_session.query(Info).filter_by(deviceId = kwargs['deviceId']).update(kwargs)
                 db_session.commit()
-            except Exception, e:
+            except Exception as e:
                 db_session.rollback()
-                print e
+                print (e)
         db_lock.release()
         return ret
 
@@ -627,7 +627,7 @@ class Info_Manager():
 
             ret = {'info':db_arr}
             pass
-        except Exception, e:
+        except Exception as e:
             db_session.rollback()
             ret = {'info': e}
             pass
@@ -646,9 +646,9 @@ class Info_Manager():
             db_session.flush()
             db_session.commit()
             ret = {'status': True}
-        except Exception, e:
+        except Exception as e:
             db_session.rollback()
-            print e
+            print (e)
             pass
         db_lock.release()
         return ret
@@ -656,7 +656,7 @@ class Info_Manager():
 
 """testing"""
 if __name__ == '__main__':
-    print sqlalchemy.__version__
+    print (sqlalchemy.__version__)
     db = create_engine('sqlite:///demo.db', echo=False)
     Base.metadata.create_all(db)
 

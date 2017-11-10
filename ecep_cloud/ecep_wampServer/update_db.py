@@ -33,7 +33,7 @@ def device_init():
 # decorator for threads
 def threaded(func):
     def func_wrapper(*args, **kwargs):
-        print args[0]
+        print (args[0])
         thread = threading.Thread(target=func, args=args, kwargs=kwargs)
         thread.setDaemon(True)
         thread.start()
@@ -109,7 +109,7 @@ class updateDB(object):
             rm = []
             for device in regDevice:
                 if regDevice[device] == False:
-                    print '~~~!!!!!!!!!!!!!!! no heartbeat !!!!!!!!!!!!!!~~~'
+                    print ('~~~!!!!!!!!!!!!!!! no heartbeat !!!!!!!!!!!!!!~~~')
 
                     try:
                         devManager = Device_Manager()
@@ -123,7 +123,7 @@ class updateDB(object):
 
                         rm.append(device)
                     except Exception as e:
-                        print 'error while removing: ', e
+                        print ('error while removing: ', e)
                 else:
                     regDevice[device] = False
 
@@ -139,15 +139,15 @@ class updateDB(object):
         """
         Periodic update of status of all containers
         """
-        print '**************** in container status ***********************'
-        print statusList
+        print ('**************** in container status ***********************')
+        print (statusList)
 
         global containerThread
 
         compute = Compute_Manager()
         contList = compute.get_compute_node_list(deviceId=statusList['deviceId'])['compute']
 
-        print 'from DB: ', contList
+        print ('from DB: ', contList)
 
         keyList = ('containerName', 'status')
 
@@ -163,7 +163,7 @@ class updateDB(object):
                             data['username'] = user.split('/')[1]
                             data['containerName'] = entries['containerName'][0].split('_')[1]
                             data['active'] = True
-                            print 'in container check: ', data
+                            print ('in container check: ', data)
 
                             if (data['username'] == cont['username']) and \
                                     (data['containerName'] == cont['containerName']):
@@ -174,7 +174,7 @@ class updateDB(object):
                                 finally:
                                     containerThread.release()
                                 _updateCont = True
-                                print 'updated DB'
+                                print ('updated DB')
 
                     if _updateCont == False:
                         containerThread.acquire()
@@ -182,12 +182,12 @@ class updateDB(object):
                             self.removeComputeNode(cont['username'] + '_' + cont['containerName'])
                         finally:
                             containerThread.release()
-                        print 'removed a cont in DB'
+                        print ('removed a cont in DB')
 
-            print '********************************************************'
+            print ('********************************************************')
                 
         except Exception as e:
-            print 'Could not update the node with periodic status, error: ', e
+            print ('Could not update the node with periodic status, error: ', e)
             pass
 
 
@@ -211,7 +211,7 @@ class updateDB(object):
                 self.updateComputeNode(data)
 
         except Exception as e:
-            print 'Could not update device response, error: ' + e
+            print ('Could not update device response, error: ' + e)
             pass
 
 
@@ -221,7 +221,7 @@ class updateDB(object):
         """
         infoDB = Info_Manager()
         print ("######################################################################")
-        print info
+        print (info)
         print ("######################################################################")
         if 'info' in info:
             data = info['info']
@@ -234,5 +234,5 @@ if __name__ == '__main__':
     handle = trial.checkHeartbeat()
     while True:
         time.sleep(1)
-    # print 'abhi'
+    # print ('abhi')
     handle.join()

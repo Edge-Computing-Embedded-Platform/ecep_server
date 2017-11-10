@@ -49,7 +49,7 @@ class ClientReader(ApplicationSession):
             yield self.subscribe(onHeartbeat, self.heartbeat)
             print ("Subscribed to topic: " + self.heartbeat)
         except Exception as e:
-            print("******* could not subscribe to topic:" + self.heartbeat)
+            print("******* could not subscribe to topic:" + self.heartbeat + ", ERROR".format(e))
 
         
         # This is to handle response from end node
@@ -65,7 +65,7 @@ class ClientReader(ApplicationSession):
             yield self.subscribe(deviceResponse, self.devResp)
             print ("Subscribed to topic: " + self.devResp)
         except Exception as e:
-            print("******* could not subscribe to topic:" + self.devResp)
+            print("******* could not subscribe to topic:" + self.devResp + ", ERROR".format(e))
 
 
         # This is to handle container status sync
@@ -81,7 +81,7 @@ class ClientReader(ApplicationSession):
             yield self.subscribe(containerStatus, self.contStat)
             print ("Subscribed to topic: " + self.contStat)
         except Exception as e:
-            print("******* could not subscribe to topic:" + self.contStat)
+            print("******* could not subscribe to topic:" + self.contStat + ", ERROR".format(e))
         
         
         # This is to handle cpu info
@@ -97,7 +97,7 @@ class ClientReader(ApplicationSession):
             yield self.subscribe(cpuInfo, self.cpuInfo)
             print ("Subscribed to topic: " + self.cpuInfo)
         except Exception as e:
-            print("******* could not subscribe to topic:" + self.cpuInfo)
+            print("******* could not subscribe to topic:" + self.cpuInfo + ", ERROR".format(e))
         
 
 class wampserver(ApplicationSession):
@@ -164,12 +164,12 @@ def sendTo(topic, data):
     """
     Sends the message to all the subscribed topics
     """
-    print topic, data
+    print (topic, data)
     global requestReceived
     try:
         requestReceived.publish(topic, data)
     except Exception as e:
-        print e
+        print (e)
         pass
 
 
@@ -185,7 +185,7 @@ if __name__ == '__main__':
     check = server.connect(ip, port, realm)
 
     value = {'name': 'abhi'}
-    print value
+    print (value)
     handle = uDB_instance.checkHeartbeat()
 
     while True:
