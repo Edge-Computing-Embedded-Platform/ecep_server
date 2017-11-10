@@ -1,5 +1,5 @@
-from wamp_server import *
-from update_db import updateDB
+from ecep_cloud.ecep_wampServer.wamp_server import *
+from ecep_cloud.ecep_wampServer.update_db import updateDB
 
 
 # Form the data packet to be transfered to end node

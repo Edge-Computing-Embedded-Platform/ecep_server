@@ -15,7 +15,7 @@ import threading
 import time
 import sys
 
-from update_db import updateDB as uDB
+from ecep_cloud.ecep_wampServer.update_db import updateDB as uDB
 
 log.startLogging(sys.stdout)
 

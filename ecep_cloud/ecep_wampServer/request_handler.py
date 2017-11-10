@@ -14,14 +14,16 @@ from tornado.concurrent import run_on_executor
 from concurrent.futures import ThreadPoolExecutor
 import time
 import json
-from container_control import *
+import urlparse
+from Queue import Queue
+import sys
+
+from ecep_cloud.ecep_wampServer.container_control import *
 from ..ecep_db.controller import Compute_Manager, Image_Manager, Device_Manager, Location_Manager, Info_Manager, \
     init_db_lock
-from wamp_server import *
-import urlparse
-import sys
-from update_db import threaded
-from Queue import Queue
+from ecep_cloud.ecep_wampServer.wamp_server import *
+from ecep_cloud.ecep_wampServer.update_db import threaded
+
 q = Queue()
 @threaded
 def checkConnection(name='checkConnection'):

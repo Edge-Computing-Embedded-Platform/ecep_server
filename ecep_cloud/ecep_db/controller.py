@@ -383,7 +383,7 @@ class Device_Manager():
                 db_arr.append(new)
 
             ret = {'device': db_arr}
-            print ret
+            print (ret)
         except Exception as e:
             ret = "{error:%s}" % str(e)
             pass
