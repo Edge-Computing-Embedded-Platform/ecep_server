@@ -14,8 +14,8 @@ from tornado.concurrent import run_on_executor
 from concurrent.futures import ThreadPoolExecutor
 import time
 import json
-import urlparse
-from Queue import Queue
+import urllib.parse as urlparse
+from multiprocessing import Queue
 import sys
 
 from ecep_cloud.ecep_wampServer.container_control import *
@@ -411,7 +411,7 @@ if __name__ == "__main__":
     # params for wampserver
     ip = u'127.0.0.1'
     port = sys.argv[1]
-    realm = unicode(sys.argv[2])
+    realm = str(sys.argv[2])
     server = wampserver()
     check = server.connect(ip, port, realm)
 
